@@ -1776,7 +1776,7 @@ const sidebars = {
         },
         {
           type: 'category',
-          label: 'How tos',
+          label: 'Guides',
           items: [
             {
               type: 'doc',
@@ -1786,7 +1786,7 @@ const sidebars = {
             {
               type: 'doc',
               id: 'stylus/how-tos/using-inheritance',
-              label: 'Using inheritance',
+              label: 'Composition, trait-based routing',
             },
             {
               type: 'doc',
