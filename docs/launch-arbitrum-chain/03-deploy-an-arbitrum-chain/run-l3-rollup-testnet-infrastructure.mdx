@@ -480,7 +480,7 @@ main().catch(console.error);
 - Run it with your chain's RPC URL (the LoadBalancer IP from Step 11):
 
 ```bash
-CHAIN_RPC=http://YOUR_LOADBALANCER_IP:8547 node deploy-token-bridge.mjs
+CHAIN_RPC=http://YOUR_LOADBALANCER_IP:8547/rpc node deploy-token-bridge.mjs
 ```
 
 - Replace `YOUR_LOADBALANCER_IP` with your external IP. The script reads from your `.env` file. When you see `Token bridge ready.`, you now have the testnet infrastructure running.
