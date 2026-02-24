@@ -365,7 +365,7 @@ curl -X POST -H "Content-Type: application/json" \
 
 ```bash
 # Replace with your LoadBalancer IP or hostname
-RPC_URL="http://YOUR_FULLNODE_IP:8547"
+RPC_URL="http://YOUR_FULLNODE_IP:8547/rpc"
 curl -X POST -H "Content-Type: application/json" \
   --data '{"jsonrpc":"2.0","method":"eth_blockNumber","params":[],"id":1}' \
   $RPC_URL
