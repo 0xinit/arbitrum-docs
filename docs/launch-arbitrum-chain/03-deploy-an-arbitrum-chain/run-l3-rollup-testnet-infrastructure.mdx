@@ -254,7 +254,7 @@ The validator validates blocks and posts assertions to the parent chain. It is r
 - Save the validator private key to a file (do not commit to Git):
 
 ```bash
-jq -r '.node["staker"]["parent-chain-wallet"]["private-key"]' node-config.json > validator-key.txt
+printf '%s' "$(jq -r '.node["staker"]["parent-chain-wallet"]["private-key"]' node-config.json)" > validator-key.txt
 ```
 
 - Deploy the validator:
