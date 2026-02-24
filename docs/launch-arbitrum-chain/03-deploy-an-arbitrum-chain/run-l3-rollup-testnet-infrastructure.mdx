@@ -167,7 +167,7 @@ helm install sequencer-relay offchainlabs/relay \
   --namespace my-l3-chain \
   --set replicaCount=2 \
   --set configmap.data.chain.id=$CHAIN_ID \
-  --set configmap.data.node.feed.input.url=ws://sequencer-nitro-0.sequencer-nitro:9642,ws://sequencer-nitro-1.sequencer-nitro:9642,ws://sequencer-nitro-2.sequencer-nitro:9642
+  --set configmap.data.node.feed.input.url=ws://sequencer-nitro-0.sequencer-nitro-headless:9642\,ws://sequencer-nitro-1.sequencer-nitro-headless:9642\,ws://sequencer-nitro-2.sequencer-nitro-headless:9642
 ```
 
 - The relay service names (`sequencer-nitro-0`, etc.) depend on your Helm release name. If you used a different release name for the sequencer, adjust accordingly (format: `<release>-nitro-<index>.<release>-nitro`).
