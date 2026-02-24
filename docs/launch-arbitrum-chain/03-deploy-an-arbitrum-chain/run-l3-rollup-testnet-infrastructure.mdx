@@ -227,7 +227,7 @@ helm install batchposter offchainlabs/nitro \
   --set configmap.data.parent-chain.connection.url=$PARENT_RPC \
   --set configmap.data.chain.id=$CHAIN_ID \
   --set-file configmap.data.chain.info-json=chain-info.json \
-  --set configmap.data.execution.forwarding-target=null \
+  --set-string configmap.data.execution.forwarding-target=null \
   --set configmap.data.node.seq-coordinator.enable=true \
   --set configmap.data.node.seq-coordinator.redis-url=$REDIS_URL \
   --set configmap.data.node.batch-poster.enable=true \
