@@ -215,7 +215,7 @@ The batch poster posts transaction batches to the parent chain.
 - Save the private key to a file (do not commit this file to Git):
 
 ```bash
-jq -r '.node["batch-poster"]["parent-chain-wallet"]["private-key"]' node-config.json > batch-poster-key.txt
+printf '%s' "$(jq -r '.node["batch-poster"]["parent-chain-wallet"]["private-key"]' node-config.json)" > batch-poster-key.txt
 ```
 
 - Deploy the batch poster:
