@@ -202,7 +202,8 @@ helm install fullnode offchainlabs/nitro \
   --set-file configmap.data.chain.info-json=chain-info.json \
   --set configmap.data.execution.forwarder.redis-url=$REDIS_URL \
   --set configmap.data.node.feed.input.url=ws://external-relay:9642 \
-  --set configmap.data.init.empty=true
+  --set configmap.data.init.empty=true \
+  --set configmap.data.execution.forwarding-target=http://sequencer-nitro:8547
 ```
 
 - If your chain already has blocks, use `--set configmap.data.init.latest=pruned` instead of `init.empty=true`.
