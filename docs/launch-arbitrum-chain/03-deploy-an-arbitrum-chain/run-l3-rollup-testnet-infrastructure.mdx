@@ -145,7 +145,7 @@ extraEnv:
       fieldRef:
         fieldPath: metadata.name
   - name: NITRO_NODE_SEQ__COORDINATOR_MY__URL
-    value: 'http://$(POD_NAME).sequencer-nitro.my-l3-chain.svc.cluster.local:8547/rpc'
+    value: 'http://$(POD_NAME).sequencer-nitro-headless.my-l3-chain.svc.cluster.local:8547/rpc'
 ```
 
 - Then add `-f sequencer-extra-env.yaml` to the `helm install` command above.
