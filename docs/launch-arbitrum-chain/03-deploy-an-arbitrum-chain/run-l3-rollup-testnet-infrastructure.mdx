@@ -265,7 +265,7 @@ helm install validator offchainlabs/nitro \
   --set configmap.data.parent-chain.connection.url=$PARENT_RPC \
   --set configmap.data.chain.id=$CHAIN_ID \
   --set-file configmap.data.chain.info-json=chain-info.json \
-  --set configmap.data.node.sequencer.enable=false \
+  --set configmap.data.node.sequencer=false \
   --set configmap.data.node.batch-poster.enable=false \
   --set configmap.data.node.staker.enable=true \
   --set configmap.data.node.staker.strategy=MakeNodes \
