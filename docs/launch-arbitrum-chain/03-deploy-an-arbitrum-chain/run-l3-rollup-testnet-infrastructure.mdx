@@ -158,7 +158,7 @@ kubectl get pods -l app.kubernetes.io/name=nitro -w
 
 :::warning Set sequencer priority after deployment
 
-After deploying sequencers, you **must** set at least one sequencer in the priority list. Without this, no sequencer will be chosen as active and your chain won't produce blocks. Complete **Step 10** to set priorities using the Sequencer Coordinator Manager, or set them directly in Redis.
+After deploying sequencers, you must set at least one sequencer in the priority list. Without this, no sequencer will be active, and your chain won’t produce blocks. Complete Step 10 to set priorities using the Sequencer Coordinator Manager, or set them directly in Redis.
 
 :::
 
@@ -290,13 +290,13 @@ rm validator-key.txt
 
 ## Step 10: Set up Sequencer Coordinator Manager and set priority
 
-You **must** set sequencer priority for your chain to work. Without setting priority, no sequencer will be chosen as active. The Sequencer Coordinator Manager (SQM) provides a UI to manage the sequencer priority list. You can also set priority directly in Redis (advanced users).
+:::warning Required for sequencer activation
 
-:::note Required for sequencer activation
-
-This step is **required**, not optional. At least one sequencer must be added to the priority list in Redis for any sequencer to become active. The SQM provides the easiest way to do this.
+This step is **required**, not optional.
 
 :::
+
+You **must** set sequencer priority for your chain to work. Without setting a priority, no sequencer will be active. The Sequencer Coordinator Manager (SQM) provides a UI to manage the sequencer priority list. You can also set priority directly in Redis (advanced users).
 
 #### 1. Port-forward Redis (if using in-cluster Redis from Step 3):
 
@@ -327,7 +327,7 @@ make target/bin/seq-coordinator-manager
 
 When you first run SQM, all sequencers will be in the `--Not in priority list but online--` section. You must add at least one to the priority list:
 
-1. **Select a sequencer** from the non-priority list using arrow keys and press Enter
+1. **Select a sequencer** from the non-priority list using the arrow keys and press Enter
 2. **Choose position 1** from the dropdown menu
 3. **Click/press `Update`** to add it to the priority list at position 1
 4. **Repeat** for other sequencers if you want multiple sequencers with failover (e.g., add at positions 2, 3)
