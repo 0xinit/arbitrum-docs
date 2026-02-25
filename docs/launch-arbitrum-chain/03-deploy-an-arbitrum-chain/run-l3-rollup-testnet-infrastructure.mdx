@@ -156,6 +156,12 @@ extraEnv:
 kubectl get pods -l app.kubernetes.io/name=nitro -w
 ```
 
+:::warning Set sequencer priority after deployment
+
+After deploying sequencers, you **must** set at least one sequencer in the priority list. Without this, no sequencer will be chosen as active and your chain won't produce blocks. Complete **Step 10** to set priorities using the Sequencer Coordinator Manager, or set them directly in Redis.
+
+:::
+
 ## Step 5: Deploy sequencer relays
 
 Sequencer relays combine feeds from all sequencer replicas. Other components connect to these relays rather than directly to the sequencers.
@@ -282,11 +288,17 @@ helm install validator offchainlabs/nitro \
 rm validator-key.txt
 ```
 
-## Step 10: Set up Sequencer Coordinator Manager (optional)
+## Step 10: Set up Sequencer Coordinator Manager and set priority
 
-The chain works without this step—sequencers automatically coordinate via Redis. The SQM lets you view which sequencer is active and manually switch if needed. Run it on your local machine.
+You **must** set sequencer priority for your chain to work. Without setting priority, no sequencer will be chosen as active. The Sequencer Coordinator Manager (SQM) provides a UI to manage the sequencer priority list. You can also set priority directly in Redis (advanced users).
 
-#### 1. Port-forward Redis (if using in-cluster Redis from Step 2):
+:::note Required for sequencer activation
+
+This step is **required**, not optional. At least one sequencer must be added to the priority list in Redis for any sequencer to become active. The SQM provides the easiest way to do this.
+
+:::
+
+#### 1. Port-forward Redis (if using in-cluster Redis from Step 3):
 
 - Run the following:
 
@@ -311,12 +323,31 @@ make target/bin/seq-coordinator-manager
 
 - If Redis is external (e.g., ElastiCache), use its URL instead of `redis://127.0.0.1:6379`.
 
-#### 3. Use the SQM
+#### 3. Use the SQM to add sequencers to priority list
 
-- Press `c` to switch between lists
-- Press `s` to save changes to Redis
-- Press `q` to quit
-- Do **not** add the batch poster to the priority list
+When you first run SQM, all sequencers will be in the `--Not in priority list but online--` section. You must add at least one to the priority list:
+
+1. **Select a sequencer** from the non-priority list using arrow keys and press Enter
+2. **Choose position 1** from the dropdown menu
+3. **Click/press `Update`** to add it to the priority list at position 1
+4. **Repeat** for other sequencers if you want multiple sequencers with failover (e.g., add at positions 2, 3)
+5. **Press `s`** to save changes to Redis (this makes them permanent)
+6. **Verify** one sequencer is marked with a `chosen` indicator (this is the active sequencer)
+7. **Press `q`** to quit
+
+:::tip Add all sequencers to priority list
+
+For proper high availability with automatic failover, add all 3 sequencers to the priority list at different positions (1, 2, 3). The sequencer at position 1 becomes active. If it fails, position 2 takes over automatically.
+
+:::
+
+:::warning
+
+Do **not** add the batch poster to the priority list. The batch poster should never become the active sequencer.
+
+:::
+
+Alternatively, you can press `a` to manually add a new sequencer by entering its URL. The URL must match the `my-url` configured for each sequencer (e.g., `http://sequencer-nitro-0.sequencer-nitro-headless.my-l3-chain.svc.cluster.local:8547/rpc`).
 
 ## Step 11: Expose RPC
 
