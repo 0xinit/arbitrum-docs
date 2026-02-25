@@ -170,7 +170,7 @@ helm install sequencer-relay offchainlabs/relay \
   --set configmap.data.node.feed.input.url=ws://sequencer-nitro-0.sequencer-nitro-headless:9642\,ws://sequencer-nitro-1.sequencer-nitro-headless:9642\,ws://sequencer-nitro-2.sequencer-nitro-headless:9642
 ```
 
-- The relay service names (`sequencer-nitro-0`, etc.) depend on your Helm release name. If you used a different release name for the sequencer, adjust accordingly (format: `<release>-nitro-<index>.<release>-nitro`).
+- The relay service names (`sequencer-nitro-0`, etc.) depend on your Helm release name. If you used a different release name for the sequencer, adjust accordingly (format: `<release>-nitro-<index>.<release>-nitro-headless`).
 
 ## Step 6: Deploy external relays
 
