@@ -72,7 +72,7 @@ The child chain gas price on a given <a data-quicklook-from="arbitrum-chain">Arb
 
 Calling the Arbitrum Node’s `eth_estimateGas` RPC returns a value sufficient to cover the full transaction fee at the given child chain gas price; i.e., the value returned from `eth_estimateGas` multiplied by the child chain gas price tells you how much total `ETH` is required for the transaction to succeed.
 
-Note that this means that, for a given operation, the value returned by `eth_estimateGas` will change over time (as the parent chain's calldata price fluctuates). (See [2-D fees](https://medium.com/offchainlabs/understanding-arbitrum-2-dimensional-fees-fd1d582596c9) and [How to estimate gas in Arbitrum](/build-decentralized-apps/02-how-to-estimate-gas.mdx) for more.)
+This means that, for a given operation, the value returned by `eth_estimateGas` will change over time (as the parent chain's calldata price fluctuates). (See [2-D fees](https://medium.com/offchainlabs/understanding-arbitrum-2-dimensional-fees-fd1d582596c9) and [How to estimate gas in Arbitrum](/build-decentralized-apps/02-how-to-estimate-gas.mdx) for more.)
 
 ### Child chain gas fees
 
