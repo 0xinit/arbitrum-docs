@@ -348,7 +348,7 @@ Any associated messages and values, excluding the escrowed `callValue`, may be p
 
 On success, the `To` address receives the escrowed `callValue`, and any unused gas returns to ArbOS's gas pools. On failure, the `callValue` is returned to the escrow for the future `redeem` attempt. In either case, the network fee is paid during the scheduling transaction, so no fees or refunds are charged.
 
-During ticket redemption, attempts to cancel the same ticket or to schedule another `redeem` of the same ticket will be reverted. In this manner, retryable tickets are not self-modifying.
+During ticket redemption, attempts to cancel the same ticket or to schedule another `redeem` of the same ticket will revert. In this manner, retryable tickets are not self-modifying.
 
 If a ticket with a `callValue` is eventually discarded (canceled or expired) and never successfully runs, the escrowed `callValue` will be paid out to the `callValueRefundAddress` account specified in the initial submission (Step 1).
 
