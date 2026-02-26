@@ -94,7 +94,7 @@ The sequencer prioritizes transactions on a first-come, first-served basis. Beca
 
 ### Gas estimating retryables
 
-When a transaction schedules another, the cost of the subsequent transaction’s execution [will be included][will be included](https://github.com/OffchainLabs/go-ethereum/blob/d52739e6d54f2ea06146fdc44947af3488b89082/internal/ethapi/api.go#L999) in the gas estimation via the node’s RPC. A transaction’s gas estimate, then, can only be found if all the transactions succeed at a given gas limit. This is especially important when working with retryables and scheduling redeem attempts.
+When a transaction schedules another, the cost of the subsequent transaction's execution [will be included](https://github.com/OffchainLabs/go-ethereum/blob/d52739e6d54f2ea06146fdc44947af3488b89082/internal/ethapi/api.go#L999) in the gas estimation via the node's RPC. A transaction's gas estimate can only be found if all the transactions succeed at a given gas limit. This is especially important when working with retryables and scheduling redeem attempts.
 
 when estimating gas via the node's RPC. A transaction's gas estimate, then, can only be found if all the transactions succeed at a given gas limit. This is especially important when working with retryables and scheduling redeem attempts.
 
