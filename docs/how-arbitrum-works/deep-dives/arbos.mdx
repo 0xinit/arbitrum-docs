@@ -134,7 +134,7 @@ Gas estimation for retryable submissions is possible via the [`NodeInterface`](/
 
 The security of Nitro chains depends on the assumption that when one validator creates an assertion, other validators will verify it and respond with a correct assertion or a challenge if it's incorrect. This assumption requires that the other validators have the time and resources to check each assertion and issue a challenge quickly. The Arbitrum protocol accounts for this when setting assertion deadlines.
 
-This approach sets an effective gas target for the execution of a Nitro chain: in the long run, the chain cannot progress faster than a validator can emulate its execution. If assertions are published faster than the gas target, their deadlines will keep moving farther into the future. Due to the Rollup protocol’s limit on how far a deadline can be in the future, this will eventually slow new assertions, thereby enforcing the effective gas target.
+This approach sets an effective gas target for the execution of a Nitro chain: in the long run, the chain can't progress faster than a validator can emulate its execution. If assertions are published faster than the gas target, their deadlines will keep moving farther into the future. Due to the Rollup protocol's limit on how far a deadline can be in the future, this will eventually slow new assertions, thereby enforcing the effective gas target.
 
 Setting the gas target accurately depends on estimating the time required to validate an assertion with some accuracy. Any uncertainty in estimating validation time will force us to lower the gas target to be on the safe side. We do not want to lower the gas target, so we try to enable accurate estimation.
 
