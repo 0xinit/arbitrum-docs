@@ -11,7 +11,7 @@ import ImageZoom from '@site/src/components/ImageZoom';
 
 In the [Bypassing the Sequencer](/how-arbitrum-works/deep-dives/transaction-lifecycle.mdx#bypassing-the-sequencer) section, we introduced an alternative way for users to submit transactions to a <a data-quicklook-from="child-chain">child chain</a> by going through the <a data-quicklook-from="parent-chain">parent chain</a>'s <a data-quicklook-from="delayed-inbox">Delayed Inbox</a> contract instead of sending them directly to the <a data-quicklook-from="sequencer">sequencer</a>. This approach is one example of a parent-to-child messaging path. More broadly, parent-to-child chain messaging covers all ways to:
 
-- Submit child chain bound <a data-quicklook-from="transaction">transaction</a> from a parent chain
+- Submit a child chain bound <a data-quicklook-from="transaction">transaction</a> from a parent chain
 - Deposit `ETH` or native tokens from a parent chain to a child chain
 - Send arbitrary data or instructions from a parent chain to a child chain
 
