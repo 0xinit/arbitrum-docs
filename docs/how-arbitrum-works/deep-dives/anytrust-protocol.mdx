@@ -42,7 +42,7 @@ Because of the `2-of-N` trust assumption, a DACert constitutes proof that the bl
 
 In regular Arbitrum Nitro, the Arbitrum <a data-quicklook-from="sequencer">Sequencer</a> posts data blocks on the parent chain as blobs or calldata. The hashes of the data blocks are committed to the parent chain Inbox contract, allowing the data to be reliably read by the child chain code.
 
-AnyTrust gives the sequencer two ways to post a data block on parent chain: it can post the full data as above, or it can post a DACert proving availability of the data. The parent chain inbox contract will reject any DACert that uses an invalid Keyset; the other aspects of DACert validity are checked by the child chain code.
+AnyTrust gives the Sequencer two ways to post a data block on the parent chain: it can post the full data as above, or it can post a DACert proving availability of the data. The parent chain Inbox contract will reject any DACert that uses an invalid Keyset; the other aspects of DACert validity are checked by the child chain code.
 
 The child chain code that reads data from the inbox reads a full-data block as in ordinary Arbitrum Nitro. If it sees a DACert instead, it checks the DACert's validity, using the Keyset specified by the DACert (which is known to be valid because the parent chain inbox verified it). The child chain code verifies that:
 
