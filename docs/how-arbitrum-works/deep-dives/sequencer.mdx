@@ -280,7 +280,7 @@ Censorship Timeout aims to limit the negative effects of:
 
 ### How the Censorship Timeout feature works
 
-To explain how this feature improves the security of chains settling to Arbitrum One Nova, consider a scenario where an L3’s parent chain sequencer (the L2 sequencer) is censoring or offline. In such a case, every assertion and/or sub-challenge move would need to wait 24 hours before bypassing the L2 sequencer (using the `SequencerInbox`’s `forceInclusion` method described here). In this scenario, challenge resolution would be delayed by a time `t` where `t = (24 hours) * number of moves for a challenge`. To illustrate with sample numbers, if a challenge takes 50 sequential moves to resolve, then the delay would be 50 days.
+To explain how this feature improves the security of chains settling to Arbitrum One and Nova, consider a scenario where an L3's parent chain sequencer (the L2 sequencer) is censoring or offline. In such a case, every assertion and/or sub-challenge move would need to wait 24 hours before bypassing the L2 sequencer (using the `SequencerInbox`'s `forceInclusion` method described here). In this scenario, challenge resolution would be delayed by a time `t` where `t = (24 hours) * number of moves for a challenge`. To illustrate with sample numbers, if a challenge takes 50 sequential moves to resolve, then the delay would be 50 days.
 
 The Censorship Timeout feature mitigates this by lowering the force inclusion threshold when unexpected delays in message inclusion occur due to one (or all) of the above-mentioned cases of censorship or a sequencer outage, enabling entities to make moves without the 24-hour delay-per-move.
 
