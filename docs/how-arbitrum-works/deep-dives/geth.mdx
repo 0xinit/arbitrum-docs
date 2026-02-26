@@ -70,7 +70,7 @@ Suppose the user attempts to purchase compute gas over ArbOS's per-block gas lim
 
 ### [`PushCaller`](https://github.com/OffchainLabs/nitro/blob/8e786ec6d1ac3862be85e0c9b5ac79cbd883791c/arbos/tx_processor.go#L76)
 
-These hooks track callers on the EVM call stack, pushing and popping as calls are made and completed. This hook provides [`ArbSys`](/build-decentralized-apps/precompiles/02-reference.mdx#arbsys) with info about the callstack, which is used to implement the methods `WasMyCallersAddressAliased` and `MyCallersAddressWithoutAliasing`.
+These hooks track callers on the EVM call stack, pushing and popping as calls are made and completed. This hook provides [`ArbSys`](/build-decentralized-apps/precompiles/02-reference.mdx#arbsys) with info about the call stack, which is used to implement the methods `WasMyCallersAddressAliased` and `MyCallersAddressWithoutAliasing`.
 
 ### [`L1BlockHash`](https://github.com/OffchainLabs/nitro/blob/8e786ec6d1ac3862be85e0c9b5ac79cbd883791c/arbos/tx_processor.go#L617)
 
