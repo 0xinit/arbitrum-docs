@@ -54,7 +54,7 @@ The price per estimated byte is set by a dynamic algorithm that compares the tot
 
 A transaction is charged for the parent chain gas if and only if it arrived as part of a sequencer batch. This means that someone would have paid for the parent chain gas to post the transaction on the parent chain.
 
-The estimated cost of posting a transaction on the parent chain is the product of the transaction’s estimated size and the current parent chain gas basefee. This estimated cost is divided by the current child-chain gas used for the parent-chain operation (see [this article](https://medium.com/offchainlabs/understanding-arbitrum-2-dimensional-fees-fd1d582596c9) for more information.
+The estimated cost of posting a transaction on the parent chain is the product of the transaction's estimated size and the current parent chain gas basefee. This estimated cost is divided by the current child-chain gas used for the parent-chain operation (see [this article](https://medium.com/offchainlabs/understanding-arbitrum-2-dimensional-fees-fd1d582596c9) for more information).
 
 The estimated size is measured in the parent chain gas. It is calculated as follows: first, compress the transaction’s data using the Brotli-zero algorithm, then multiply the size of the result by 16 (because the parent chain charges 16 gas per byte—the parent chain charges less for bytes that are zero, but that doesn’t apply here).
 
