@@ -9,7 +9,7 @@ content_type: concept
 
 Arbitrum Nitro makes minimal modifications to <a data-quicklook-from="geth">Geth</a> to avoid violating its assumptions. This section will explore the relationship between Geth and <a data-quicklook-from="arbos">ArbOS</a>, which consists of a series of hooks, interface implementations, and strategic re-appropriations of Geth’s basic types.
 
-We store ArbOS’s state at an address within a Geth `statedb` (state database). In doing so, ArbOS inherits the `statedb`’s statefulness and lifetime properties. For example, a <a data-quicklook-from="transaction">transaction</a>'s' direct state changes to ArbOS would get discarded upon a revert.
+We store ArbOS's state at an address within a Geth `statedb` (state database). In doing so, ArbOS inherits the `statedb`'s statefulness and lifetime properties. For example, a <a data-quicklook-from="transaction">transaction's</a> direct state changes to ArbOS would get discarded upon a revert.
 
 `0xA4B05FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF` is a fictional account representing ArbOS.
 
