@@ -78,7 +78,7 @@ Arbitrum ensures full Ethereum Virtual Machine (EVM) compatibility via a three-l
 
 For more technical details about Geth, refer to the [Geth deep dive documentation](/how-arbitrum-works/deep-dives/geth.mdx).
 
-Above this, ArbOS—the Arbitrum operating system—adds Layer 2 features such as cross-chain messaging, fee management, gas pricing, deposit and withdrawal handling, and advanced tooling, such as Stylus. The top layer, the node interface, manages RPC connections and APIs, providing Ethereum-like functionality for clients.
+Above this, ArbOS—the Arbitrum operating system—adds child chain features such as cross-chain messaging, fee management, gas pricing, deposit and withdrawal handling, and advanced tooling, such as Stylus. The top layer, the node interface, manages RPC connections and APIs, providing Ethereum-like functionality for clients.
 
 In the STF, transactions follow a structured workflow: first, ArbOS validates formatting and funds, then charges gas for Layer 2 execution and Layer 1 posting. Then Geth executes per EVM standards. Finally, ArbOS updates state and cross-chain elements, generating receipts and logs to finalize the process.
 
