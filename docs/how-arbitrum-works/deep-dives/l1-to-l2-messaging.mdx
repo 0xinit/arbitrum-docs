@@ -480,7 +480,7 @@ The following steps can set up your token for the generic-custom gateway. You ca
 
 1. **Deploy your token on the child chain**
 
-- Your token should conform to the minimum [IArbToken](https://github.com/OffchainLabs/token-bridge-contracts/blob/main/contracts/tokenbridge/arbitrum/IArbToken.sol) interface: it should have `bridgeMint` and `bridgeBurn` methods callable only by the `L2CustomGateway` contract, and the address of its corresponding Ethereum token should be accessible via l1Address. For an example implementation, see [`L2GatewayToken`](https://github.com/OffchainLabs/token-bridge-contracts/blob/main/contracts/tokenbridge/libraries/L2GatewayToken.sol).
+- Your token should conform to the minimum [IArbToken](https://github.com/OffchainLabs/token-bridge-contracts/blob/main/contracts/tokenbridge/arbitrum/IArbToken.sol) interface: it should have `bridgeMint` and `bridgeBurn` methods callable only by the `L2CustomGateway` contract, and the address of its corresponding Ethereum token should be accessible via `l1Address`. For an example implementation, see [`L2GatewayToken`](https://github.com/OffchainLabs/token-bridge-contracts/blob/main/contracts/tokenbridge/libraries/L2GatewayToken.sol).
 - Token compatibility with available tooling
 
   - If you want your token to be compatible out of the box with all available tooling (e.g., the [Arbitrum bridge]), we recommend keeping the implementation of the `IArbToken` interface as close as possible to the [`L2GatewayToken`](https://github.com/OffchainLabs/token-bridge-contracts/blob/main/contracts/tokenbridge/libraries/L2GatewayToken.sol) implementation example.
