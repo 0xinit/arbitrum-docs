@@ -202,7 +202,7 @@ ArbOS primarily implements retryables, while Geth requires some modifications to
 
 We added [`UnderlyingTransaction`](https://github.com/OffchainLabs/go-ethereum/blob/7503143fd13f73e46a966ea2c42a058af96f7fcf/core/state_transition.go#L69) to the Message interface, and [`GetCurrentTxLogs`](https://github.com/OffchainLabs/go-ethereum/blob/7503143fd13f73e46a966ea2c42a058af96f7fcf/core/state/statedb_arbitrum.go) to StateDB.
 
-We created the `AdvancedPrecompile` interface, which executes and charges gas with the same function call. Arbitrum uses this interface to [precompile](/build-decentralized-apps/precompiles/01-overview.mdx) and wrap Geth's standard precompiles.
+We created the `AdvancedPrecompile` interface, which executes and charges gas with the same function call. [Arbitrum precompiles](/build-decentralized-apps/precompiles/01-overview.mdx) use this interface, and it wraps Geth's standard precompiles.
 
 ### WASM build support
 
