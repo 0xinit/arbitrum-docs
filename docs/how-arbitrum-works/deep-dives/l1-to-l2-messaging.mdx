@@ -296,7 +296,7 @@ Here, we walk through the different stages of the lifecycle of a <a data-quicklo
 1. It is very important to note that submitting a ticket on the parent chain is separate and asynchronous from its execution on the child chain, i.e., a successful parent chain ticket creation does not guarantee successful redemption. Upon successful ticket creation, checks validate the two following conditions:
 
 - if the user's child chain balance is greater than (or equal to) `maxFeePerGas * gasLimit` **and**
-- if the `maxFeePerGas` (provided by the user in the ticket submission process) is greater than (or equal to) the `l2BaseFee`. If both conditions are met, an attempt to execute the ticket on the child chain triggers (i.e., auto-redeem using the supplied gas, as if the `[ArbyRetryableTx]` \* redeem method had been called). Depending on how much gas the sender has provided in Step 1, the ticket’s redemption can either (1) immediately succeed or (2) fail. We explain both situations below:
+- if the `maxFeePerGas` (provided by the user in the ticket submission process) is greater than (or equal to) the `l2BaseFee`. If both conditions are met, an attempt to execute the ticket on the child chain triggers (i.e., auto-redeem using the supplied gas, as if the `ArbRetryableTx` precompile's `redeem` method had been called). Depending on how much gas the sender has provided in Step 1, the ticket's redemption can either (1) immediately succeed or (2) fail. We explain both situations below:
 
 **Immediate success**
 
