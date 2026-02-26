@@ -140,7 +140,7 @@ Arbitrum transaction receipts include a `gasUsedForL1` field that shows the amou
 
 After allocating funds and paying what is owed, the parent chain pricer adjusts the parent chain gas basefee. The goal of this process is to find a value that, over time, causes the amount collected to equal the amount owed.
 
-The algorithm first computes the surplus (funds in the `L1PricerFundsPool`, minus total funds due), which might be negative. If the surplus is positive, the parent chain gas basefee is reduced, so that exactly the surplus will reduce the amount collected over a fixed future interval. If the surplus is negative, the base fee is increased so that the shortfall is eliminated over the same fixed future interval.
+The algorithm first computes the surplus (funds in the `L1PricerFundsPool`, minus total funds due), which might be negative. If the surplus is positive, the parent chain gas basefee is reduced so that exactly the surplus will reduce the amount collected over a fixed future interval. If the surplus is negative, the basefee is increased so that the shortfall is eliminated over the same fixed future interval.
 
 A second term is added to the parent chain gas basefee, based on the derivative of the surplus (surplus at present, minus the surplus after the previous batch posting report was processed). This term, which is multiplied by a smoothing factor to reduce fluctuations, will reduce the basefee if the surplus is increasing, and increase the basefee if the surplus is shrinking.
 
