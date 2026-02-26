@@ -2296,6 +2296,11 @@
       "permanent": false
     },
     {
+      "source": "/(build-decentralized-apps/token-bridging/token-bridge-erc20/?)",
+      "destination": "/how-arbitrum-works/deep-dives/token-bridging",
+      "permanent": false
+    },
+    {
       "source": "/(withdrawals/?)",
       "destination": "/how-arbitrum-works/deep-dives/transaction-lifecycle",
       "permanent": false
