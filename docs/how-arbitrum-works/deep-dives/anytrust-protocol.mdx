@@ -27,7 +27,7 @@ Keysets are identified by their hashes. A parent chain `KeysetManager` contract 
 
 Although the API does not limit the number of Keysets that can be valid simultaneously, only one Keyset is normally valid.
 
-## Data Availability Certificates
+## Data Availability Certificates (DACert)
 
 A central concept in AnyTrust is the Data Availability Certificate (hereafter, a "DACert"). A DACert contains:
 
@@ -52,7 +52,7 @@ The child chain code that reads data from the inbox reads a full-data block as i
 
 If the DACert is invalid, the child chain code discards it and proceeds to the next data block. If the DACert is valid, the child chain code reads the data block, which is guaranteed to be available because the DACert is valid.
 
-## Data Availability Servers
+## Data Availability Servers (DAS)
 
 DAC members run the Data Availability Server (DAS) software. The DAS exposes two APIs:
 
