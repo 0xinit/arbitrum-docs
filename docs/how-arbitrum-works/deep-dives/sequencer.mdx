@@ -112,7 +112,7 @@ The Sequencer in Arbitrum is critical in collecting and organizing child chain t
 - **Ordering**: Transactions are ordered by the order in which they are received, ensuring deterministic transaction order.
 - **Buffering**: Received transactions are temporarily stored in a buffer awaiting batch formation.
 
-#### Batch Formation Criteria:
+#### Batch formation criteria:
 
 - **Size thresholds**: Batch formation occurs when accumulated transactions reach a predefined size limit. This limit ensures that the fixed costs of posting data to the parent chain are amortized over more transactions, improving cost efficiency.
 - **Time constraints**: The Sequencer also monitors the elapsed time since the last batch update to prevent undue delays. Upon reaching the maximum time threshold, the Sequencer will create a batch with the transactions collected so far, even if the batch doesn’t meet the size threshold.
