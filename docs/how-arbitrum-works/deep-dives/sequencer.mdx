@@ -163,7 +163,7 @@ There are two primary methods the Sequencer uses to send batches to the parent c
 ### 1. Using blobs with `addSequencerL2BatchFromBlobs`
 
 - **Default approach**: When the parent chain supports EIP-4844, the Sequencer utilizes blob transactions to post batches efficiently.
-- **Method**: The Batch Poster calls the `addSequencerL2BatchFromBlobs` function of the Sequencer Inbox Contract.
+- **Method**: The batch poster calls the `addSequencerL2BatchFromBlobs` function of the Sequencer Inbox contract.
 - **Process**:
   - Batch data gets included as blobs—large binary data structures optimized for scalability.
   - The transaction includes metadata about the batch but does not include the batch data itself in the calldata.
