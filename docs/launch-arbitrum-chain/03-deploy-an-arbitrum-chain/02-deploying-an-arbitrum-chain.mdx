@@ -157,13 +157,15 @@ Again, most of these parameters don't need to be configured, since the Chain SDK
 
 The `chainId` and `InitialChainOwner` parameters must be equal to the `chainId` and `owner` defined in the `Config` struct.
 
-`MaxCodeSize` limitations:
+#### `MaxCodeSize` limitations:
 
 - Entering a contract requires reading its code from the database, which means more code = more work. The EVM doesn't charge differently based on code size, but the computation cost could vary; however, that doesn't seem to be a strict limit compared to the readability aspect.
 - Reading code occurs via a preimage fetch (`code hash -> code`). The limit of preimage size is that a one-step proof (OSP) of a preimage must include the full preimage as part of the transaction.
 
-`MaxInitCodeSize` limitations:
+#### `MaxInitCodeSize` limitations:
+
 **For L2's building on top of Ethereum (L1):**
+
 The effective limit on calldata seems to be 128KB:
 
 - Some clients (geth, AFAU) use 128KB as the limit, even though the protocol does not enforce it
