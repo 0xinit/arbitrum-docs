@@ -284,7 +284,7 @@ Here, we walk through the different stages of the lifecycle of a <a data-quicklo
 
 3. Check the user's deposit
 
-- A logic check to see if the user has enough funds to create a ticket. A process that checks if the `msg.value` provided by the user is greater than or equal to `maxSubmissionCost + l2CallValue + gasLimit * maxFeePerGas`.
+- Logic that checks if the user has enough funds to create a ticket. This process verifies that the `msg.value` provided by the user is greater than or equal to `maxSubmissionCost + l2CallValue + gasLimit * maxFeePerGas`.
 
 4. Ticket creation fails, and no funds get deducted from the user
 5. Ticket creation
