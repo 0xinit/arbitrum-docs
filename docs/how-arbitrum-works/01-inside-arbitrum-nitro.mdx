@@ -94,7 +94,7 @@ Consult the [State Transition Function deep dive](/how-arbitrum-works/deep-dives
 
 At this stage, the transaction achieves two complementary levels of finality, each tailored to Arbitrum’s security needs:
 
-1. Soft finality emerges immediately upon the inclusion into the Sequencer feed, offering instant acceptance feedback, a commitment to order, and the ability to act without wait times—as noted in the submission phase. This “soft finality” relies on the Sequencer’s trustworthiness for usability but lacks cryptographic backing.
+1. Soft finality emerges immediately upon inclusion in the Sequencer feed, offering instant acceptance feedback, a commitment to order, and the ability to act without wait times—as noted in the submission phase. This "soft finality" relies on the Sequencer's trustworthiness for usability but lacks cryptographic backing.
 
 2. Hard finality, conversely, solidifies when the batch is posted and is confirmed on Ethereum, inheriting its consensus security, ensuring public data availability, and making the transaction irreversible. This process typically takes 10-20 minutes, which varies depending on Ethereum’s block times and batch frequency. Hard finality depends on Rollup assertions being confirmed on Ethereum.
 
