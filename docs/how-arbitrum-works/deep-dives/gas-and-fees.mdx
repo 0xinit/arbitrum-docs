@@ -106,7 +106,7 @@ Gas estimation for retryable submissions is possible via the [`NodeInterface`](/
 
 The security of Arbitrum Nitro chains depends on the assumption that when one <a data-quicklook-from="validator">validator</a> creates an assertion, other validators check it and respond with a correct assertion or a <a data-quicklook-from="challenge">challenge</a> if it's wrong.
 
-This requires that the other validators have the time and resources to check each assertion and issue a timely challenge quickly. The Arbitrum protocol takes this into account in setting deadlines for assertions.
+This requires that the other validators have the time and resources to check each assertion quickly enough to issue a timely challenge. The Arbitrum protocol takes this into account when setting deadlines for assertions.
 
 This sets an effective gas target for executing an Arbitrum Nitro chain: in the long run, the chain cannot make progress faster than a validator can emulate its execution. If assertions are published faster than the gas target, their deadlines will get farther and farther into the future. Due to the limit enforced by the Rollup protocol contracts on how far in the future a deadline can be, this will eventually slow down new assertions, thereby enforcing the effective gas target.
 
