@@ -11,7 +11,7 @@ The <a data-quicklook-from="state-transition-function">State Transition Function
 
 With <a data-quicklook-from="arbitrum">Arbitrum</a>, the STF plays an even more pivotal role. Arbitrum executes transactions offchain in batches, periodically submitting summaries to the <a data-quicklook-from="parent-chain">parent chain</a>. This approach leverages offchain computation to achieve higher throughput and lower gas costs while maintaining Ethereum’s security.
 
-To safeguard against incorrect or malicious offchain execution, Arbitrum employs a <a data-quicklook-from="challenge">challenge</a> mechanism called fraud proofs. If a dispute arises, the STF can be recomputed step-by-step onchain, enabling the network to verify the validity of off-chain computations and ensure that errors or fraudulent behavior are detected and corrected.
+To safeguard against incorrect or malicious offchain execution, Arbitrum employs a <a data-quicklook-from="challenge">challenge</a> mechanism called fraud proofs. If a dispute arises, the STF can be recomputed step-by-step onchain, enabling the network to verify the validity of offchain computations and ensure that errors or fraudulent behavior are detected and corrected.
 
 The <a data-quicklook-from="arbitrum-nitro">Arbitrum Nitro</a> stack’s STF mirrors Ethereum’s STF with key modifications for the <a data-quicklook-from="arbitrum-chain">Arbitrum chain</a> requirements. The function processes ordered transactions and outputs the updated state from the transaction <a data-quicklook-from="batch">batch</a>.
 
