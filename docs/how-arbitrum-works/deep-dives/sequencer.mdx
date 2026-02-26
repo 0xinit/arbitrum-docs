@@ -117,7 +117,7 @@ The Sequencer in Arbitrum is critical in collecting and organizing child chain t
 - **Size thresholds**: Batch formation occurs when accumulated transactions reach a predefined size limit. This limit ensures that the fixed costs of posting data to the parent chain are amortized over more transactions, improving cost efficiency.
 - **Time constraints**: The Sequencer also monitors the elapsed time since the last batch update to prevent undue delays. Upon reaching the maximum time threshold, the Sequencer will create a batch with the transactions collected so far, even if the batch doesn’t meet the size threshold.
 
-#### Batch Creation Process:
+#### Batch creation process:
 
 - **Aggregation**: Once the batch-formation criteria (size or time threshold) are satisfied, the Sequencer aggregates buffered transactions into a single batch.
 - **Metadata inclusion**: The batch includes all necessary metadata for all transactions.
