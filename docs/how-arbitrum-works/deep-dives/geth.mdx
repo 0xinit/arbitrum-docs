@@ -82,7 +82,7 @@ This hook allows ArbOS to add additional refunds to the user's transaction. The 
 
 ### [`NonRefundableGas`](https://github.com/OffchainLabs/nitro/blob/8e786ec6d1ac3862be85e0c9b5ac79cbd883791c/arbos/tx_processor.go#L418)
 
-Because poster costs are borne by the parent chain aggregators, not the network, payments toward parent chain calldata should not be refunded. This hook provides Geth access to the equivalent amount of child-chain gas that the poster's cost equals, ensuring that this amount isn't reimbursed for network-incentivized behaviors like freeing storage slots.
+Because poster costs are borne by the parent chain aggregators, not the network, payments toward parent chain calldata should not be refunded. This hook provides Geth access to the equivalent amount of child chain gas that the poster's cost equals, ensuring that this amount isn't reimbursed for network-incentivized behaviors like freeing storage slots.
 
 ### [`EndTxHook`](https://github.com/OffchainLabs/nitro/blob/8e786ec6d1ac3862be85e0c9b5ac79cbd883791c/arbos/tx_processor.go#L429)
 
