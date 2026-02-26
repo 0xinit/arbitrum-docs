@@ -80,7 +80,7 @@ While the Sequencer feed offers significant advantages, consider the following:
 
 Developers and users should design their applications and interactions with these factors in mind, choosing the appropriate balance between speed and certainty based on their requirements.
 
-### **Delayed messages on the Sequencer feed**
+### Delayed messages on the Sequencer feed
 
 As illustrated in the diagram above, the Sequencer feed not only sends child-chain transactions posted directly to the Sequencer, but also incorporates parent-chain-submitted child-chain transactions. These include child chain messages submitted on the parent chain and retryable transactions. The Sequencer agent monitors the finalized messages submitted to the parent chain’s Delayed Inbox contract. Once finalized, it processes them as incoming messages to the feed, ensuring they are added as ordered transactions.
 
