@@ -46,7 +46,7 @@ Every transaction that comes in through the Sequencer will pay a parent chain ca
 
 The parent chain pricing algorithm assigns a parent chain calldata fee to each Sequencer transaction. First, it computes the transaction’s size, an estimate of how many bytes the transaction will add to the compressed batch it is in; the formula includes an estimate of the transaction's compressibility.
 
-Second, it multiples the computed size estimate by the current price per estimated byte to determine the transaction’s parent chain calldata wei in `wei`. Finally, it divides this cost by the current child chain basefee to convert the fee into child chain gas units. The result is reported as the “poster fee” for the transaction.
+Second, it multiplies the computed size estimate by the current price per estimated byte to determine the transaction's parent chain calldata cost in `wei`. Finally, it divides this cost by the current child chain basefee to convert the fee into child chain gas units. The result is reported as the "poster fee" for the transaction.
 
 The price per estimated byte is set by a dynamic algorithm that compares the total parent-chain calldata fees collected to the total fees actually paid by batch posters and tries to bring the two as close to equality as possible. If batch poster costs are less than fee receipts, the price will increase; if they exceed fee receipts, the price will decrease.
 
