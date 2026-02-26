@@ -33,7 +33,7 @@ A central concept in AnyTrust is the Data Availability Certificate (hereafter, a
 
 - The hash of a data block
 - An expiration time
-- Proof that the `N -1` DAC members have signed the pair (hash, expiration time), consisting of:
+- Proof that the `N - 1` DAC members have signed the pair (hash, expiration time), consisting of:
   - The hash of the Keyset used in signing
   - A bitmap showing which DAC members signed
   - A BLS aggregated signature (over the BLS12-381 curve) proving that those parties signed.
