@@ -1068,16 +1068,6 @@ const sidebars = {
             },
             {
               type: 'doc',
-              label: 'Geth',
-              id: 'how-arbitrum-works/deep-dives/geth',
-            },
-            {
-              type: 'doc',
-              label: 'Parent chain pricing',
-              id: 'how-arbitrum-works/deep-dives/parent-chain-pricing',
-            },
-            {
-              type: 'doc',
               label: 'Sequencer',
               id: 'how-arbitrum-works/deep-dives/sequencer',
             },
@@ -1088,11 +1078,6 @@ const sidebars = {
             },
             {
               type: 'doc',
-              label: 'STF inputs',
-              id: 'how-arbitrum-works/deep-dives/stf-inputs',
-            },
-            {
-              type: 'doc',
               label: 'Transaction lifecycle',
               id: 'how-arbitrum-works/deep-dives/transaction-lifecycle',
             },
@@ -1100,6 +1085,27 @@ const sidebars = {
               type: 'doc',
               label: 'Gas and fees',
               id: 'how-arbitrum-works/deep-dives/gas-and-fees',
+            },
+          ],
+        },
+        {
+          type: 'category',
+          label: 'Reference',
+          items: [
+            {
+              type: 'doc',
+              label: 'STF inputs',
+              id: 'how-arbitrum-works/reference/stf-inputs',
+            },
+            {
+              type: 'doc',
+              label: 'Geth',
+              id: 'how-arbitrum-works/reference/geth',
+            },
+            {
+              type: 'doc',
+              label: 'Parent chain pricing',
+              id: 'how-arbitrum-works/reference/parent-chain-pricing',
             },
           ],
         },
@@ -1324,12 +1330,12 @@ const sidebars = {
             {
               type: 'doc',
               label: 'Withdraw tokens',
-              id: 'build-decentralized-apps/token-bridging/how-to-bridge-from-parent-chain',
+              id: 'build-decentralized-apps/how-to-bridge-from-parent-chain',
             },
             {
               type: 'doc',
               label: 'Withdraw tokens',
-              id: 'build-decentralized-apps/token-bridging/how-to-bridge-to-parent-chain',
+              id: 'build-decentralized-apps/how-to-bridge-to-parent-chain',
             },
             {
               type: 'doc',
