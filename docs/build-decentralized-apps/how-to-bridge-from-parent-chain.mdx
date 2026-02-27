@@ -6,7 +6,7 @@ content_type: how-to
 
 import ImageZoom from '@site/src/components/ImageZoom';
 
-This guide explains how to programmatically send messages and bridge assets from a parent chain (like Ethereum) to an Arbitrum child chain. For conceptual information about the messaging protocol, see [Parent to child chain messaging](/how-arbitrum-works/deep-dives/l1-to-l2-messaging.mdx).
+This guide explains how to programmatically send messages and bridge assets from a parent chain (like Ethereum) to an Arbitrum child chain. For conceptual information about the messaging protocol, see [Parent-to-child chain messaging](/how-arbitrum-works/deep-dives/l1-to-l2-messaging.mdx).
 
 ## Prerequisites
 
@@ -106,7 +106,7 @@ Unsigned messages are automatically aliased for security. The Delayed Inbox prov
 
 #### From EOAs (with nonce for replay protection)
 
-**sendL1FundedUnsignedTransaction** - Transfers value from parent to child chain:
+**`sendL1FundedUnsignedTransaction`** - Transfers value from parent to child chain:
 
 ```solidity
 function sendL1FundedUnsignedTransaction(
@@ -118,7 +118,7 @@ function sendL1FundedUnsignedTransaction(
 ) external payable returns (uint256)
 ```
 
-**sendUnsignedTransaction** - Uses child chain balance (no L1 funds transferred):
+**`sendUnsignedTransaction`** - Uses child chain balance (no L1 funds transferred):
 
 ```solidity
 function sendUnsignedTransaction(
@@ -133,7 +133,7 @@ function sendUnsignedTransaction(
 
 #### From Contracts (standard Ethereum replay protection)
 
-**sendContractTransaction** - Uses contract's existing child chain balance:
+**`sendContractTransaction`** Uses contract's existing child chain balance:
 
 ```solidity
 function sendContractTransaction(
@@ -145,7 +145,7 @@ function sendContractTransaction(
 ) external returns (uint256)
 ```
 
-**sendL1FundedContractTransaction** - Transfers additional funds from parent to child:
+**`sendL1FundedContractTransaction`** - Transfers additional funds from parent to child:
 
 ```solidity
 function sendL1FundedContractTransaction(
@@ -173,7 +173,7 @@ Understanding these parameters is crucial for successful retryable ticket creati
 - **`maxSubmissionCost`**: Maximum `ETH` to pay for submitting the ticket. This amount is:
 
   - Supplied within the deposit (`l1CallValue`)
-  - Later deducted from sender's child chain balance
+  - Later deducted from the sender's child chain balance
   - Directly proportional to retryable data size and parent chain basefee
 
 - **`excessFeeRefundAddress`**: Where to refund unused gas and submission costs:
@@ -185,7 +185,7 @@ Understanding these parameters is crucial for successful retryable ticket creati
 
 - **`gasLimit`**: Maximum gas for child chain execution of the ticket. Used for the automatic redemption attempt.
 
-- **`maxFeePerGas`**: Gas price bid for child chain execution, supplied within the deposit (`l1CallValue`).
+- **`maxFeePerGas`**: Gas price bid for child-chain execution, supplied in the deposit (`l1CallValue`).
 
 - **`data`**: Calldata to send to the destination address on the child chain.
 
