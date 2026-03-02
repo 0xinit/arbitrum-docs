@@ -89,7 +89,6 @@ const privateKey = process.env.PRIVATE_KEY; // Your wallet private key (funded w
 // Step 1: Prepare chain config with increased size limits
 const orbitChainParams = {
   chainId: 123456,
-  nativeToken: '0x0000000000000000000000000000000000000000', // ETH as native token (or custom ERC20 address)
   arbitrum: {
     MaxCodeSize: 98304, // Increase to max 96KB for larger contracts
     MaxInitCodeSize: 98304, // Matching increase for init code
