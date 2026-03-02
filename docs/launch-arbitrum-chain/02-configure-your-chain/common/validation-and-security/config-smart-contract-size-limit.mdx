@@ -15,7 +15,7 @@ The limit applies to both deployed contract code (`MaxCodeSize`) and initializat
 - **Default values**: 24KB (24,576 bytes) for both `MaxCodeSize` and `MaxInitCodeSize` if not explicitly set.
 - **Maximum values**: 96KB (98,304 bytes) for each. Setting higher is not supported and may cause deployment failures or compatibility issues.
 - **Where applicable**: Only in custom Arbitrum chains. Public chains like Arbitrum One or Nova remain fixed at 24KB without a network-wide upgrade.
-- **Requirements**: You'll need the Arbitrum Chain SDK (installed via `npm install @offchainlabs/chain-sdk` or similar), a funded wallet on the parent chain (e.g., Ethereum or Arbitrum One), and access to deployment tools like Hardhat or Foundry for integration.
+- **Requirements**: You'll need the Arbitrum Chain SDK (installed via `npm install @arbitrum/chain-sdk` or similar), a funded wallet on the parent chain (e.g., Ethereum or Arbitrum One), and access to deployment tools like Hardhat or Foundry for integration.
 
 #### Process overview
 
@@ -104,7 +104,7 @@ const parentProvider = new ethers.JsonRpcProvider(parentChainRpcUrl);
 const wallet = new ethers.Wallet(privateKey, parentProvider);
 
 // Step 3: Prepare node config (generates nitro-node config like chain.toml)
-const nodeConfig = await prepareNodeConfig({
+const nodeConfig = prepareNodeConfig({
   chainName: 'my-arbitrum-chain', // Name for your chain
   chainConfig, // Pass the prepared chain config here
   parentChainId: 11155111, // e.g., Sepolia chain ID
