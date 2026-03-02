@@ -173,6 +173,12 @@ Once the new DAS servers and keyset are fully verified, you can optionally inval
 invalidateKeysetHash(<old_keyset_hash>)
 ```
 
+:::note
+
+After invalidating the old keyset, you **must** stop and restart the batch poster so it picks up the new keyset. If you skip this step, the batch poster will continue attempting to use the old (now invalid) keyset and fail to submit batches.
+
+:::
+
 :::caution
 
 - You can obtain the old keyset hash from the `SetValidKeyset` event that was emitted when the old keyset was originally registered
