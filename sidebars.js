@@ -326,6 +326,11 @@ const sidebars = {
                   label: 'Delayed inbox finality',
                   id: 'launch-arbitrum-chain/features/advanced/choose-custom-delay-inbox-finality',
                 },
+                {
+                  type: 'doc',
+                  label: 'Sequencer timing adjustments',
+                  id: 'launch-arbitrum-chain/features/advanced/sequencer-timing-adjustments',
+                },
               ],
             },
           ],
@@ -372,6 +377,11 @@ const sidebars = {
                   label: 'Data availability',
                   collapsed: true,
                   items: [
+                    {
+                      type: 'doc',
+                      id: 'launch-arbitrum-chain/configure-your-chain/common/data-availability/config-data-availability',
+                      label: `Config data availability`,
+                    },
                     {
                       type: 'category',
                       label: 'Data availability committee',
@@ -533,6 +543,11 @@ const sidebars = {
                   id: 'launch-arbitrum-chain/configure-your-chain/advanced/da-api-integration-guide',
                   label: `DA API integration guide`,
                 },
+                {
+                  type: 'doc',
+                  id: 'launch-arbitrum-chain/configure-your-chain/advanced/config-sequencer-timing-adjustments',
+                  label: `Sequencer timing adjustments`,
+                },
               ],
             },
           ],
@@ -573,6 +588,16 @@ const sidebars = {
               type: 'doc',
               id: 'launch-arbitrum-chain/deploy-an-arbitrum-chain/canonical-factory-contracts',
               label: 'Canonical factory contracts',
+            },
+            {
+              type: 'doc',
+              id: 'launch-arbitrum-chain/deploy-an-arbitrum-chain/run-l3-rollup-from-scratch',
+              label: 'Run an L3 rollup from scratch',
+            },
+            {
+              type: 'doc',
+              id: 'launch-arbitrum-chain/deploy-an-arbitrum-chain/run-l3-rollup-testnet-infrastructure',
+              label: 'Run L3 rollup infrastructure (product-level testnet)',
             },
           ],
         },
@@ -624,6 +649,11 @@ const sidebars = {
                   type: 'doc',
                   id: 'launch-arbitrum-chain/maintain-your-chain/guidance/post-launch-contract-deployments',
                   label: `Post-launch deployments`,
+                },
+                {
+                  type: 'doc',
+                  id: 'launch-arbitrum-chain/maintain-your-chain/guidance/key-rotation',
+                  label: `Node key rotation guide`,
                 },
               ],
             },
@@ -725,6 +755,11 @@ const sidebars = {
               type: 'doc',
               id: 'launch-arbitrum-chain/arbitrum-node-runners/high-availability-sequencer-docs',
               label: 'Run a high availability sequencer',
+            },
+            {
+              type: 'doc',
+              id: 'launch-arbitrum-chain/arbitrum-node-runners/run-batch-poster',
+              label: 'Run a batch poster',
             },
           ],
         },
