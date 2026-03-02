@@ -38,9 +38,16 @@ For sequencer nodes running both the sequencer and batch poster on the same serv
 
 #### 1. Enable the new batch poster
 
-```sh
-Call setIsBatchPoster(address=<new_address>, enabled=true) on SequencerInbox contract
-Call setBatchPosterManager(address=<new_address>) on SequencerInbox contract if you want to change batch poster manager
+Call the following function on the `SequencerInbox` contract. The caller must be the **rollup owner** or the **batch poster manager**.
+
+```solidity
+setIsBatchPoster(<new_address>, true)
+```
+
+If you also want to transfer the batch poster manager role to a new address, the **rollup owner** must call:
+
+```solidity
+setBatchPosterManager(<new_address>)
 ```
 
 #### 2. Update the node configuration
@@ -65,8 +72,8 @@ If you encounter the error: `"posting this transaction will exceed max mempool s
 
 #### 5. Disable the old batch poster
 
-```sh
-Call setIsBatchPoster(address=<old_address>, enabled=false) on SequencerInbox contract
+```solidity
+setIsBatchPoster(<old_address>, false)
 ```
 
 ## 2. Validator/bonder key rotation
@@ -81,8 +88,12 @@ Call setIsBatchPoster(address=<old_address>, enabled=false) on SequencerInbox co
 
 #### 1. Enable new validator
 
-```sh
-Call setValidator(addr=<new_validator_address>, val=true) on Rollup contract
+Call the following function on the `RollupAdminLogic` contract. The caller must be the **rollup owner**.
+
+Note that `setValidator` accepts arrays, allowing you to enable or disable multiple validators in a single call.
+
+```solidity
+setValidator([<new_validator_address>], [true])
 ```
 
 #### 2. Update the node configuration
@@ -105,15 +116,15 @@ If you encounter the error: `"posting this transaction will exceed max mempool s
 
 #### 5. Disable the old validator
 
-```sh
-Call setValidator(addr=<old_validator_address>, val=false) on Rollup contract
+```solidity
+setValidator([<old_validator_address>], [false])
 ```
 
 #### 6. Recover old validator bond (if applicable)
 
 - Wait for your old validator's latest bond assertion to be confirmed
-- Call `reduceDeposit()` on the `Rollup` Contract
-- Call `withdrawStakerFunds()` to get your bond back
+- Call `reduceDeposit(0)` on the `RollupUserLogic` contract to reduce the staked bond to zero
+- Call `withdrawStakerFunds()` on the `RollupUserLogic` contract to withdraw the released funds
 
 ## 3. AnyTrust Data Availability Committee (DAC) rotation
 
@@ -129,15 +140,17 @@ Call setValidator(addr=<old_validator_address>, val=false) on Rollup contract
 - Follow the [Generate Keyset documentation](/launch-arbitrum-chain/02-configure-your-chain/common/data-availability/data-availability-committees/04-configure-dac.mdx#step-1-generate-the-keyset-and-keyset-hash-with-all-the-information-from-the-servers) with your new group of DAS servers
 - Ensure that all new DASs are properly configured and accessible
 
-#### 2. Update keyset onchain
+#### 2. Register the new keyset onchain
 
-```sh
-Call setValidKeyset(keyset=<new_keyset>, assumedHonest=1) on SequencerInbox contract
+Call the following function on the `SequencerInbox` contract. The caller must be the **rollup owner**.
+
+```solidity
+setValidKeyset(<new_keyset_bytes>)
 ```
 
 :::note
 
-`assumedHonest=1` assumes at least one committee member is honest
+The `setValidKeyset` function takes the raw keyset bytes as its only parameter. The assumed-honest count is encoded within the keyset bytes themselves during keyset generation — it is not a separate contract parameter.
 
 :::
 
@@ -151,3 +164,19 @@ Call setValidKeyset(keyset=<new_keyset>, assumedHonest=1) on SequencerInbox cont
 - Monitor that the batch poster can successfully write batches to the new DAS servers
 - Check DAS server logs for successful data storage operations
 - Confirm data availability requests are getting handled successfully
+
+#### 5. Invalidate the old keyset (optional)
+
+Once the new DAS servers and keyset are fully verified, you can optionally invalidate the old keyset to prevent it from being used. Call the following function on the `SequencerInbox` contract. The caller must be the **rollup owner**.
+
+```solidity
+invalidateKeysetHash(<old_keyset_hash>)
+```
+
+:::caution
+
+- You can obtain the old keyset hash from the `SetValidKeyset` event that was emitted when the old keyset was originally registered
+- Do **not** invalidate the old keyset until the new keyset is fully verified and the batch poster is successfully posting with the new DAS servers — invalidating prematurely can disrupt data availability for your chain
+- After invalidation, the old keyset can no longer be used to certify data availability certificates
+
+:::
