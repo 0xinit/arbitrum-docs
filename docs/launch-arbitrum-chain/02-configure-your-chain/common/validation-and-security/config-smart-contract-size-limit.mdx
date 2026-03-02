@@ -12,7 +12,7 @@ The limit applies to both deployed contract code (`MaxCodeSize`) and initializat
 
 ## Key specifics
 
-- **Default values**: 24KB (24,576 bytes) for both `MaxCodeSize` and `MaxInitCodeSize` if not explicitly set.
+- **Default values**: 24KB (24,576 bytes) for `MaxCodeSize` and `MaxInitCodeSize` is `2 * DefaultMaxCodeSize`.
 - **Maximum values**: 96KB (98,304 bytes) for each. Setting higher is not supported and may cause deployment failures or compatibility issues.
 - **Where applicable**: Only in custom Arbitrum chains. Public chains like Arbitrum One or Nova remain fixed at 24KB without a network-wide upgrade.
 - **Requirements**: You'll need the Arbitrum Chain SDK (installed via `npm install @arbitrum/chain-sdk` or similar), a funded wallet on the parent chain (e.g., Ethereum or Arbitrum One), and access to deployment tools like Hardhat or Foundry for integration.
