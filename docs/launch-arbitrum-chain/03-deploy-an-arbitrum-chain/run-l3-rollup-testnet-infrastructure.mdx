@@ -147,6 +147,8 @@ extraEnv:
     value: 'http://$(POD_NAME).sequencer-nitro-headless.my-l3-chain.svc.cluster.local:8547/rpc'
 ```
 
+</CustomDetails>
+
 - Then add `-f sequencer-extra-env.yaml` to the `helm install` command above.
 
 - Wait for the sequencer pods to be ready:
@@ -214,6 +216,8 @@ The batch poster posts transaction batches to the parent chain.
 printf '%s' "$(jq -r '.node["batch-poster"]["parent-chain-wallet"]["private-key"]' node-config.json)" > batch-poster-key.txt
 ```
 
+</CustomDetails>
+
 <CustomDetails summary="Deploy the batch poster:">
   ```bash helm install batchposter offchainlabs/nitro \ --namespace my-l3-chain \ --set
   configmap.data.parent-chain.id=$PARENT_CHAIN_ID \ --set
@@ -232,6 +236,8 @@ printf '%s' "$(jq -r '.node["batch-poster"]["parent-chain-wallet"]["private-key"
 ```bash
 rm batch-poster-key.txt
 ```
+
+</CustomDetails>
 
 :::warning Do not add batch poster to sequencer priority
 
@@ -267,6 +273,8 @@ printf '%s' "$(jq -r '.node["staker"]["parent-chain-wallet"]["private-key"]' nod
 ```bash
 rm validator-key.txt
 ```
+
+</CustomDetails>
 
 ## Step 10: Set up Sequencer Coordinator Manager and set priority
 
