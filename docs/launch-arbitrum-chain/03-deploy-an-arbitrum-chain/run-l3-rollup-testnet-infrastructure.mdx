@@ -417,7 +417,7 @@ config();
 
 const parentChain = arbitrumSepolia;
 const parentChainPublicClient = createPublicClient({
-chain: parentChain,
+  chain: parentChain,
 transport: http(process.env.PARENT_CHAIN_RPC),
 });
 
