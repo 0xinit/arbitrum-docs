@@ -7,6 +7,17 @@
   max-width: 1200px;
   margin: 0 auto;
   padding: 0 0 40px;
+
+  // Reset Docusaurus default heading margins inside the visualization
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    margin-top: 0 !important;
+    padding-top: 0 !important;
+  }
 }
 
 // Override Docusaurus narrow content column for this page
@@ -17,6 +28,15 @@
 [class*='docItemCol']:has(.ecf-page),
 [class*='docItemContainer']:has(.ecf-page) {
   max-width: 100% !important;
+}
+
+// Ensure no ancestor overflow clips sticky positioning
+// Sticky requires ALL ancestors up to the scroll root to have overflow: visible
+div:has(.ecf-page),
+article:has(.ecf-page),
+section:has(.ecf-page),
+main:has(.ecf-page) {
+  overflow: visible !important;
 }
 
 .ecf-header-info {
@@ -140,8 +160,9 @@
   min-width: 120px;
 
   h3 {
-    font-size: 12px;
-    margin: 0 0 2px;
+    font-size: 14px !important;
+    font-weight: 600 !important;
+    margin: 0 0 2px !important;
     white-space: nowrap;
   }
 
@@ -168,7 +189,7 @@
   display: grid;
   grid-template-columns: 1fr 320px;
   gap: 16px;
-  // no align-items: start — sidebar must stretch to tree height for sticky to work
+  align-items: start;
 }
 
 .ecf-panel {
@@ -178,8 +199,9 @@
   padding: 14px;
 
   h2 {
-    margin: 0 0 12px;
-    font-size: 16px;
+    margin: 0 0 12px !important;
+    font-size: 16px !important;
+    font-weight: 600 !important;
   }
 }
 
@@ -188,26 +210,44 @@
   min-width: 0;
 }
 
-// ── Sidebar (sticky in its column) ──────────────────────────
+// ── Sidebar (sticky container, holds .ecf-panel children) ───
 
 .ecf-sidebar {
   grid-column: 2;
-}
-
-.ecf-sidebar-sticky {
   position: sticky;
   top: 76px; // below Docusaurus navbar
   display: flex;
   flex-direction: column;
-  gap: 10px;
-  max-height: calc(100vh - 90px);
-  overflow: hidden;
+  gap: 16px;
+  max-height: calc(100vh - 96px); // viewport minus navbar + breathing room
+  overflow-y: auto;
 
-  > .ecf-log-section {
-    flex: 1;
-    min-height: 0;
-    overflow-y: auto;
+  .ecf-panel {
+    min-height: auto;
   }
+}
+
+// Inner log panel inside sidebar
+.ecf-log {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+
+  h2 {
+    margin: 0 !important;
+    font-size: 16px !important;
+    font-weight: 600 !important;
+  }
+}
+
+// Fixed-height grid splitting Node Info and Event Timeline 50/50
+.ecf-log-split {
+  display: grid;
+  grid-template-rows: 1fr 1fr;
+  gap: 10px;
+  height: 520px;
+  max-height: 60vh;
+  min-height: 320px;
 }
 
 // ── Tree ────────────────────────────────────────────────────
@@ -229,16 +269,15 @@
   width: 100%;
 
   h3 {
-    margin: 0;
-    font-size: 16px;
+    margin: 0 !important;
+    font-size: 16px !important;
     color: var(--ecf-heading, #c7cdd8);
-    font-weight: 600;
+    font-weight: 600 !important;
   }
 }
 
 .ecf-tree-canvas {
   width: 100%;
-  min-height: 200px;
   overflow: auto;
 
   svg {
@@ -247,7 +286,6 @@
     border-radius: 8px;
     background: var(--ecf-tree-bg, #0f131d);
     display: block;
-    min-height: 200px;
   }
 }
 
@@ -255,7 +293,7 @@
   font-size: 12px;
   color: var(--ecf-muted, #8a93a5);
   text-align: center;
-  padding: 20px 0;
+  padding: 16px 0;
 }
 
 // ── D3 Tree Nodes ───────────────────────────────────────────
@@ -270,7 +308,7 @@
 
 .ecf-node text {
   fill: var(--ecf-node-text, #d7dbe6);
-  font-size: 13px;
+  font-size: 14px;
 }
 
 .ecf-node--active rect {
@@ -332,17 +370,22 @@
   background: var(--ecf-tree-bg, #0f131d);
   padding: 10px;
   overflow: auto;
+  min-height: 0; // allow grid to constrain height — prevents content from expanding the section
 
   h3 {
-    margin: 0 0 8px;
-    font-size: 13px;
+    margin: 0 0 8px !important;
+    font-size: 13px !important;
+    font-weight: 600 !important;
     color: var(--ecf-heading, #c7cdd8);
   }
 }
 
-.ecf-timeline {
-  overflow-y: auto;
-  max-height: 280px;
+.ecf-placeholder-text {
+  color: var(--ecf-muted, #8a93a5);
+  font-size: 12px;
+  line-height: 1.6;
+  margin: 0;
+  padding: 8px 0;
 }
 
 // ── Node Details ────────────────────────────────────────────
@@ -372,8 +415,14 @@
   margin-right: 8px;
 }
 
+.ecf-copy-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
 .ecf-copy-item {
-  display: inline-flex;
+  display: flex;
   align-items: center;
   gap: 6px;
 }
@@ -434,9 +483,12 @@
 // ── Event Timeline ──────────────────────────────────────────
 
 .ecf-timeline {
+  // No overflow here — parent .ecf-log-section handles scrolling
+
   h3 {
-    margin: 0 0 8px;
-    font-size: 13px;
+    margin: 0 0 8px !important;
+    font-size: 13px !important;
+    font-weight: 600 !important;
     color: var(--ecf-heading, #c7cdd8);
   }
 }
@@ -513,17 +565,22 @@
     grid-template-columns: 1fr;
   }
 
-  .ecf-tree {
-    grid-column: 1;
-  }
-
+  .ecf-tree,
   .ecf-sidebar {
     grid-column: 1;
   }
 
-  .ecf-sidebar-sticky {
+  .ecf-sidebar {
     position: static;
     max-height: none;
+    overflow-y: visible;
+  }
+
+  .ecf-log-split {
+    height: auto;
+    max-height: none;
+    min-height: 0;
+    grid-template-rows: auto auto;
   }
 
   .ecf-flow-steps {

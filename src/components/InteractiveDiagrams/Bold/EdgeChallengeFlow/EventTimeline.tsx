@@ -35,17 +35,24 @@ export default function EventTimeline({
   return (
     <div className="ecf-timeline" ref={containerRef}>
       <h3>Event Timeline</h3>
-      <ol className="ecf-event-log">
-        {appliedEvents.map((ev, index) => (
-          <li
-            key={`${ev.blockNumber}-${ev.logIndex}`}
-            className={index === currentIndex ? 'ecf-log-current' : undefined}
-          >
-            [{ev.blockNumber}/{ev.logIndex}]{' '}
-            {formatEvent(ev, levelMeta, edgeAddedById, rangeByEdgeId)}
-          </li>
-        ))}
-      </ol>
+      {appliedEvents.length === 0 ? (
+        <p className="ecf-placeholder-text">
+          Press Play or Next to step through on-chain events. Each event will appear here as it is
+          replayed.
+        </p>
+      ) : (
+        <ol className="ecf-event-log">
+          {appliedEvents.map((ev, index) => (
+            <li
+              key={`${ev.blockNumber}-${ev.logIndex}`}
+              className={index === currentIndex ? 'ecf-log-current' : undefined}
+            >
+              [{ev.blockNumber}/{ev.logIndex}]{' '}
+              {formatEvent(ev, levelMeta, edgeAddedById, rangeByEdgeId)}
+            </li>
+          ))}
+        </ol>
+      )}
     </div>
   );
 }

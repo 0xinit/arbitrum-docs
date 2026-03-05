@@ -26,22 +26,18 @@ export default function NodeDetailsPanel({
     }
   }, []);
 
-  if (!selectedNodeKey) {
+  if (!selectedNodeKey || !rangeNodes.get(selectedNodeKey)) {
     return (
-      <div className="ecf-node-details">
-        <p>Click a node to view details.</p>
+      <div className="ecf-node-details ecf-node-details--empty">
+        <p className="ecf-placeholder-text">
+          Click a node in the Edge Tree to inspect its range, level, mutual ID, rival status, and
+          associated edges.
+        </p>
       </div>
     );
   }
 
-  const node = rangeNodes.get(selectedNodeKey);
-  if (!node) {
-    return (
-      <div className="ecf-node-details">
-        <p>Click a node to view details.</p>
-      </div>
-    );
-  }
+  const node = rangeNodes.get(selectedNodeKey)!;
 
   const levelType = resolveLevelType(node.level, levelMeta);
   const levelText = levelType ?? (node.level !== '-' ? `Level ${node.level}` : 'Level ?');
@@ -51,7 +47,6 @@ export default function NodeDetailsPanel({
 
   return (
     <div className="ecf-node-details">
-      <h4>Node Details</h4>
       <div className="ecf-field">
         <span className="ecf-field-label">Range:</span>
         {rangeText}
@@ -62,16 +57,27 @@ export default function NodeDetailsPanel({
       </div>
       <div className="ecf-field">
         <span className="ecf-field-label">{mutualIds.length > 1 ? 'MutualIds' : 'MutualId'}:</span>
-        {mutualIds.length === 0
-          ? '-'
-          : mutualIds.map((id) => (
-              <span key={id} className="ecf-copy-item">
+        {mutualIds.length === 0 ? (
+          '-'
+        ) : mutualIds.length === 1 ? (
+          <span className="ecf-copy-item">
+            <code className="ecf-copy-text">{shortHex(mutualIds[0], 8, 6)}</code>
+            <button className="ecf-copy-btn" onClick={() => copyToClipboard(mutualIds[0])}>
+              Copy
+            </button>
+          </span>
+        ) : (
+          <div className="ecf-copy-list">
+            {mutualIds.map((id) => (
+              <div key={id} className="ecf-copy-item">
                 <code className="ecf-copy-text">{shortHex(id, 8, 6)}</code>
                 <button className="ecf-copy-btn" onClick={() => copyToClipboard(id)}>
                   Copy
                 </button>
-              </span>
+              </div>
             ))}
+          </div>
+        )}
       </div>
       <div className="ecf-field">
         <span className="ecf-field-label">Rival Status:</span>

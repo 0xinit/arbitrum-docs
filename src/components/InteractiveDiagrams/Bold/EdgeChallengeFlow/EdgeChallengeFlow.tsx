@@ -122,25 +122,28 @@ function EdgeChallengeFlowLoaded({ data }: { data: EdgeChallengeData }) {
         </div>
 
         <div className="ecf-sidebar">
-          <div className="ecf-sidebar-sticky">
-            <div className="ecf-log-section">
-              <h3>Node Info</h3>
-              <NodeDetailsPanel
-                selectedNodeKey={selectedNodeKey}
-                rangeNodes={rangeIndex.rangeNodes}
-                state={state}
-                levelMeta={levelMeta}
-                edgeAddedById={edgeAddedById}
-              />
-            </div>
-            <div className="ecf-log-section">
-              <EventTimeline
-                appliedEvents={state.appliedEvents}
-                currentIndex={currentIndex}
-                levelMeta={levelMeta}
-                edgeAddedById={edgeAddedById}
-                rangeByEdgeId={rangeByEdgeId}
-              />
+          <div className="ecf-panel ecf-log">
+            <h2>Information</h2>
+            <div className="ecf-log-split">
+              <div className="ecf-log-section">
+                <h3>Node Info</h3>
+                <NodeDetailsPanel
+                  selectedNodeKey={selectedNodeKey}
+                  rangeNodes={rangeIndex.rangeNodes}
+                  state={state}
+                  levelMeta={levelMeta}
+                  edgeAddedById={edgeAddedById}
+                />
+              </div>
+              <div className="ecf-log-section">
+                <EventTimeline
+                  appliedEvents={state.appliedEvents}
+                  currentIndex={currentIndex}
+                  levelMeta={levelMeta}
+                  edgeAddedById={edgeAddedById}
+                  rangeByEdgeId={rangeByEdgeId}
+                />
+              </div>
             </div>
           </div>
         </div>
