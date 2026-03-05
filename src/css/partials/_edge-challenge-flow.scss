@@ -200,7 +200,7 @@ main:has(.ecf-page) {
 
   h2 {
     margin: 0 0 12px !important;
-    font-size: 16px !important;
+    font-size: 18px !important;
     font-weight: 600 !important;
   }
 }
@@ -235,7 +235,7 @@ main:has(.ecf-page) {
 
   h2 {
     margin: 0 !important;
-    font-size: 16px !important;
+    font-size: 18px !important;
     font-weight: 600 !important;
   }
 }
@@ -270,7 +270,7 @@ main:has(.ecf-page) {
 
   h3 {
     margin: 0 !important;
-    font-size: 16px !important;
+    font-size: 17px !important;
     color: var(--ecf-heading, #c7cdd8);
     font-weight: 600 !important;
   }
@@ -278,14 +278,15 @@ main:has(.ecf-page) {
 
 .ecf-tree-canvas {
   width: 100%;
-  overflow: auto;
+  overflow-x: auto;
+  overflow-y: hidden;
 
   svg {
-    width: 100%;
     border: 1px solid var(--ecf-inner-border, #1f2635);
     border-radius: 8px;
     background: var(--ecf-tree-bg, #0f131d);
     display: block;
+    min-width: 100%; // fill container when tree is narrow, scroll when wide
   }
 }
 
@@ -374,7 +375,7 @@ main:has(.ecf-page) {
 
   h3 {
     margin: 0 0 8px !important;
-    font-size: 13px !important;
+    font-size: 14px !important;
     font-weight: 600 !important;
     color: var(--ecf-heading, #c7cdd8);
   }
@@ -382,7 +383,7 @@ main:has(.ecf-page) {
 
 .ecf-placeholder-text {
   color: var(--ecf-muted, #8a93a5);
-  font-size: 12px;
+  font-size: 13px;
   line-height: 1.6;
   margin: 0;
   padding: 8px 0;
@@ -391,7 +392,7 @@ main:has(.ecf-page) {
 // ── Node Details ────────────────────────────────────────────
 
 .ecf-node-details {
-  font-size: 13px;
+  font-size: 14px;
   line-height: 1.5;
   color: var(--ecf-text, #d7dbe6);
 
@@ -487,7 +488,7 @@ main:has(.ecf-page) {
 
   h3 {
     margin: 0 0 8px !important;
-    font-size: 13px !important;
+    font-size: 14px !important;
     font-weight: 600 !important;
     color: var(--ecf-heading, #c7cdd8);
   }

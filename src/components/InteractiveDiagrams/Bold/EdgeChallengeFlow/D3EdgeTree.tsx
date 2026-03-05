@@ -86,7 +86,7 @@ export default function D3EdgeTree({
     }
 
     svg
-      .attr('width', panelWidth)
+      .attr('width', viewWidth)
       .attr('height', height)
       .attr('viewBox', `0 0 ${viewWidth} ${height}`);
     if (zoomStateRef.current) {
