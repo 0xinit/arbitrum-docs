@@ -18,7 +18,7 @@ Creating an arbitrary parent-to-child chain contract call occurs via the Inbox's
 
 ## Arbitrum-to-Ethereum messaging
 
-Similarly, child chain contracts can send arbitrary messages for execution on the parent chain. These are initiated via calls to the [`ArbSys`](/build-decentralized-apps/precompiles/02-reference.mdx#arbsys) precompile contract's `sendTxToL1` method. Upon confirmation (about one week later), they are now executable by retrieving the relevant data via a call to the `NodeInterface` contract's `constructOutboxProof` method, and then executing them via the `Outbox`'s `executeTransaction` method.
+Similarly, child chain contracts can send arbitrary messages for execution on the parent chain. These are initiated via calls to the [`ArbSys`](/build-decentralized-apps/precompiles/02-reference.mdx#arbsys) precompile contract's `sendTxToL1` method. Upon confirmation (about one week later), you can execute them by retrieving the relevant data via a call to the `NodeInterface` contract's `constructOutboxProof` method, and then calling the `Outbox`'s `executeTransaction` method.
 
 - **How-to guide**: [How to bridge to parent chain from child chain](/build-decentralized-apps/how-to-bridge-to-parent-chain.mdx)
 - **Protocol details**: [Child to parent chain messaging](/how-arbitrum-works/deep-dives/l2-to-l1-messaging.mdx)
