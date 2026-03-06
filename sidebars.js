@@ -589,6 +589,16 @@ const sidebars = {
               id: 'launch-arbitrum-chain/deploy-an-arbitrum-chain/canonical-factory-contracts',
               label: 'Canonical factory contracts',
             },
+            {
+              type: 'doc',
+              id: 'launch-arbitrum-chain/deploy-an-arbitrum-chain/run-l3-rollup-from-scratch',
+              label: 'Run an L3 rollup from scratch',
+            },
+            {
+              type: 'doc',
+              id: 'launch-arbitrum-chain/deploy-an-arbitrum-chain/run-l3-rollup-testnet-infrastructure',
+              label: 'Run L3 rollup infrastructure (product-level testnet)',
+            },
           ],
         },
         {
@@ -639,6 +649,11 @@ const sidebars = {
                   type: 'doc',
                   id: 'launch-arbitrum-chain/maintain-your-chain/guidance/post-launch-contract-deployments',
                   label: `Post-launch deployments`,
+                },
+                {
+                  type: 'doc',
+                  id: 'launch-arbitrum-chain/maintain-your-chain/guidance/key-rotation',
+                  label: `Node key rotation guide`,
                 },
               ],
             },
@@ -1101,6 +1116,11 @@ const sidebars = {
               label: 'Gas and fees',
               id: 'how-arbitrum-works/deep-dives/gas-and-fees',
             },
+            {
+              type: 'doc',
+              label: 'Token bridging',
+              id: 'how-arbitrum-works/deep-dives/token-bridging',
+            },
           ],
         },
         {
@@ -1320,11 +1340,6 @@ const sidebars = {
               type: 'doc',
               label: 'ETH bridging',
               id: 'build-decentralized-apps/token-bridging/token-bridge-ether',
-            },
-            {
-              type: 'doc',
-              label: 'ERC-20 token bridging',
-              id: 'build-decentralized-apps/token-bridging/token-bridge-erc20',
             },
             {
               type: 'category',
