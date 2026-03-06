@@ -39,7 +39,7 @@ On the other hand, the **child chain counterpart of the gateway** must conform t
 - A method `outboundTransfer`, to handle external calls, and forwarded calls from `L2GatewayRouter.outboundTransfer`.
 - A method `finalizeInboundTransfer`, to handle messages coming **only** from the parent chain's gateway.
 - Two methods, `calculateL2TokenAddress` and `getOutboundCalldata`, to handle other bridging operations.
-- Methods to send cross-chain messages through the [ArbSys precompile](/build-decentralized-apps/precompiles/02-reference.mdx#arbsys). You can view an implementation example of `sendTxToL1` on [L2ArbitrumMessenger](https://github.com/OffchainLabs/token-bridge-contracts/blob/main/contracts/tokenbridge/arbitrum/L2ArbitrumMessenger.sol).
+- Methods to send cross-chain messages through the [ArbSys precompile](/build-decentralized-apps/precompiles/02-reference.mdx#arbsys). You can view an example implementation of `sendTxToL1` on [L2ArbitrumMessenger](https://github.com/OffchainLabs/token-bridge-contracts/blob/main/contracts/tokenbridge/arbitrum/L2ArbitrumMessenger.sol).
 
 ### What about my custom tokens?
 
