@@ -1078,7 +1078,7 @@ const sidebars = {
             },
             {
               type: 'doc',
-              label: 'Child to Parent chain Messaging',
+              label: 'Child to parent chain messaging',
               id: 'how-arbitrum-works/deep-dives/l2-to-l1-messaging',
             },
             {
@@ -1368,17 +1368,17 @@ const sidebars = {
               items: [
                 {
                   type: 'doc',
-                  label: 'Setup custom gateway',
+                  label: 'Set up custom gateway',
                   id: 'build-decentralized-apps/token-bridging/configure-token-bridging/setup-custom-gateway',
                 },
                 {
                   type: 'doc',
-                  label: 'Setup generic custom gateway',
+                  label: 'Set up generic custom gateway',
                   id: 'build-decentralized-apps/token-bridging/configure-token-bridging/setup-generic-custom-gateway',
                 },
                 {
                   type: 'doc',
-                  label: 'Setup standard gateway',
+                  label: 'Set up standard gateway',
                   id: 'build-decentralized-apps/token-bridging/configure-token-bridging/setup-standard-gateway',
                 },
               ],
