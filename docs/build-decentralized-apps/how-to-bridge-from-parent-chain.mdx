@@ -181,7 +181,7 @@ Understanding these parameters helps ensure successful retryable ticket creation
   - Formula: `(gasLimit × maxFeePerGas - execution cost) + (maxSubmissionCost - submission cost)`
   - **Important**: If auto-redeem fails, excess deposit goes to the alias of the L1 sender, not this address
 
-- **`callValueRefundAddress`**: The child chain address to credit the `l2CallValue` if the ticket times out or gets canceled. This address is also the "beneficiary" with permission to cancel the ticket.
+- **`callValueRefundAddress`**: The child chain address to credit the `l2CallValue` if the ticket times out or is canceled. This address is also the "beneficiary" with permission to cancel the ticket.
 
 - **`gasLimit`**: Maximum gas for child chain execution of the ticket. Used for the automatic redemption attempt.
 
