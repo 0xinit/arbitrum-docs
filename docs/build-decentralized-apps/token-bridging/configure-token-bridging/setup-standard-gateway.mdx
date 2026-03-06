@@ -32,7 +32,7 @@ When using the standard gateway:
 
 1. **No pre-configuration needed**: Your token is automatically bridgeable
 2. **Automatic child chain deployment**: On the first deposit, a [`StandardArbERC20`](https://github.com/OffchainLabs/token-bridge-contracts/blob/main/contracts/tokenbridge/arbitrum/StandardArbERC20.sol) contract is deployed on the child chain
-3. **Escrow model**: Parent chain tokens are escrowed in the gateway; child chain tokens are minted/burned
+3. **Escrow model**: Parent chain tokens are escrowed in the gateway; child chain tokens are minted and burned
 4. **Router handles routing**: The router automatically directs your token to the standard gateway
 
 For architectural details, see [Standard `ERC-20` bridging](/how-arbitrum-works/deep-dives/token-bridging.mdx#default-standard-bridging).
