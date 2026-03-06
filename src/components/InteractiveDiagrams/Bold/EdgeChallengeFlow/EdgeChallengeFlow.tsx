@@ -74,6 +74,18 @@ function EdgeChallengeFlowLoaded({ data }: { data: EdgeChallengeData }) {
           </a>
           .
         </p>
+        <p>
+          For more information or to use your own assertion data, visit the{' '}
+          <a
+            className="ecf-tx-link"
+            href="https://offchainlabs.github.io/fraudproof-example-dashboard/edge-challenge-flow.html"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            BoLD bisection guide
+          </a>
+          .
+        </p>
       </div>
 
       <ControlBar
