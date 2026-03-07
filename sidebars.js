@@ -954,7 +954,11 @@ const sidebars = {
           id: 'run-arbitrum-node/nitro/how-to-convert-databases-from-leveldb-to-pebble',
           label: 'Convert databases from LevelDB to Pebble',
         },
-        ,
+        {
+          type: 'doc',
+          id: 'run-arbitrum-node/nitro/nitro-memory-management',
+          label: 'Nitro memory management',
+        },
         {
           type: 'doc',
           id: 'run-arbitrum-node/troubleshooting',
@@ -1100,11 +1104,6 @@ const sidebars = {
               type: 'doc',
               label: 'Gas and fees',
               id: 'how-arbitrum-works/deep-dives/gas-and-fees',
-            },
-            {
-              type: 'doc',
-              label: 'Nitro memory management',
-              id: 'how-arbitrum-works/deep-dives/nitro-memory-management',
             },
             {
               type: 'doc',

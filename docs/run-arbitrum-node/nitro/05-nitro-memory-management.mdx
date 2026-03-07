@@ -3,8 +3,8 @@ title: 'Nitro memory management'
 description: 'Understand how Arbitrum Nitro uses memory across Go, CGO, and raw mmap allocators, and how to configure caches and GOMEMLIMIT for stable node operation.'
 author: athomas
 sme: athomas
-user_story: As a node operator, I need to understand how Nitro allocates memory so I can size my containers correctly and avoid out-of-memory issues.
-content_type: concept
+user_story: As a node operator, I need to understand how Nitro allocates memory so I can size my containers correctly, configure GOMEMLIMIT, and avoid out-of-memory issues.
+content_type: how-to
 ---
 
 Arbitrum Nitro nodes use significantly more memory than Go's runtime reports. This is because Nitro relies on multiple allocators — the Go garbage-collected heap, CGO allocations via `calloc`, and direct `mmap` system calls — each with its own accounting. Understanding where memory lives and which configuration knobs control it is essential for sizing containers, setting `GOMEMLIMIT`, and avoiding out-of-memory (OOM) kills.
