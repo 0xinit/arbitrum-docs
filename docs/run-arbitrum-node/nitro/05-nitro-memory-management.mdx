@@ -27,7 +27,7 @@ Only the Go heap is subject to Go's garbage collector and `GOMEMLIMIT`. The CGO 
 The Go runtime manages its own heap for all pure-Go allocations. Key consumers include:
 
 - **Dirty trie cache** (`trie-dirty-cache`): Modified state trie nodes held in memory before being flushed to disk. This is the largest Go-heap consumer and defaults to 1024 MB.
-- **Goroutine stacks**: Nitro runs hundreds of goroutines; their stacks are managed by the Go runtime.
+- **Goroutine stacks**: Nitro runs many goroutines; their stacks are managed by the Go runtime.
 - **General application state**: Transaction processing, RPC handling, block building, and other runtime data.
 
 Go reports its total memory usage via `runtime.MemStats.Sys`, which includes the heap, stack space, and GC metadata. This is the portion of memory that `GOMEMLIMIT` governs.
