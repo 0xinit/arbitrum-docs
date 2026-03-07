@@ -11,7 +11,7 @@ Arbitrum Nitro nodes can use significantly more memory than Go's runtime reports
 
 ## Memory allocators in Nitro
 
-Nitro's total resident memory (RSS) is the sum of three distinct categories:
+Nitro's total resident memory (RSS) is the sum of four distinct categories:
 
 | Allocator               | What uses it                                                                           | Visible in Go `memstats`? | Controlled by                                 |
 | ----------------------- | -------------------------------------------------------------------------------------- | ------------------------- | --------------------------------------------- |
@@ -40,7 +40,7 @@ Nitro's on-disk database, <a data-quicklook-from="pebble">Pebble</a>, allocates 
 
 **Pebble memtables** buffer recent writes before they are flushed to disk. Nitro configures four memtables, each sized at `database-cache / 8`, for a combined maximum of `database-cache / 2`. For the default `database-cache` of 2048 MB, this means up to 1024 MB of memtable space (four memtables of 256 MB each).
 
-**Stylus WASM cache** stores compiled WebAssembly modules for Stylus smart contracts. It is allocated via Rust and bounded by `stylus-lru-cache-capacity`.
+**Stylus WASM cache** stores compiled WebAssembly modules for Stylus smart contracts. It is allocated via Rust (invoked through CGO FFI) and bounded by `stylus-lru-cache-capacity`.
 
 ### Raw `mmap` allocations (fastcache)
 
@@ -89,7 +89,7 @@ All cache sizes are configured under `execution.caching`:
 | `trie-dirty-cache`          | 1024 MB | Go heap            | Modified trie nodes awaiting flush to disk.              |
 | `trie-clean-cache`          | 600 MB  | `mmap` (fastcache) | Unchanged trie nodes cached for read performance.        |
 | `snapshot-cache`            | 400 MB  | `mmap` (fastcache) | State snapshot data for fast lookups.                    |
-| `stylus-lru-cache-capacity` | 256 MB  | Rust               | Compiled Stylus WASM modules.                            |
+| `stylus-lru-cache-capacity` | 256 MB  | Rust (via CGO FFI) | Compiled Stylus WASM modules.                            |
 
 :::tip
 All of these caches are **bounded by configuration** and will not grow beyond their configured limits. This means total non-Go memory is predictable and can be calculated from your configuration.
@@ -105,13 +105,13 @@ Sum all memory that lives outside the Go heap:
 
 ```
 Non-Go Memory =
-    database-cache                  +   # Pebble block cache (CGO)
-    (database-cache / 2)            +   # Pebble memtables, max (CGO)
-    trie-clean-cache                +   # fastcache (mmap)
-    snapshot-cache                  +   # fastcache (mmap)
-    stylus-lru-cache-capacity       +   # Stylus WASM (Rust)
-    malloc arena overhead           +   # glibc arenas (see below)
-    ~300 MB                             # Thread stacks (depends on thread count)
+    database-cache            # Pebble block cache (CGO)
+  + (database-cache / 2)      # Pebble memtables, max (CGO)
+  + trie-clean-cache           # fastcache (mmap)
+  + snapshot-cache             # fastcache (mmap)
+  + stylus-lru-cache-capacity  # Stylus WASM (Rust)
+  + malloc arena overhead      # glibc arenas
+  + ~300 MB                    # Thread stacks (varies by workload)
 ```
 
 With `MALLOC_ARENA_MAX=2`, arena overhead is ~128 MB. Without it, arena overhead can grow to several gigabytes depending on host CPU count. See [glibc malloc arenas](#glibc-malloc-arenas) above.
