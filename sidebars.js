@@ -1103,6 +1103,11 @@ const sidebars = {
             },
             {
               type: 'doc',
+              label: 'Nitro memory management',
+              id: 'how-arbitrum-works/deep-dives/nitro-memory-management',
+            },
+            {
+              type: 'doc',
               label: 'Token bridging',
               id: 'how-arbitrum-works/deep-dives/token-bridging',
             },
