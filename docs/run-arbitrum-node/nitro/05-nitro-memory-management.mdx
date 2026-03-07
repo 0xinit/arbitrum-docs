@@ -40,7 +40,7 @@ Nitro's on-disk database, <a data-quicklook-from="pebble">Pebble</a>, allocates 
 
 **Pebble memtables** buffer recent writes before they are flushed to disk. Nitro configures four memtables, each sized at `database-cache / 8`, for a combined maximum of `database-cache / 2`. For the default `database-cache` of 2048 MB, this means up to 1024 MB of memtable space (four memtables of 256 MB each).
 
-**Stylus WASM cache** stores compiled WebAssembly modules for Stylus smart contracts. It is allocated via Rust/jemalloc and bounded by `stylus-lru-cache-capacity`.
+**Stylus WASM cache** stores compiled WebAssembly modules for Stylus smart contracts. It is allocated via Rust and bounded by `stylus-lru-cache-capacity`.
 
 ### Raw `mmap` allocations (fastcache)
 
@@ -49,17 +49,17 @@ Two caches use [fastcache](https://github.com/VictoriaMetrics/fastcache), a libr
 - **Trie-clean cache** (`trie-clean-cache`): Caches unchanged state trie nodes. Default: 600 MB.
 - **Snapshot cache** (`snapshot-cache`): Caches state snapshot data for fast reads. Default: 400 MB.
 
-Because fastcache uses raw `mmap`, this memory does not appear in Go's `memstats`, jemalloc statistics, or standard profiling tools. It is only visible by inspecting `/proc/<pid>/smaps` at the OS level. Each fastcache instance allocates memory in 64 MB chunks, making these regions identifiable when analyzing process memory maps.
+Because fastcache uses raw `mmap`, this memory does not appear in Go's `memstats` or standard profiling tools. It is only visible by inspecting `/proc/<pid>/smaps` at the OS level. Each fastcache instance allocates memory in 64 MB chunks, making these regions identifiable when analyzing process memory maps.
 
 ### glibc malloc arenas
 
 When Nitro makes CGO calls (for Pebble, Stylus, etc.), the resulting C-side allocations go through the system's default C memory allocator: glibc `malloc`. Unlike Go's garbage-collected heap, `malloc` manages memory by requesting large regions from the OS and subdividing them to satisfy individual allocation requests. Freed memory is returned to the allocator's internal free lists rather than immediately back to the OS, so the process's RSS can remain elevated even after allocations are freed.
 
-To handle concurrent allocations efficiently, glibc `malloc` uses arenas, which are independent memory pools, each with its own lock. When a thread allocates memory, it picks an arena, reducing contention compared to a single global lock. By default, glibc creates up to `8 × CPU_count` arenas, each reserving a 64 MB region. On a 16-core worker node, this means:
+To handle concurrent allocations efficiently, glibc `malloc` uses arenas, which are independent memory pools, each with its own lock. When a thread allocates memory, it picks an arena, reducing contention compared to a single global lock. By default, glibc creates up to `8 × CPU_count` arenas, each reserving a 64 MB region. The worst-case overhead for arenas is:
 
-- Max arenas: 8 × 16 = 128
-- Arena size: 64 MB each
-- Worst-case overhead: **up to 8 GB** just for arena structures
+```
+Arena overhead = 8 × CPU_count × 64 MB
+```
 
 In containerized environments, glibc detects the underlying host CPU count (not the container's CPU requests), which often results in far more arenas than needed. As the process runs and more threads make CGO calls, new arenas are created and retained, causing RSS to drift upward over days or weeks even though no individual allocation is leaking.
 
@@ -89,7 +89,7 @@ All cache sizes are configured under `execution.caching`:
 | `trie-dirty-cache`          | 1024 MB | Go heap            | Modified trie nodes awaiting flush to disk.              |
 | `trie-clean-cache`          | 600 MB  | `mmap` (fastcache) | Unchanged trie nodes cached for read performance.        |
 | `snapshot-cache`            | 400 MB  | `mmap` (fastcache) | State snapshot data for fast lookups.                    |
-| `stylus-lru-cache-capacity` | 256 MB  | Rust/jemalloc      | Compiled Stylus WASM modules.                            |
+| `stylus-lru-cache-capacity` | 256 MB  | Rust               | Compiled Stylus WASM modules.                            |
 
 :::tip
 All of these caches are **bounded by configuration** and will not grow beyond their configured limits. This means total non-Go memory is predictable and can be calculated from your configuration.
@@ -109,7 +109,7 @@ Non-Go Memory =
     (database-cache / 2)            +   # Pebble memtables, max (CGO)
     trie-clean-cache                +   # fastcache (mmap)
     snapshot-cache                  +   # fastcache (mmap)
-    stylus-lru-cache-capacity       +   # Stylus WASM (Rust/jemalloc)
+    stylus-lru-cache-capacity       +   # Stylus WASM (Rust)
     malloc arena overhead           +   # glibc arenas (see below)
     ~300 MB                             # Thread stacks (depends on thread count)
 ```
