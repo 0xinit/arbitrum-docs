@@ -1350,18 +1350,19 @@ const sidebars = {
             {
               type: 'doc',
               label: 'Withdraw tokens',
+              id: 'build-decentralized-apps/token-bridging/withdraw-tokens',
+            },
+            {
+              type: 'doc',
+              label: 'Bridge to child chain',
               id: 'build-decentralized-apps/how-to-bridge-from-parent-chain',
             },
             {
               type: 'doc',
-              label: 'Withdraw tokens',
+              label: 'Bridge to parent chain',
               id: 'build-decentralized-apps/how-to-bridge-to-parent-chain',
             },
-            {
-              type: 'doc',
-              label: 'Withdraw tokens',
-              id: 'build-decentralized-apps/token-bridging/withdraw-tokens',
-            },
+            ,
             {
               type: 'category',
               label: 'Configure token bridging',
