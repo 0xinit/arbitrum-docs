@@ -134,8 +134,10 @@ A safety margin of 300-500 MB is recommended to account for allocator overhead, 
 | Snapshot cache         | 400 MB       | `snapshot-cache` (fastcache)       |
 | Stylus WASM cache      | 256 MB       | `stylus-lru-cache-capacity` (Rust) |
 | Malloc arenas          | 128 MB       | `MALLOC_ARENA_MAX=2`               |
-| Thread stacks          | 300 MB       | ~180 threads                       |
+| Thread stacks          | 300 MB\*     | ~2 MB per thread                   |
 | **Total non-Go**       | **4,756 MB** |                                    |
+
+\*Thread stack usage depends on the number of active threads, which varies by workload.
 
 ```
 GOMEMLIMIT = 16,384 MB - 4,756 MB - 400 MB safety = ~11,228 MB ≈ 11 GB
