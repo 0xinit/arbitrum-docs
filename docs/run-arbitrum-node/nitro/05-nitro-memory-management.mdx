@@ -26,9 +26,12 @@ Only the Go heap is subject to Go's garbage collector and `GOMEMLIMIT`. The CGO 
 
 The Go runtime manages its own heap for all pure-Go allocations. Key consumers include:
 
-- **Dirty trie cache** (`trie-dirty-cache`): Modified state trie nodes held in memory before being flushed to disk. This is the largest Go-heap consumer and defaults to 1024 MB.
-- **Goroutine stacks**: Nitro runs many goroutines; their stacks are managed by the Go runtime.
-- **General application state**: Transaction processing, RPC handling, block building, and other runtime data.
+- **Dirty trie cache** (`trie-dirty-cache`): Modified state trie nodes held in memory before being flushed to disk. Defaults to 1024 MB and is one of the largest bounded caches on the Go heap.
+- **Contract code cache**: An LRU cache of contract bytecode, hardcoded at 256 MB. Not configurable.
+- **Activated WASM cache**: Compiled Stylus WASM modules cached on the Go heap, hardcoded at 64 MB.
+- **fastcache index maps**: Although fastcache stores its data via `mmap`, each instance maintains a Go-side index (bucket maps of `uint64` to `uint64`). With two large fastcache instances (trie-clean and snapshot), this index metadata can consume hundreds of MB on the Go heap.
+- **Snapshot diff layers**: Up to 128 diff layers can accumulate, each holding Go maps of modified accounts and storage slots.
+- **Goroutine stacks, block/receipt caches, and GC overhead**: Goroutine stacks, recently accessed blocks/receipts, and Go's own GC metadata collectively add further pressure.
 
 Go reports its total memory usage via `runtime.MemStats.Sys`, which includes the heap, stack space, and GC metadata. This is the portion of memory that `GOMEMLIMIT` governs.
 
@@ -97,7 +100,9 @@ All of these caches are bounded by configuration and will not grow beyond their 
 
 ## Calculating `GOMEMLIMIT`
 
-`GOMEMLIMIT` tells Go's garbage collector to keep heap usage below a target. For it to work correctly, you must reserve enough headroom for all the non-Go memory that competes for container memory.
+`GOMEMLIMIT` is an environment variable that sets a soft memory limit for the Go runtime. When set, Go's garbage collector (GC) runs more aggressively as heap usage approaches the limit, helping to keep total Go memory usage below the target. Without it, the GC relies solely on the `GOGC` environment variable (which defaults to 100, meaning the GC triggers when the heap doubles in size since the last collection), and has no awareness of an absolute memory ceiling.
+
+For `GOMEMLIMIT` to work correctly in a containerized environment, you must reserve enough headroom for all the non-Go memory that competes for the container's memory limit.
 
 ### Non-Go memory budget
 
