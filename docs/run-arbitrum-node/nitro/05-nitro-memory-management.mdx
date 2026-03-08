@@ -92,7 +92,7 @@ All cache sizes are configured under `execution.caching`:
 | `stylus-lru-cache-capacity` | 256 MB  | Rust (via CGO)     | Compiled Stylus WASM modules.                            |
 
 :::tip
-All of these caches are **bounded by configuration** and will not grow beyond their configured limits. This means total non-Go memory is predictable and can be calculated from your configuration.
+All of these caches are bounded by configuration and will not grow beyond their configured limits. This means total non-Go memory is predictable and can be calculated from your configuration.
 :::
 
 ## Calculating `GOMEMLIMIT`
@@ -153,10 +153,6 @@ If `GOMEMLIMIT` is set too high (not accounting for non-Go memory), the Go garba
 
 2. **Start from the formula**: Calculate `GOMEMLIMIT` using the formula above with your actual cache configuration values. Do not set it to the container memory limit.
 
-3. **Reduce `database-cache` if memory-constrained**: This is the single largest non-Go consumer. Reducing it from 2048 MB to 1024 MB frees ~1.5 GB (block cache + proportionally smaller memtables), at the cost of more disk I/O.
+3. **Monitor RSS, not just Go heap**: Set container memory alerts based on actual RSS (`container_memory_rss` in Prometheus / cAdvisor), not Go-reported memory.
 
-4. **Reduce fastcache sizes for smaller containers**: `trie-clean-cache` and `snapshot-cache` can be lowered together to free `mmap` memory. These affect read performance for state queries.
-
-5. **Monitor RSS, not just Go heap**: Set container memory alerts based on actual RSS (`container_memory_rss` in Prometheus / cAdvisor), not Go-reported memory.
-
-6. **All caches are bounded**: Unlike memory leaks, all non-Go memory in Nitro is bounded by configuration. With `MALLOC_ARENA_MAX` set, if RSS is stable and predictable, the node is behaving correctly. The memory is simply allocated outside Go's visibility.
+4. **All caches are bounded**: Unlike memory leaks, all non-Go memory in Nitro is bounded by configuration. With `MALLOC_ARENA_MAX` set, if RSS is stable and predictable, the node is behaving correctly. The memory is simply allocated outside Go's visibility.
