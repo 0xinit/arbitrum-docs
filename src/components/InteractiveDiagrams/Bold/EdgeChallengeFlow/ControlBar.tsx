@@ -41,7 +41,7 @@ export default function ControlBar({
       <button className="ecf-btn" disabled={!hasEvents || atEnd} onClick={onNext}>
         Next
       </button>
-      <button className="ecf-btn" disabled={!hasEvents} onClick={onShowAll}>
+      <button className="ecf-btn ecf-btn--show-all" disabled={!hasEvents} onClick={onShowAll}>
         Show All
       </button>
       <button className="ecf-btn" disabled={!hasEvents} onClick={onReset}>
