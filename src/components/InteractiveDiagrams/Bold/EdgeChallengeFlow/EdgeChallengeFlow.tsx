@@ -85,7 +85,7 @@ function EdgeChallengeFlowLoaded({ data }: { data: EdgeChallengeData }) {
             target="_blank"
             rel="noopener noreferrer"
           >
-            BoLD bisection guide
+            BoLD assertion dashboard
           </a>
           .
         </p>
