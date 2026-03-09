@@ -1139,6 +1139,11 @@ const sidebars = {
               label: 'A gentle introduction',
             },
             {
+              type: 'doc',
+              id: 'how-arbitrum-works/bold/how-bold-bisection-works',
+              label: 'How bisection works',
+            },
+            {
               type: 'link',
               href: 'https://github.com/offchainlabs/bold-validator-starter-kit',
               label: 'Deploy a validator on testnet',
