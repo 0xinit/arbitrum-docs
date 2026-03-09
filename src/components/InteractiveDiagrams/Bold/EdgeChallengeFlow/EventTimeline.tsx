@@ -20,15 +20,17 @@ export default function EventTimeline({
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const container = containerRef.current;
-    if (!container) return;
-    const currentItem = container.querySelector('.ecf-log-current') as HTMLElement | null;
+    const timeline = containerRef.current;
+    if (!timeline) return;
+    const currentItem = timeline.querySelector('.ecf-log-current') as HTMLElement | null;
     if (currentItem) {
-      // Scroll only within the timeline container, not the whole page
-      const containerRect = container.getBoundingClientRect();
+      // The actual scroll container is .ecf-log-section (parent with overflow: auto)
+      const scrollContainer =
+        (timeline.closest('.ecf-log-section') as HTMLElement | null) ?? timeline;
+      const containerRect = scrollContainer.getBoundingClientRect();
       const itemRect = currentItem.getBoundingClientRect();
-      const offset = itemRect.top - containerRect.top + container.scrollTop;
-      container.scrollTop = offset - containerRect.height / 2;
+      const offset = itemRect.top - containerRect.top + scrollContainer.scrollTop;
+      scrollContainer.scrollTop = offset - containerRect.height / 2;
     }
   }, [currentIndex]);
 

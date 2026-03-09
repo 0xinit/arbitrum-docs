@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import BrowserOnly from '@docusaurus/BrowserOnly';
+// @ts-ignore – module alias resolved by Docusaurus at build time
+import useBaseUrl from '@docusaurus/useBaseUrl';
 import type { EdgeChallengeData } from './types';
 import { useEdgeChallengeState } from './useEdgeChallengeState';
 import ControlBar from './ControlBar';
@@ -12,16 +14,17 @@ import { ARBISCAN_BASE_URL } from './constants';
 function EdgeChallengeFlowInner() {
   const [data, setData] = useState<EdgeChallengeData | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const dataUrl = useBaseUrl('/data/edge-challenge-flow.json');
 
   useEffect(() => {
-    fetch('/data/edge-challenge-flow.json')
+    fetch(dataUrl)
       .then((res) => {
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
         return res.json();
       })
       .then((json) => setData(json))
       .catch((err) => setError(err.message));
-  }, []);
+  }, [dataUrl]);
 
   if (error) {
     return <div className="ecf-error">Failed to load data: {error}</div>;
