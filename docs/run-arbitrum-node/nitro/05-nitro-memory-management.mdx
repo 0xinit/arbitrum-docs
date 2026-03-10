@@ -27,7 +27,7 @@ Only the Go heap is subject to Go's garbage collector and `GOMEMLIMIT`. The CGO 
 The Go runtime manages its own heap for all pure-Go allocations. Key consumers include:
 
 - **Dirty trie cache** (`trie-dirty-cache`): Modified state trie nodes held in memory before being flushed to disk. Defaults to 1024 MB and is one of the largest bounded caches on the Go heap.
-- **Contract code cache**: An LRU cache of contract bytecode, hardcoded at 256 MB. Not configurable.
+- **Contract code cache**: An LRU cache of contract bytecode, hardcoded at 256 MB. Isn't configurable.
 - **Activated WASM cache**: Compiled Stylus WASM modules cached on the Go heap, hardcoded at 64 MB.
 - **fastcache index maps**: Although fastcache stores its data via `mmap`, each instance maintains a Go-side index (bucket maps of `uint64` to `uint64`). With two large fastcache instances (trie-clean and snapshot), this index metadata can consume hundreds of MB on the Go heap.
 - **Snapshot diff layers**: Up to 128 diff layers can accumulate, each holding Go maps of modified accounts and storage slots.
