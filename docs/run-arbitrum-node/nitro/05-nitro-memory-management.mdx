@@ -52,7 +52,7 @@ Two caches use [fastcache](https://github.com/VictoriaMetrics/fastcache), a libr
 - **Trie-clean cache** (`trie-clean-cache`): Caches unchanged state trie nodes. Default: 600 MB.
 - **Snapshot cache** (`snapshot-cache`): Caches state snapshot data for fast reads. Default: 400 MB.
 
-Because fastcache uses raw `mmap`, this memory does not appear in Go's `memstats` or standard profiling tools. It is only visible by inspecting `/proc/<pid>/smaps` at the OS level. Each fastcache instance allocates memory in 64 MB chunks, making these regions identifiable when analyzing process memory maps.
+Because fastcache uses raw `mmap`, this memory doesn't appear in Go's `memstats` or standard profiling tools. You can only see it by inspecting `/proc/<pid>/smaps` at the OS level. Each fastcache instance allocates memory in 64 MB chunks, making these regions identifiable when analyzing process memory maps.
 
 ### glibc malloc arenas
 
