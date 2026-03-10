@@ -92,13 +92,8 @@ It is available as a plugin to the standard cargo tool used for developing Rust 
 In your terminal, run:
 
 ```shell
-rustup update stable
 cargo +stable install --force --locked cargo-stylus
 ```
-
-:::tip Recommended
-The `+stable` and `--locked` flags avoid dependency-resolution mismatches with older Cargo versions.
-:::
 
 We'll add WASM ([WebAssembly](https://webassembly.org/)) as a build target by pinning a project-local Rust toolchain in `rust-toolchain.toml`.
 
@@ -107,7 +102,7 @@ We'll add WASM ([WebAssembly](https://webassembly.org/)) as a build target by pi
 Let's create our first Stylus project by running:
 
 ```shell
-cargo +stable stylus new <YOUR_PROJECT_NAME>
+cargo stylus new <YOUR_PROJECT_NAME>
 cd <YOUR_PROJECT_NAME>
 ```
 
