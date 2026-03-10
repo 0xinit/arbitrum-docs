@@ -149,7 +149,7 @@ GOMEMLIMIT = 16,384 MB - 4,756 MB - 400 MB safety = ~11,228 MB ≈ 11 GB
 ```
 
 :::caution
-If `GOMEMLIMIT` is set too high (not accounting for non-Go memory), the Go garbage collector will defer collection, expecting more room than actually exists. The OS will then OOM-kill the process when total RSS (Go heap plus all non-Go allocations) exceeds the container limit.
+If `GOMEMLIMIT` is set too high (not accounting for non-Go memory), the Go garbage collector defers collection, expecting more room than actually exists. The OS then OOM-kills the process when total RSS (Go heap plus all non-Go allocations) exceeds the container limit.
 :::
 
 ## Tuning recommendations
