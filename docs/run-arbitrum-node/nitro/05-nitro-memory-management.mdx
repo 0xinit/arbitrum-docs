@@ -64,7 +64,7 @@ To handle concurrent allocations efficiently, glibc `malloc` uses arenas, which 
 Arena overhead = 8 × CPU_count × 64 MB
 ```
 
-In containerized environments, glibc detects the underlying host CPU count (not the container's CPU requests), which often results in far more arenas than needed. As the process runs and more threads make CGO calls, new arenas are created and retained, causing RSS to drift upward over days or weeks even though no individual allocation is leaking.
+In containerized environments, glibc detects the underlying host CPU count (not the container's CPU requests), which often results in far more arenas than needed. As the process runs and more threads make CGO calls, glibc creates and retains new arenas, causing RSS to drift upward over days or weeks even though no individual allocation is leaking.
 
 This can be controlled with the `MALLOC_ARENA_MAX` environment variable:
 
