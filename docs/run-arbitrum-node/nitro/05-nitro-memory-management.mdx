@@ -95,7 +95,7 @@ All cache sizes are configured under `execution.caching`:
 | `stylus-lru-cache-capacity` | 256 MB  | Rust (via CGO)     | Compiled Stylus WASM modules.                            |
 
 :::tip
-All of these caches are bounded by configuration and will not grow beyond their configured limits. This means total non-Go memory is predictable and can be calculated from your configuration.
+All of these caches are bounded by configuration and won't grow beyond their configured limits. This means total non-Go memory is predictable and can be calculated from your configuration.
 :::
 
 ## Calculating `GOMEMLIMIT`
