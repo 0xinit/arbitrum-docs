@@ -39,7 +39,7 @@ export default function EventTimeline({
       <h3>Event Timeline</h3>
       {appliedEvents.length === 0 ? (
         <p className="ecf-placeholder-text">
-          Press Play or Next to step through on-chain events. Each event will appear here as it is
+          Press Play or Next to step through onchain events. Each event will appear here as it is
           replayed.
         </p>
       ) : (
