@@ -127,7 +127,7 @@ With `MALLOC_ARENA_MAX=2`, arena overhead is ~128 MB. Without it, arena overhead
 GOMEMLIMIT = Container_Memory_Limit - Non_Go_Memory - Safety_Margin
 ```
 
-A safety margin of 300-500 MB is recommended to account for allocator overhead, transient allocations, and kernel page cache.
+You should use a safety margin of 300–500 MB to account for allocator overhead, transient allocations, and kernel page cache.
 
 ### Example: 16 GB container with defaults
 
