@@ -100,7 +100,7 @@ All of these caches are bounded by configuration and will not grow beyond their 
 
 ## Calculating `GOMEMLIMIT`
 
-`GOMEMLIMIT` is an environment variable that sets a soft memory limit for the Go runtime. When set, Go's garbage collector (GC) runs more aggressively as heap usage approaches the limit, helping to keep total Go memory usage below the target. Without it, the GC relies solely on the `GOGC` environment variable (which defaults to 100, meaning the GC triggers when the heap doubles in size since the last collection), and has no awareness of an absolute memory ceiling.
+`GOMEMLIMIT` is an environment variable that sets a soft memory limit for the Go runtime. When set, Go's garbage collector (GC) runs more aggressively as heap usage approaches the limit, helping to keep total Go memory usage below the target. Without it, the GC relies solely on the `GOGC` environment variable (which defaults to 100, meaning the GC triggers when the heap doubles in size since the last collection) and has no awareness of an absolute memory ceiling.
 
 For `GOMEMLIMIT` to work correctly in a containerized environment, you must reserve enough headroom for all the non-Go memory that competes for the container's memory limit.
 
