@@ -43,7 +43,7 @@ Nitro's on-disk database, <a data-quicklook-from="pebble">Pebble</a>, allocates 
 
 **Pebble memtables** buffer recent writes before they are flushed to disk. Nitro configures four memtables, each sized at `database-cache / 8`, for a combined maximum of `database-cache / 2`. For the default `database-cache` of 2048 MB, this means up to 1024 MB of memtable space (four memtables of 256 MB each).
 
-**Stylus WASM cache** stores compiled WebAssembly modules for Stylus smart contracts. It is allocated via Rust (invoked through CGO) and bounded by `stylus-lru-cache-capacity`.
+**Stylus WASM cache** stores compiled WebAssembly modules for Stylus smart contracts. Rust allocates this cache (invoked through CGO), and `stylus-lru-cache-capacity` bounds its size.
 
 ### Raw `mmap` allocations (fastcache)
 
