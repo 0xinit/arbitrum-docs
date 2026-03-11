@@ -1058,8 +1058,8 @@ const sidebars = {
             },
             {
               type: 'doc',
-              label: 'Token bridging',
-              id: 'how-arbitrum-works/deep-dives/token-bridging',
+              label: 'STF inputs',
+              id: 'how-arbitrum-works/deep-dives/stf-inputs',
             },
           ],
         },
