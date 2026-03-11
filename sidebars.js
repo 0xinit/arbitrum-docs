@@ -320,11 +320,6 @@ const sidebars = {
                   label: 'Delayed inbox finality',
                   id: 'launch-arbitrum-chain/features/advanced/choose-custom-delay-inbox-finality',
                 },
-                {
-                  type: 'doc',
-                  label: 'Sequencer timing adjustments',
-                  id: 'launch-arbitrum-chain/features/advanced/sequencer-timing-adjustments',
-                },
               ],
             },
           ],
@@ -371,11 +366,6 @@ const sidebars = {
                   label: 'Data availability',
                   collapsed: true,
                   items: [
-                    {
-                      type: 'doc',
-                      id: 'launch-arbitrum-chain/configure-your-chain/common/data-availability/config-data-availability',
-                      label: `Config data availability`,
-                    },
                     {
                       type: 'category',
                       label: 'Data availability committee',
@@ -537,11 +527,6 @@ const sidebars = {
                   id: 'launch-arbitrum-chain/configure-your-chain/advanced/da-api-integration-guide',
                   label: `DA API integration guide`,
                 },
-                {
-                  type: 'doc',
-                  id: 'launch-arbitrum-chain/configure-your-chain/advanced/config-sequencer-timing-adjustments',
-                  label: `Sequencer timing adjustments`,
-                },
               ],
             },
           ],
@@ -582,16 +567,6 @@ const sidebars = {
               type: 'doc',
               id: 'launch-arbitrum-chain/deploy-an-arbitrum-chain/canonical-factory-contracts',
               label: 'Canonical factory contracts',
-            },
-            {
-              type: 'doc',
-              id: 'launch-arbitrum-chain/deploy-an-arbitrum-chain/run-l3-rollup-from-scratch',
-              label: 'Run an L3 rollup from scratch',
-            },
-            {
-              type: 'doc',
-              id: 'launch-arbitrum-chain/deploy-an-arbitrum-chain/run-l3-rollup-testnet-infrastructure',
-              label: 'Run L3 rollup infrastructure (product-level testnet)',
             },
           ],
         },
@@ -643,11 +618,6 @@ const sidebars = {
                   type: 'doc',
                   id: 'launch-arbitrum-chain/maintain-your-chain/guidance/post-launch-contract-deployments',
                   label: `Post-launch deployments`,
-                },
-                {
-                  type: 'doc',
-                  id: 'launch-arbitrum-chain/maintain-your-chain/guidance/key-rotation',
-                  label: `Node key rotation guide`,
                 },
               ],
             },
@@ -749,11 +719,6 @@ const sidebars = {
               type: 'doc',
               id: 'launch-arbitrum-chain/arbitrum-node-runners/high-availability-sequencer-docs',
               label: 'Run a high availability sequencer',
-            },
-            {
-              type: 'doc',
-              id: 'launch-arbitrum-chain/arbitrum-node-runners/run-batch-poster',
-              label: 'Run a batch poster',
             },
           ],
         },
@@ -1068,7 +1033,7 @@ const sidebars = {
             },
             {
               type: 'doc',
-              label: 'Child to parent chain messaging',
+              label: 'Child to Parent chain Messaging',
               id: 'how-arbitrum-works/deep-dives/l2-to-l1-messaging',
             },
             {
@@ -1104,8 +1069,8 @@ const sidebars = {
           items: [
             {
               type: 'doc',
-              label: 'STF inputs',
-              id: 'how-arbitrum-works/reference/stf-inputs',
+              label: 'Sequencer',
+              id: 'how-arbitrum-works/deep-dives/sequencer',
             },
             {
               type: 'doc',
@@ -1127,11 +1092,6 @@ const sidebars = {
               type: 'doc',
               id: 'how-arbitrum-works/bold/gentle-introduction',
               label: 'A gentle introduction',
-            },
-            {
-              type: 'doc',
-              id: 'how-arbitrum-works/bold/how-bold-bisection-works',
-              label: 'How bisection works',
             },
             {
               type: 'link',
@@ -1334,8 +1294,8 @@ const sidebars = {
           items: [
             {
               type: 'doc',
-              label: 'Get started',
-              id: 'build-decentralized-apps/token-bridging/get-started',
+              label: 'Overview',
+              id: 'build-decentralized-apps/token-bridging/overview',
             },
             {
               type: 'doc',
@@ -1344,8 +1304,8 @@ const sidebars = {
             },
             {
               type: 'doc',
-              label: 'Withdraw tokens',
-              id: 'build-decentralized-apps/token-bridging/withdraw-tokens',
+              label: 'ERC-20 token bridging',
+              id: 'build-decentralized-apps/token-bridging/token-bridge-erc20',
             },
             {
               type: 'doc',
