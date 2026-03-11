@@ -101,6 +101,7 @@ const config = {
   baseUrl: '/',
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'throw',
+  onBrokenAnchors: 'warn', // Allow build to succeed despite false positive anchor warnings from TypeDoc
   favicon: 'img/logo.svg',
   markdown: {
     mermaid: true,
@@ -159,7 +160,7 @@ const config = {
             // troubleshooting docs content has external source-of-truth; node-providers uses form-submission
             if (s.docPath.includes('troubleshooting') || s.docPath.includes('node-providers'))
               return undefined;
-            return 'https://github.com/OffchainLabs/arbitrum-docs/edit/master/' + s.docPath;
+            return 'https://github.com/OffchainLabs/arbitrum-docs/edit/master/docs/' + s.docPath;
           },
           showLastUpdateTime: true,
         },
@@ -217,6 +218,7 @@ const config = {
         propertiesFormat: 'table',
         enumMembersFormat: 'table',
         typeDeclarationFormat: 'table',
+        useHTMLAnchors: true, // Fix anchor mismatches in tables
         sanitizeComments: true,
         frontmatterGlobals: {
           layout: 'docs',
@@ -280,7 +282,7 @@ const config = {
         logo: {
           alt: 'Arbitrum Logo',
           src: 'img/logo.svg',
-          href: '/get-started/overview',
+          href: '/',
         },
         items: [
           {
