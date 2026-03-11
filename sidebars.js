@@ -1043,8 +1043,8 @@ const sidebars = {
             },
             {
               type: 'doc',
-              label: 'STF',
-              id: 'how-arbitrum-works/deep-dives/stf-gentle-intro',
+              label: 'Parent chain pricing',
+              id: 'how-arbitrum-works/reference/parent-chain-pricing',
             },
             {
               type: 'doc',
