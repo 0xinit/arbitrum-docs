@@ -650,7 +650,7 @@ impl MyContract {
 }
 ```
 
-#### Payable Calls
+#### Payable calls
 
 ```rust
 #[public]
@@ -667,7 +667,7 @@ impl MyContract {
 }
 ```
 
-#### Configuring Gas
+#### Configuring gas
 
 ```rust
 #[public]
@@ -681,7 +681,7 @@ impl MyContract {
 }
 ```
 
-### Low-Level Calls
+### Low-Level calls
 
 For maximum flexibility, use raw calls:
 
@@ -722,11 +722,11 @@ impl MyContract {
 - `static_call()`: Read-only call (equivalent to Solidity `staticcall`)
 - `RawCall`: Low-level unsafe calls with fine-grained control
 
-## Error Handling
+## Error handling
 
 Stylus contracts can define and return custom errors using Solidity-compatible error types.
 
-### Defining Errors
+### Defining errors
 
 ```rust
 use alloy_sol_types::sol;
@@ -745,7 +745,7 @@ pub enum TokenError {
 }
 ```
 
-### Using Errors in Methods
+### Using errors in methods
 
 ```rust
 #[public]
@@ -781,9 +781,9 @@ impl Token {
 - Error data includes the error signature and parameters
 - Compatible with Solidity `try/catch` blocks
 
-## Complete Example
+## Complete example
 
-Here's a complete ERC-20-style token contract demonstrating all major features:
+Here's a complete `ERC-20`-style token contract demonstrating all major features:
 
 ```rust
 #![cfg_attr(not(any(test, feature = "export-abi")), no_main)]
@@ -938,9 +938,9 @@ impl SimpleToken {
 }
 ```
 
-## Best Practices
+## Best practices
 
-### 1. Use Appropriate State Mutability
+### 1. Use appropriate state mutability
 
 ```rust
 // Good: Read-only functions use &self
@@ -954,7 +954,7 @@ pub fn set_balance(&mut self, account: Address, balance: U256) {
 }
 ```
 
-### 2. Validate Inputs Early
+### 2. Validate inputs early
 
 ```rust
 pub fn transfer(&mut self, to: Address, amount: U256) -> Result<bool, TokenError> {
@@ -973,7 +973,7 @@ pub fn transfer(&mut self, to: Address, amount: U256) -> Result<bool, TokenError
 }
 ```
 
-### 3. Use Custom Errors
+### 3. Use custom errors
 
 ```rust
 // Good: Descriptive custom errors
@@ -994,7 +994,7 @@ pub fn withdraw(&mut self, amount: U256) -> Result<(), Vec<u8>> {
 }
 ```
 
-### 4. Emit Events for State Changes
+### 4. Emit events for state changes
 
 ```rust
 pub fn update_value(&mut self, new_value: U256) {
@@ -1009,7 +1009,7 @@ pub fn update_value(&mut self, new_value: U256) {
 }
 ```
 
-### 5. Access Control Patterns
+### 5. Access control patterns
 
 ```rust
 // Good: Clear access control checks
@@ -1038,7 +1038,7 @@ impl Token {
 }
 ```
 
-### 6. Gas-Efficient Storage Access
+### 6. Gas-efficient storage access
 
 ```rust
 // Good: Read once, use multiple times
@@ -1054,7 +1054,7 @@ pub fn inefficient_calculation(&self, account: Address) -> U256 {
 }
 ```
 
-### 7. Check Effects Interactions Pattern
+### 7. Check effects interactions pattern
 
 ```rust
 // Good: Check-Effects-Interactions pattern
@@ -1080,7 +1080,7 @@ pub fn withdraw(&mut self, amount: U256) -> Result<(), VaultError> {
 }
 ```
 
-### 8. Use Type-Safe Interfaces for External Calls
+### 8. Use type-safe interfaces for external calls
 
 ```rust
 // Good: Use sol_interface! for type safety
@@ -1646,9 +1646,9 @@ impl Vault {
 }
 ```
 
-## See Also
+## See also
 
-- [Primitives](./data-types/primitives.mdx) - Basic data types
-- [Compound Types](./data-types/compound-types.mdx) - Arrays, structs, tuples
-- [Storage Types](./data-types/storage.mdx) - Persistent storage
-- [Global Variables and Functions](./global-variables-and-functions.mdx) - VM context methods
+- [Primitives](./data-types/primitives.mdx): Basic data types
+- [Compound Types](./data-types/compound-types.mdx): Arrays, structs, tuples
+- [Storage Types](./data-types/storage.mdx): Persistent storage
+- [Global Variables and Functions](./global-variables-and-functions.mdx): VM context methods
