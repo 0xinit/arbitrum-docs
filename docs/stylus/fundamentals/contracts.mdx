@@ -95,7 +95,7 @@ pub struct Counter {
 
 Both approaches produce identical storage layouts and are fully interoperable with Solidity contracts using the same storage structure.
 
-## The `#[entrypoint]` Macro
+## The `#[entrypoint]` macro
 
 The `#[entrypoint]` macro marks a struct as the contract's main entry point. It automatically implements the `TopLevelStorage` trait, which enables:
 
@@ -130,7 +130,7 @@ The `#[entrypoint]` macro generates:
 
 The `#[public]` macro exposes Rust methods as external contract functions callable from Solidity, other Stylus contracts, or external callers.
 
-### Basic Public Methods
+### Basic public methods
 
 ```rust
 use stylus_sdk::prelude::*;
@@ -162,7 +162,7 @@ impl Calculator {
 }
 ```
 
-### State Mutability
+### State mutability
 
 The SDK automatically infers state mutability from the method signature:
 
@@ -201,7 +201,7 @@ impl MyContract {
 
 The `#[constructor]` attribute marks a function that runs once during contract deployment.
 
-### Basic Constructor
+### Basic constructor
 
 ```rust
 use stylus_sdk::prelude::*;
@@ -230,7 +230,7 @@ impl Token {
 }
 ```
 
-### Constructor Features
+### Constructor features
 
 **Payable Constructor:**
 
@@ -255,7 +255,7 @@ impl Token {
 - Constructor runs exactly once when the contract is deployed
 - Use `tx_origin()` instead of `msg_sender()` when deploying via a factory contract
 
-## Method Attributes
+## Method attributes
 
 ### `#[payable]`
 
@@ -500,7 +500,7 @@ impl IErc20 for MyToken {
 - Easy to test components independently
 - Compatible with Solidity interface standards
 
-### Accessing VM Context
+### Accessing VM context
 
 All public methods can access the blockchain context via the `self.vm()` property:
 
@@ -524,7 +524,7 @@ See the [Global Variables and Functions](./global-variables-and-functions.mdx) d
 
 Events allow contracts to log data to the blockchain, enabling off-chain monitoring and indexing.
 
-### Defining Events
+### Defining events
 
 Use the `sol!` macro to define events with Solidity-compatible signatures:
 
@@ -546,7 +546,7 @@ sol! {
 - Limited to 3 indexed parameters per event
 - Indexed parameters are stored in log topics, not data
 
-### Emitting Events
+### Emitting events
 
 Use `self.vm().log()` to emit events:
 
@@ -572,7 +572,7 @@ impl Token {
 }
 ```
 
-### Raw Log Emission
+### Raw log emission
 
 For advanced use cases, emit raw logs directly:
 
@@ -597,11 +597,11 @@ impl Contract {
 }
 ```
 
-## External Contract Calls
+## External contract calls
 
 Stylus contracts can call other contracts (Solidity or Stylus) using typed interfaces or raw calls.
 
-### Defining Contract Interfaces
+### Defining contract interfaces
 
 Use `sol_interface!` to define interfaces for external contracts:
 
@@ -620,9 +620,9 @@ sol_interface! {
 }
 ```
 
-### Calling External Contracts
+### Calling external contracts
 
-#### View Calls (Read-Only)
+#### View calls (read-only)
 
 ```rust
 use stylus_sdk::call::Call;
@@ -637,7 +637,7 @@ impl MyContract {
 }
 ```
 
-#### Mutating Calls
+#### Mutating calls
 
 ```rust
 #[public]
