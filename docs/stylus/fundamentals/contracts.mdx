@@ -1112,7 +1112,7 @@ This pattern is essential for building upgradeable contracts, proxy patterns, an
 
 ### Using the low-level `delegate_call` function
 
-The `delegate_call` function is a low-level operation similar to `call` and `static_call`. It is considered unsafe because it requires trusting the external contract to maintain safety.
+The `delegate_call` function is a low-level operation similar to `call` and `static_call`. It is considered unsafe because it relies on an external contract to ensure safety.
 
 ```rust
 pub unsafe fn delegate_call(
