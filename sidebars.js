@@ -1038,11 +1038,6 @@ const sidebars = {
             },
             {
               type: 'doc',
-              label: 'Sequencer',
-              id: 'how-arbitrum-works/reference/sequencer',
-            },
-            {
-              type: 'doc',
               label: 'Parent chain pricing',
               id: 'how-arbitrum-works/reference/parent-chain-pricing',
             },
@@ -1059,7 +1054,7 @@ const sidebars = {
             {
               type: 'doc',
               label: 'STF inputs',
-              id: 'how-arbitrum-works/deep-dives/stf-inputs',
+              id: 'how-arbitrum-works/reference/stf-inputs',
             },
           ],
         },
