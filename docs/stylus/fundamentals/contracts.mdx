@@ -1106,7 +1106,7 @@ pub fn raw_call(&mut self, token: Address, to: Address, amount: U256) -> Vec<u8>
 
 ## Delegate calls
 
-Delegate calls allow a contract to execute code from another contract while maintaining its own context. When Contract A executes a delegate call to Contract B, B's code runs using Contract A's storage, `msg.sender`, and `msg.value`. This means any state changes affect Contract A, and the original sender and value of the transaction are preserved.
+Delegate calls allow a contract to execute code from another contract while maintaining its own context. When Contract A executes a delegate call to Contract B, B's code runs using Contract A's storage, `msg.sender`, and `msg.value`. This means that any state changes affect Contract A, and the original sender and transaction value are preserved.
 
 This pattern is essential for building upgradeable contracts, proxy patterns, and modular smart contract systems.
 
