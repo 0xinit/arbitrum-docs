@@ -11,7 +11,7 @@ export default function Home() {
   return (
     <Layout title={`Arbitrum 🔵`}>
       <Head>
-        <style>{`[class*='navbarSearchContainer'] { opacity: 0 !important; } .main-wrapper { min-height: 0 !important; }`}</style>
+        <style>{`[class*='navbarSearchContainer'] { display: none !important; } .main-wrapper { min-height: 0 !important; } .navbar__inner > .navbar__items--right [class*=colorModeToggle], .navbar__inner > .navbar__items--right [class*=colorModeToggle] [class*=toggleButton] { margin-left: auto; }`}</style>
       </Head>
       <main className={styles.main}>
         <div className={styles.hero}>
