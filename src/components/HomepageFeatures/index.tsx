@@ -93,7 +93,7 @@ function InkeepSearchInner() {
                   min-height: 54px !important;
                 }
                 .ikp-search-bar__text {
-                  color: #213147;
+                  color: #999898;
                 }
                 @media screen and (min-width: 1024px) {
                   .ikp-search-bar__text {
