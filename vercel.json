@@ -6,11 +6,6 @@
   "trailingSlash": false,
   "redirects": [
     {
-      "source": "/",
-      "destination": "/get-started/overview",
-      "permanent": false
-    },
-    {
       "source": "/(anytrust/?)",
       "destination": "/how-arbitrum-works/deep-dives/anytrust-protocol",
       "permanent": false
