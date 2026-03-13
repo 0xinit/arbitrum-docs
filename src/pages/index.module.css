@@ -1,66 +1,44 @@
-/**
- * CSS files with the .module.css suffix will be treated as CSS modules
- * and scoped locally.
- */
-
-/**
-  * custom CSS variables here
-  */
-:root {
-  --space-l: 20px;
-  --space-m: 14px;
-  --space-s: 10px;
-  --space-xs: 6px;
-  --border-radius-s: 4px;
-  --red: red;
-  --red-light: #fbbebe;
-}
-
-.heroBanner {
+.main {
   position: relative;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
-  align-items: flex-start;
-  height: 350px;
-  background-color: var(--arbitrum-color-primary);
-  border-radius: var(--arbitrum-border-radius);
   padding: 20px;
-  margin: 0 20px;
 }
 
-.heroTitle {
+.hero {
+  background-image: linear-gradient(#016be5 0%, #05163d 100%);
+  border-radius: 30px;
+  overflow: hidden;
+}
+
+[data-theme='dark'] .hero {
+  opacity: 0.8;
+}
+
+.svg {
+  height: calc(100vh - 118px - 40px);
+  width: auto;
+}
+
+@media screen and (min-width: 1024px) {
+  .hero{
+    max-height: calc(100vh - 90px - 40px);
+  }
+
+  .svg {
+    height: 100%;
+    width: 120%;
+    max-width: none;
+  }
+}
+
+.content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   position: absolute;
-  top: 50%;
-  color: var(--arbitrum-text);
-  font-size: 36px;
-  font-weight: 400;
-  font-family: var(--arbitrum-font-family);
-  margin-bottom: auto;
-  transform: translateY(-50%);
-}
-
-@media screen and (max-width: 1023px) {
-  .heroBanner {
-    height: 400px;
-  }
-  .heroTitle {
-    font-size: 28px;
-  }
-}
-
-.heroBanner .button {
-  font-size: 14px;
-  font-weight: 500;
-  font-family: var(--arbitrum-font-family);
-  color: var(--arbitrum-primary-button-text);
-  background: var(--arbitrum-primary-button-bg);
-  padding: 12px;
-  border-radius: var(--arbitrum-border-radius-sm);
-  border: none;
-  cursor: pointer;
-}
-
-.heroBanner .button:hover {
-  opacity: 70%;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  max-width: 1200px;
+  margin: auto;
 }
