@@ -213,7 +213,7 @@ This setting protects the node by pausing block validation when free memory drop
 | ---------------------------------------- | ------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------- |
 | `node.block-validator.memory-free-limit` | `"default"` (1 GB) | Minimum free memory required to continue block validation. Set to `""` (empty string) to disable. Accepts the same suffixes as the RPC setting. |
 
-Unlike the RPC throttling setting, this is **enabled by default** with a 1 GB threshold. When free memory drops below the threshold, the block validator pauses both recording new blocks and sending pending validations. Validation resumes automatically once memory usage drops back below the threshold.
+Unlike the RPC throttling setting, this is enabled by default with a 1 GB threshold. When free memory drops below the threshold, the block validator pauses both recording new blocks and sending pending validations. Validation resumes automatically once memory usage drops back below the threshold.
 
 **Example configuration:**
 
