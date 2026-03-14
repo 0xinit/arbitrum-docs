@@ -152,6 +152,113 @@ GOMEMLIMIT = 16,384 MB - 4,756 MB - 400 MB safety = ~11,228 MB ≈ 11 GB
 If `GOMEMLIMIT` is set too high (not accounting for non-Go memory), the Go garbage collector defers collection, expecting more room than actually exists. The OS then OOM-kills the process when total RSS (Go heap plus all non-Go allocations) exceeds the container limit.
 :::
 
+## Runtime memory protection
+
+Even with caches sized correctly and `GOMEMLIMIT` tuned, transient workload spikes or unexpected memory pressure can push a node toward OOM. Nitro provides two built-in memory protection mechanisms that use Linux cgroups to monitor actual container memory usage at runtime and take protective action before the kernel's OOM killer intervenes.
+
+Both mechanisms work by reading the container's cgroup memory files (v1 or v2), computing the effective memory usage excluding page cache (which the kernel can reclaim), and comparing it against the container's memory limit minus a configurable free-memory threshold:
+
+```
+effective_usage = cgroup_memory_usage - (active_file_cache + inactive_file_cache)
+threshold       = cgroup_memory_limit - configured_free_limit
+exceeded        = effective_usage >= threshold
+```
+
+By subtracting active and inactive file cache from usage, the check avoids false positives caused by the kernel's page cache, which can be reclaimed under pressure and doesn't represent actual memory consumption.
+
+:::note
+Both features require Linux cgroups (v1 or v2) and only work inside containers or cgroup-limited environments. On bare-metal hosts without cgroup limits, the features will be unavailable.
+:::
+
+### RPC throttling (`node.resource-mgmt.mem-free-limit`)
+
+This setting protects the node by rejecting incoming RPC requests with HTTP 429 (Too Many Requests) when free memory drops below the configured threshold. It acts as a back-pressure mechanism, preventing new RPC work from pushing the node over its memory limit.
+
+| Parameter                           | Default         | Description                                                                                                                     |
+| ----------------------------------- | --------------- | ------------------------------------------------------------------------------------------------------------------------------- |
+| `node.resource-mgmt.mem-free-limit` | `""` (disabled) | Minimum free memory required to accept RPC requests. Accepts values with suffixes: `B`, `K`/`KB`, `M`/`MB`, `G`/`GB`, `T`/`TB`. |
+
+When enabled, Nitro wraps the HTTP server with a middleware that checks free memory before every RPC call. If the limit is exceeded, the request is rejected immediately without being processed.
+
+**Example configuration:**
+
+```shell
+--node.resource-mgmt.mem-free-limit=1GB
+```
+
+**Metrics emitted:**
+
+| Metric                        | Type      | Description                                                                   |
+| ----------------------------- | --------- | ----------------------------------------------------------------------------- |
+| `arb/rpc/limitcheck/duration` | Histogram | Time spent checking the memory limit per request (nanoseconds).               |
+| `arb/rpc/limitcheck/success`  | Counter   | Number of RPC requests allowed through.                                       |
+| `arb/rpc/limitcheck/failure`  | Counter   | Number of RPC requests rejected due to memory pressure.                       |
+| `arb/memory/limit`            | Gauge     | Current effective memory limit (cgroup limit minus free threshold), in bytes. |
+| `arb/memory/usage`            | Gauge     | Current effective memory usage (cgroup usage minus page cache), in bytes.     |
+
+**Log lines:**
+
+| Level | Message                                                                                                  | When                                                          |
+| ----- | -------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------- |
+| Error | `No method for determining memory usage and limits was discovered, disabled memory limit RPC throttling` | Cgroups v1/v2 not available; throttling silently disabled.    |
+| Info  | `Cgroups v1 detected, enabling memory limit RPC throttling`                                              | Cgroups v1 detected at startup.                               |
+| Info  | `Cgroups v2 detected, enabling memory limit RPC throttling`                                              | Cgroups v2 detected at startup.                               |
+| Error | `Error checking memory limit`                                                                            | An error occurred reading cgroup files during an RPC request. |
+
+### Block validator throttling (`node.block-validator.memory-free-limit`)
+
+This setting protects the node by pausing block validation when free memory drops below the configured threshold. Block validation is memory-intensive — it involves recording and replaying blocks through the WASM validator — so pausing it under memory pressure prevents the validation workload from triggering an OOM kill.
+
+| Parameter                                | Default            | Description                                                                                                                                     |
+| ---------------------------------------- | ------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------- |
+| `node.block-validator.memory-free-limit` | `"default"` (1 GB) | Minimum free memory required to continue block validation. Set to `""` (empty string) to disable. Accepts the same suffixes as the RPC setting. |
+
+Unlike the RPC throttling setting, this is **enabled by default** with a 1 GB threshold. When free memory drops below the threshold, the block validator pauses both recording new blocks and sending pending validations. Validation resumes automatically once memory usage drops back below the threshold.
+
+**Example configuration:**
+
+To increase the threshold to 2 GB:
+
+```shell
+--node.block-validator.memory-free-limit=2GB
+```
+
+To disable the protection:
+
+```shell
+--node.block-validator.memory-free-limit=""
+```
+
+**Metrics emitted:**
+
+| Metric                                | Type  | Description                                                                   |
+| ------------------------------------- | ----- | ----------------------------------------------------------------------------- |
+| `arb/validator/memory/limit_exceeded` | Gauge | `1` when the block validator is paused due to memory pressure, `0` otherwise. |
+
+**Log lines:**
+
+| Level | Message                                                                                         | When                                                                           |
+| ----- | ----------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------ |
+| Error | `sendNextRecordRequests: aborting due to running low on memory`                                 | Block recording paused because free memory is below threshold.                 |
+| Error | `sendValidations: aborting due to running low on memory`                                        | Sending validations paused because free memory is below threshold.             |
+| Error | `error checking if free-memory limit exceeded using MemoryFreeLimitChecker`                     | An error occurred reading cgroup files during a validation check.              |
+| Warn  | `Cgroups V1 or V2 is unsupported, memory-free-limit feature inside block-validator is disabled` | Cgroups not available and default setting was used; feature silently disabled. |
+
+:::tip
+Alert on `arb/validator/memory/limit_exceeded == 1` to know when your validator nodes are under memory pressure and validation is paused. Sustained pauses may indicate that the node needs more memory or that cache sizes should be reduced.
+:::
+
+### Choosing between the two settings
+
+The two settings protect different subsystems and can be used independently or together:
+
+| Setting                                  | Protects         | Action                              | Default  |
+| ---------------------------------------- | ---------------- | ----------------------------------- | -------- |
+| `node.resource-mgmt.mem-free-limit`      | RPC serving      | Rejects new RPC requests (HTTP 429) | Disabled |
+| `node.block-validator.memory-free-limit` | Block validation | Pauses recording and validation     | 1 GB     |
+
+For **RPC nodes** that don't run validation, `node.resource-mgmt.mem-free-limit` is the relevant setting. For **validator nodes**, the block validator setting is already active by default and provides protection against validation-driven OOM. On nodes that serve both RPC and validation, enabling both provides defense-in-depth.
+
 ## Tuning recommendations
 
 1. **Set `MALLOC_ARENA_MAX=2`**: This is the single most impactful change for containerized nodes. Without it, glibc can waste gigabytes on arena overhead, causing RSS to drift upward over days. Set this environment variable on every Nitro container.
@@ -161,3 +268,7 @@ If `GOMEMLIMIT` is set too high (not accounting for non-Go memory), the Go garba
 3. **Monitor RSS, not just Go heap**: Set container memory alerts based on actual RSS (`container_memory_rss` in Prometheus / cAdvisor), not Go-reported memory.
 
 4. **All caches are bounded**: Unlike memory leaks, all non-Go memory in Nitro is bounded by configuration. With `MALLOC_ARENA_MAX` set, if RSS is stable and predictable, the node is behaving correctly. The memory is simply allocated outside Go's visibility.
+
+5. **Enable RPC throttling on public-facing nodes**: Set `node.resource-mgmt.mem-free-limit` (e.g., `1GB`) on nodes that serve external RPC traffic. This prevents request surges from pushing the node into OOM. Monitor `arb/rpc/limitcheck/failure` to track how often throttling activates.
+
+6. **Monitor block validator memory pauses**: The block validator's memory protection is on by default. Alert on `arb/validator/memory/limit_exceeded == 1` to detect when validation is paused due to memory pressure.
