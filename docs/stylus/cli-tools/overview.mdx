@@ -9,13 +9,13 @@ target_audience: Developers writing Stylus contracts in Rust using Stylus
 displayed_sidebar: buildStylusSidebar
 ---
 
-This guide will get you started using [cargo stylus](https://github.com/OffchainLabs/stylus-sdk-rs/tree/main/cargo-stylus), a CLI toolkit to help developers manage, compile, deploy, and optimize their Stylus contracts efficiently.
+This guide will get you started with [`cargo stylus`](https://github.com/OffchainLabs/stylus-sdk-rs/tree/main/cargo-stylus) a CLI toolkit that helps developers manage, compile, deploy, and optimize their Stylus contracts efficiently.
 
-This overview will help you discover and learn how to uses cargo stylus tools.
+This overview will help you discover and learn how to use `cargo stylus` tools.
 
-### Installing cargo stylus
+### Installing `cargo stylus`
 
-Cargo stylus is a plugin to the standard cargo tool for developing Rust programs.
+`cargo stylus` is a plugin to the standard cargo tool for developing Rust programs.
 
 #### Prerequisites
 
@@ -29,7 +29,7 @@ Follow the instructions on [Rust Lang's installation page](https://www.rust-lang
 <details>
 <summary>Docker</summary>
 
-We will use the testnet, and some `cargo stylus` commands will require Docker to operate.
+We will use the testnet and some `cargo stylus` commands, which require Docker to run.
 
 You can download Docker from [Docker's website](https://www.docker.com/products/docker-desktop).
 
@@ -66,7 +66,7 @@ In your terminal, run:
 cargo install --force cargo-stylus
 ```
 
-Add WASM ([WebAssembly](https://webassembly.org/)) as a build target for the specific Rust toolchain you are using. The below example sets your default Rust toolchain to 1.80 as well as adding the WASM build target:
+Add WASM ([WebAssembly](https://webassembly.org/)) as a build target for the specific Rust toolchain you are using. The example below sets your default Rust toolchain to 1.80, as well as adding the WASM build target:
 
 ```shell
 rustup default 1.80
@@ -75,9 +75,9 @@ rustup target add wasm32-unknown-unknown --toolchain 1.80
 
 You can verify the cargo stylus installation by running `cargo stylus -V` in your terminal, returning something like:`stylus 0.5.6`
 
-### Using cargo stylus
+### Using `cargo stylus`
 
-#### Cargo Stylus Commands Reference
+#### `cargo stylus` commands reference
 
 | Command      | Description                                      | Arguments                                                                                                             | Options                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          | Example Usage                                                                                         |
 | ------------ | ------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------- |
@@ -108,12 +108,12 @@ These options are available across multiple commands:
 
 Available for commands involving transactions:
 
-| Option                   | Description                                          |
-| ------------------------ | ---------------------------------------------------- |
-| --private-key-path       | Path to file containing hex-encoded private key      |
-| --private-key            | Private key as hex string (exposes to shell history) |
-| --keystore-path          | Path to Ethereum wallet keystore file                |
-| --keystore-password-path | Keystore password file path                          |
+| Option                     | Description                                          |
+| -------------------------- | ---------------------------------------------------- |
+| `--private-key-path`       | Path to file containing hex-encoded private key      |
+| `--private-key`            | Private key as hex string (exposes to shell history) |
+| `--keystore-path`          | Path to Ethereum wallet keystore file                |
+| `--keystore-password-path` | Keystore password file path                          |
 
 #### How-tos
 
