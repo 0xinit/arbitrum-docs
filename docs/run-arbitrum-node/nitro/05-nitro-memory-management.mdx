@@ -207,7 +207,7 @@ When enabled, Nitro wraps the HTTP server with a middleware that checks free mem
 
 ### Block validator throttling
 
-This setting protects the node by pausing block validation when free memory drops below the configured threshold. Block validation is memory-intensive — it involves recording and replaying blocks through the WASM validator — so pausing it under memory pressure prevents the validation workload from triggering an OOM kill.
+This setting protects the node by pausing block validation when free memory drops below the configured threshold. Block validation is memory-intensive, so pausing it under memory pressure prevents the validation workload from triggering an OOM kill.
 
 | Parameter                                | Default            | Description                                                                                                                                     |
 | ---------------------------------------- | ------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------- |
