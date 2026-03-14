@@ -257,7 +257,7 @@ The two settings protect different subsystems and can be used independently or t
 | `node.resource-mgmt.mem-free-limit`      | RPC serving      | Rejects new RPC requests (HTTP 429) | Disabled |
 | `node.block-validator.memory-free-limit` | Block validation | Pauses recording and validation     | 1 GB     |
 
-For **RPC nodes** that don't run validation, `node.resource-mgmt.mem-free-limit` is the relevant setting. For **validator nodes**, the block validator setting is already active by default and provides protection against validation-driven OOM.
+For RPC nodes that don't run validation, `node.resource-mgmt.mem-free-limit` is the relevant setting. For validator nodes, the block validator setting is already active by default and provides protection against validation-driven OOM.
 
 ## Tuning recommendations
 
