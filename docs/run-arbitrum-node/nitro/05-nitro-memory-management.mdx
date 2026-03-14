@@ -7,7 +7,7 @@ user_story: As a node operator, I need to understand how Nitro allocates memory 
 content_type: how-to
 ---
 
-Although Nitro is a Go application, it can use significantly more memory than Go's runtime reports. This is because Nitro relies on multiple allocators: the Go garbage-collected heap, CGO (Go's mechanism for calling C code) allocations via `calloc`, and direct `mmap` system calls, each with its own accounting. Understanding where memory lives and which configuration knobs control it is essential for sizing containers, setting `GOMEMLIMIT`, and avoiding out-of-memory (OOM) kills.
+Although Nitro is a Go application, it can use significantly more memory than Go's runtime reports. This is because Nitro relies on multiple allocators: the Go garbage-collected heap, CGO (Go's mechanism for calling C code) allocations via `calloc`, and direct `mmap` system calls, each with its own accounting. Understanding where memory lives and which configuration knobs control it is essential for sizing containers, setting `GOMEMLIMIT`, and avoiding out-of-memory (OOM) kills. Nitro also includes built-in [runtime memory protection](#runtime-memory-protection) settings that can throttle RPC requests or pause block validation when free memory runs low, providing a safety net against OOM kills.
 
 ## Memory allocators in Nitro
 
@@ -170,7 +170,7 @@ By subtracting active and inactive file cache from usage, the check avoids false
 Both features require Linux cgroups (v1 or v2) and only work inside containers or cgroup-limited environments. On bare-metal hosts without cgroup limits, the features will be unavailable.
 :::
 
-### RPC throttling (`node.resource-mgmt.mem-free-limit`)
+### RPC throttling
 
 This setting protects the node by rejecting incoming RPC requests with HTTP 429 (Too Many Requests) when free memory drops below the configured threshold. It acts as a back-pressure mechanism, preventing new RPC work from pushing the node over its memory limit.
 
@@ -205,7 +205,7 @@ When enabled, Nitro wraps the HTTP server with a middleware that checks free mem
 | Info  | `Cgroups v2 detected, enabling memory limit RPC throttling`                                              | Cgroups v2 detected at startup.                               |
 | Error | `Error checking memory limit`                                                                            | An error occurred reading cgroup files during an RPC request. |
 
-### Block validator throttling (`node.block-validator.memory-free-limit`)
+### Block validator throttling
 
 This setting protects the node by pausing block validation when free memory drops below the configured threshold. Block validation is memory-intensive — it involves recording and replaying blocks through the WASM validator — so pausing it under memory pressure prevents the validation workload from triggering an OOM kill.
 
@@ -257,7 +257,7 @@ The two settings protect different subsystems and can be used independently or t
 | `node.resource-mgmt.mem-free-limit`      | RPC serving      | Rejects new RPC requests (HTTP 429) | Disabled |
 | `node.block-validator.memory-free-limit` | Block validation | Pauses recording and validation     | 1 GB     |
 
-For **RPC nodes** that don't run validation, `node.resource-mgmt.mem-free-limit` is the relevant setting. For **validator nodes**, the block validator setting is already active by default and provides protection against validation-driven OOM. On nodes that serve both RPC and validation, enabling both provides defense-in-depth.
+For **RPC nodes** that don't run validation, `node.resource-mgmt.mem-free-limit` is the relevant setting. For **validator nodes**, the block validator setting is already active by default and provides protection against validation-driven OOM.
 
 ## Tuning recommendations
 
