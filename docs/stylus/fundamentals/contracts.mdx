@@ -18,7 +18,7 @@ A Stylus contract consists of three main components:
 2. **Entrypoint**: Marks the main contract struct that handles incoming calls
 3. **Public Methods**: Functions exposed to external callers via the `#[public]` macro
 
-### Minimal Contract
+### Minimal contract
 
 Here's the simplest possible Stylus contract:
 
@@ -47,7 +47,7 @@ This contract:
 - Uses `#[public]` to expose the `user_main` function
 - Returns `ArbResult`, which is `Result<Vec<u8>, Vec<u8>>`
 
-## Storage Definition
+## Storage definition
 
 Stylus contracts use the `sol_storage!` macro or `#[storage]` attribute to define persistent storage that maps directly to Solidity storage slots.
 
@@ -95,7 +95,7 @@ pub struct Counter {
 
 Both approaches produce identical storage layouts and are fully interoperable with Solidity contracts using the same storage structure.
 
-## The `#[entrypoint]` Macro
+## The `#[entrypoint]` macro
 
 The `#[entrypoint]` macro marks a struct as the contract's main entry point. It automatically implements the `TopLevelStorage` trait, which enables:
 
@@ -126,11 +126,11 @@ The `#[entrypoint]` macro generates:
 2. A `user_entrypoint` function that Stylus calls when the contract receives a transaction
 3. Method routing logic to dispatch calls to `#[public]` methods
 
-## Public Methods with `#[public]`
+## Public methods with `#[public]`
 
 The `#[public]` macro exposes Rust methods as external contract functions callable from Solidity, other Stylus contracts, or external callers.
 
-### Basic Public Methods
+### Basic public methods
 
 ```rust
 use stylus_sdk::prelude::*;
@@ -162,7 +162,7 @@ impl Calculator {
 }
 ```
 
-### State Mutability
+### State mutability
 
 The SDK automatically infers state mutability from the method signature:
 
@@ -201,7 +201,7 @@ impl MyContract {
 
 The `#[constructor]` attribute marks a function that runs once during contract deployment.
 
-### Basic Constructor
+### Basic constructor
 
 ```rust
 use stylus_sdk::prelude::*;
@@ -230,7 +230,7 @@ impl Token {
 }
 ```
 
-### Constructor Features
+### Constructor features
 
 **Payable Constructor:**
 
@@ -255,7 +255,7 @@ impl Token {
 - Constructor runs exactly once when the contract is deployed
 - Use `tx_origin()` instead of `msg_sender()` when deploying via a factory contract
 
-## Method Attributes
+## Method attributes
 
 ### `#[payable]`
 
@@ -363,7 +363,7 @@ impl Contract {
 
 1. A function call doesn't match any existing function signature
 2. Plain ETH transfer when no `#[receive]` function exists
-3. The contract receives calldata but no function matches
+3. The contract receives calldata, but no function matches
 
 **Notes:**
 
@@ -500,9 +500,9 @@ impl IErc20 for MyToken {
 - Easy to test components independently
 - Compatible with Solidity interface standards
 
-### Accessing VM Context
+### Accessing VM context
 
-All public methods can access blockchain context via `self.vm()`:
+All public methods can access the blockchain context via the `self.vm()` property:
 
 ```rust
 #[public]
@@ -524,7 +524,7 @@ See the [Global Variables and Functions](./global-variables-and-functions.mdx) d
 
 Events allow contracts to log data to the blockchain, enabling off-chain monitoring and indexing.
 
-### Defining Events
+### Defining events
 
 Use the `sol!` macro to define events with Solidity-compatible signatures:
 
@@ -546,7 +546,7 @@ sol! {
 - Limited to 3 indexed parameters per event
 - Indexed parameters are stored in log topics, not data
 
-### Emitting Events
+### Emitting events
 
 Use `self.vm().log()` to emit events:
 
@@ -572,7 +572,7 @@ impl Token {
 }
 ```
 
-### Raw Log Emission
+### Raw log emission
 
 For advanced use cases, emit raw logs directly:
 
@@ -597,11 +597,11 @@ impl Contract {
 }
 ```
 
-## External Contract Calls
+## External contract calls
 
 Stylus contracts can call other contracts (Solidity or Stylus) using typed interfaces or raw calls.
 
-### Defining Contract Interfaces
+### Defining contract interfaces
 
 Use `sol_interface!` to define interfaces for external contracts:
 
@@ -620,9 +620,9 @@ sol_interface! {
 }
 ```
 
-### Calling External Contracts
+### Calling external contracts
 
-#### View Calls (Read-Only)
+#### View calls (read-only)
 
 ```rust
 use stylus_sdk::call::Call;
@@ -637,7 +637,7 @@ impl MyContract {
 }
 ```
 
-#### Mutating Calls
+#### Mutating calls
 
 ```rust
 #[public]
@@ -650,7 +650,7 @@ impl MyContract {
 }
 ```
 
-#### Payable Calls
+#### Payable calls
 
 ```rust
 #[public]
@@ -667,7 +667,7 @@ impl MyContract {
 }
 ```
 
-#### Configuring Gas
+#### Configuring gas
 
 ```rust
 #[public]
@@ -681,7 +681,7 @@ impl MyContract {
 }
 ```
 
-### Low-Level Calls
+### Low-Level calls
 
 For maximum flexibility, use raw calls:
 
@@ -722,11 +722,11 @@ impl MyContract {
 - `static_call()`: Read-only call (equivalent to Solidity `staticcall`)
 - `RawCall`: Low-level unsafe calls with fine-grained control
 
-## Error Handling
+## Error handling
 
 Stylus contracts can define and return custom errors using Solidity-compatible error types.
 
-### Defining Errors
+### Defining errors
 
 ```rust
 use alloy_sol_types::sol;
@@ -745,7 +745,7 @@ pub enum TokenError {
 }
 ```
 
-### Using Errors in Methods
+### Using errors in methods
 
 ```rust
 #[public]
@@ -781,9 +781,9 @@ impl Token {
 - Error data includes the error signature and parameters
 - Compatible with Solidity `try/catch` blocks
 
-## Complete Example
+## Complete example
 
-Here's a complete ERC-20-style token contract demonstrating all major features:
+Here's a complete `ERC-20`-style token contract demonstrating all major features:
 
 ```rust
 #![cfg_attr(not(any(test, feature = "export-abi")), no_main)]
@@ -938,9 +938,9 @@ impl SimpleToken {
 }
 ```
 
-## Best Practices
+## Best practices
 
-### 1. Use Appropriate State Mutability
+### 1. Use appropriate state mutability
 
 ```rust
 // Good: Read-only functions use &self
@@ -954,7 +954,7 @@ pub fn set_balance(&mut self, account: Address, balance: U256) {
 }
 ```
 
-### 2. Validate Inputs Early
+### 2. Validate inputs early
 
 ```rust
 pub fn transfer(&mut self, to: Address, amount: U256) -> Result<bool, TokenError> {
@@ -973,7 +973,7 @@ pub fn transfer(&mut self, to: Address, amount: U256) -> Result<bool, TokenError
 }
 ```
 
-### 3. Use Custom Errors
+### 3. Use custom errors
 
 ```rust
 // Good: Descriptive custom errors
@@ -994,7 +994,7 @@ pub fn withdraw(&mut self, amount: U256) -> Result<(), Vec<u8>> {
 }
 ```
 
-### 4. Emit Events for State Changes
+### 4. Emit events for state changes
 
 ```rust
 pub fn update_value(&mut self, new_value: U256) {
@@ -1009,7 +1009,7 @@ pub fn update_value(&mut self, new_value: U256) {
 }
 ```
 
-### 5. Access Control Patterns
+### 5. Access control patterns
 
 ```rust
 // Good: Clear access control checks
@@ -1038,7 +1038,7 @@ impl Token {
 }
 ```
 
-### 6. Gas-Efficient Storage Access
+### 6. Gas-efficient storage access
 
 ```rust
 // Good: Read once, use multiple times
@@ -1054,7 +1054,7 @@ pub fn inefficient_calculation(&self, account: Address) -> U256 {
 }
 ```
 
-### 7. Check Effects Interactions Pattern
+### 7. Check effects interactions pattern
 
 ```rust
 // Good: Check-Effects-Interactions pattern
@@ -1080,7 +1080,7 @@ pub fn withdraw(&mut self, amount: U256) -> Result<(), VaultError> {
 }
 ```
 
-### 8. Use Type-Safe Interfaces for External Calls
+### 8. Use type-safe interfaces for external calls
 
 ```rust
 // Good: Use sol_interface! for type safety
@@ -1106,13 +1106,13 @@ pub fn raw_call(&mut self, token: Address, to: Address, amount: U256) -> Vec<u8>
 
 ## Delegate calls
 
-Delegate calls allow a contract to execute code from another contract while maintaining its own context. When Contract A executes a delegate call to Contract B, B's code runs using Contract A's storage, `msg.sender`, and `msg.value`. This means any state changes affect Contract A, and the original sender and value of the transaction are preserved.
+Delegate calls allow a contract to execute code from another contract while maintaining its own context. When Contract A executes a delegate call to Contract B, B's code runs using Contract A's storage, `msg.sender`, and `msg.value`. This means that any state changes affect Contract A, and the original sender and transaction value are preserved.
 
 This pattern is essential for building upgradeable contracts, proxy patterns, and modular smart contract systems.
 
 ### Using the low-level `delegate_call` function
 
-The `delegate_call` function is a low-level operation similar to `call` and `static_call`. It is considered unsafe because it requires trusting the external contract to maintain safety.
+The `delegate_call` function is a low-level operation similar to `call` and `static_call`. It is considered unsafe because it relies on an external contract to ensure safety.
 
 ```rust
 pub unsafe fn delegate_call(
@@ -1142,7 +1142,7 @@ pub fn low_level_delegate_call(
 
 ### Using `RawCall` with `new_delegate()`
 
-For scenarios requiring untyped calls with more configuration options, `RawCall` offers a fluent interface. You can set up a delegate call by chaining optional configuration methods.
+For scenarios that require untyped calls with additional configuration options, `RawCall` provides a fluent interface. You can set up a delegate call by chaining optional configuration methods.
 
 ```rust
 use stylus_sdk::call::RawCall;
@@ -1164,7 +1164,7 @@ pub fn raw_delegate_call(
 ### Safety considerations
 
 :::caution
-Delegate calls are inherently unsafe and require careful consideration before use.
+Delegate calls are inherently unsafe and should be used with caution.
 :::
 
 - **Trust requirement**: The calling contract must trust the external contract to uphold safety requirements
@@ -1232,7 +1232,7 @@ impl DelegateExample {
 
 ## Sending ether
 
-Stylus provides multiple ways to send ether from a contract. Unlike Solidity's `transfer` method which is capped at 2300 gas, Stylus's `transfer_eth` forwards all gas to the recipient. You can cap gas using the low-level `call` method if needed.
+Stylus provides multiple ways to send ether from a contract. Unlike Solidity's `transfer` method, which is capped at 2300 gas, Stylus's `transfer_eth` forwards all gas to the recipient. You can cap gas using the low-level `call` method if needed.
 
 ### Methods for sending ether
 
@@ -1259,7 +1259,7 @@ impl SendEther {
 }
 ```
 
-### Using low-level `call()` with value
+### Using a low-level `call()` with a value
 
 For more control over the transfer:
 
@@ -1341,11 +1341,11 @@ impl SendEther {
 }
 ```
 
-### Where you can send ether
+### Where can you send `ETH`
 
 1. **Externally owned account (EOA) addresses**: Directly send ether to any EOA address
-2. **Solidity contracts with `receive()` function**: Send ether without calldata to contracts implementing `receive()`
-3. **Solidity contracts with `fallback()` function**: Send ether with calldata to contracts implementing `fallback()`
+2. **Solidity contracts with the `receive()` function**: Send ether without calldata to contracts implementing `receive()`
+3. **Solidity contracts with the `fallback()` function**: Send ether with calldata to contracts implementing `fallback()`
 4. **Contracts with payable methods**: Call any payable method on Solidity or Stylus contracts
 
 ### Complete sending ether example
@@ -1423,7 +1423,7 @@ impl SendEther {
 
 ## Factory contract deployment (coming soon)
 
-The factory pattern allows a contract to deploy other contracts programmatically. This is useful for creating contract instances on-demand, such as deploying new token contracts or creating user-specific vaults.
+The factory pattern allows a contract to deploy other contracts programmatically. This is useful for creating contract instances on demand, such as deploying new token contracts or creating user-specific vaults.
 
 :::note
 Advanced deployment patterns documentation is in development. This section will cover:
@@ -1646,9 +1646,9 @@ impl Vault {
 }
 ```
 
-## See Also
+## See also
 
-- [Primitives](./data-types/primitives.mdx) - Basic data types
-- [Compound Types](./data-types/compound-types.mdx) - Arrays, structs, tuples
-- [Storage Types](./data-types/storage.mdx) - Persistent storage
-- [Global Variables and Functions](./global-variables-and-functions.mdx) - VM context methods
+- [Primitives](./data-types/primitives.mdx): Basic data types
+- [Compound Types](./data-types/compound-types.mdx): Arrays, structs, tuples
+- [Storage Types](./data-types/storage.mdx): Persistent storage
+- [Global Variables and Functions](./global-variables-and-functions.mdx): VM context methods
