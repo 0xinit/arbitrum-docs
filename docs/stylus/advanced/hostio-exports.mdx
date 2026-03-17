@@ -8,7 +8,7 @@ target_audience: Developers who need to understand how to use hostio exports wit
 displayed_sidebar: buildStylusSidebar
 ---
 
-Hostio (Host I/O) exports are low-level functions that provide direct access to the Stylus VM runtime. These functions are WebAssembly imports that allow Stylus programs to interact with the blockchain environment, similar to how EVM opcodes work in Solidity.
+Hostio (Host I/O) exports are low-level functions that provide direct access to the Stylus VM runtime. These functions are WebAssembly imports that allow Stylus programs to interact with the blockchain environment, similar to how EVM opcodes do in Solidity.
 
 ## Overview
 
@@ -36,7 +36,7 @@ extern "C" {
 }
 ```
 
-During execution, calls to these functions are intercepted by the Stylus VM, which implements the actual functionality using the underlying ArbOS infrastructure.
+During execution, the Stylus VM intercepts calls to these functions and implements the actual functionality using the underlying ArbOS infrastructure.
 
 ## Function categories
 
@@ -48,7 +48,7 @@ Query information about accounts on the blockchain.
 
 #### `account_balance`
 
-Gets the ETH balance of an account in wei. Equivalent to EVM's `BALANCE` opcode.
+Gets the `ETH` balance of an account in wei. Equivalent to EVM's `BALANCE` opcode.
 
 ```rust
 pub fn account_balance(address: *const u8, dest: *mut u8);
@@ -56,8 +56,8 @@ pub fn account_balance(address: *const u8, dest: *mut u8);
 
 **Parameters:**
 
-- `address`: Pointer to 20-byte address
-- `dest`: Pointer to write 32-byte balance value
+- `address`: Pointer to the 20-byte address
+- `dest`: Pointer to write the 32-byte balance value
 
 **Usage:**
 
@@ -121,8 +121,8 @@ pub fn storage_load_bytes32(key: *const u8, dest: *mut u8);
 
 **Parameters:**
 
-- `key`: Pointer to 32-byte storage key
-- `dest`: Pointer to write 32-byte value
+- `key`: Pointer to the 32-byte storage key
+- `dest`: Pointer to write the 32-byte value
 
 #### `storage_cache_bytes32`
 
@@ -154,7 +154,7 @@ The Stylus VM implements storage caching for improved performance:
 
 - Repeated reads of the same key cost less gas
 - Writes are batched for efficiency
-- Cache is automatically managed by the SDK
+- The SDK manages the cache automatically
 
 ### Block information
 
@@ -226,7 +226,7 @@ pub fn msg_sender(sender: *mut u8);
 
 **Parameters:**
 
-- `sender`: Pointer to write 20-byte address
+- `sender`: Pointer to write the 20-byte address
 
 :::note
 For L1-to-L2 retryable ticket transactions, addresses are aliased. See [address aliasing documentation](https://developer.arbitrum.io/arbos/l1-to-l2-messaging#address-aliasing).
@@ -234,7 +234,7 @@ For L1-to-L2 retryable ticket transactions, addresses are aliased. See [address 
 
 #### `msg_value`
 
-Gets the ETH value sent with the call in wei. Equivalent to EVM's `CALLVALUE` opcode.
+Gets the `ETH` value sent with the call in wei. Equivalent to EVM's `CALLVALUE` opcode.
 
 ```rust
 pub fn msg_value(value: *mut u8);
@@ -266,7 +266,7 @@ pub fn tx_origin(origin: *mut u8);
 
 #### `tx_ink_price`
 
-Gets the price of ink in EVM gas basis points. See [Ink and Gas](https://docs.arbitrum.io/stylus/concepts/gas-metering) for more information.
+Gets the price of ink on the EVM gas basis in gas basis points. See [Ink and Gas](https://docs.arbitrum.io/stylus/concepts/gas-metering) for more information.
 
 ```rust
 pub fn tx_ink_price() -> u32;
@@ -278,7 +278,7 @@ Make calls to other contracts.
 
 #### `call_contract`
 
-Calls another contract with optional value and gas limit. Equivalent to EVM's `CALL` opcode.
+Calls another contract with an optional value and gas limit. Equivalent to EVM's `CALL` opcode.
 
 ```rust
 pub fn call_contract(
@@ -298,7 +298,7 @@ pub fn call_contract(
 - `calldata_len`: Length of calldata
 - `value`: Pointer to 32-byte value in wei (use 0 for no value)
 - `gas`: Gas to supply (use `u64::MAX` for all available gas)
-- `return_data_len`: Pointer to store length of return data
+- `return_data_len`: Pointer to store the length of the return data
 
 **Returns:** `0` on success, non-zero on failure
 
@@ -335,7 +335,7 @@ pub fn delegate_call_contract(
 ```
 
 :::warning
-Delegate calls execute code in the context of the current contract. Be extremely careful when delegate calling to untrusted contracts as they have full access to your storage.
+Delegate calls execute code in the context of the current contract. Be extremely careful when delegate calling to untrusted contracts, as they have full access to your storage.
 :::
 
 #### `static_call_contract`
@@ -375,15 +375,15 @@ pub fn create1(
 - `code`: Pointer to initialization code (EVM bytecode)
 - `code_len`: Length of initialization code
 - `endowment`: Pointer to 32-byte value to send
-- `contract`: Pointer to write deployed contract address (20 bytes)
+- `contract`: Pointer to write the deployed contract address (20 bytes)
 - `revert_data_len`: Pointer to store revert data length on failure
 
 **Deployment rules:**
 
 - Init code must be EVM bytecode
 - Deployed code can be Stylus (WASM) if it starts with `0xEFF000` header
-- Address is determined by sender and nonce
-- On failure, address will be zero
+- The address is determined by the sender and the nonce
+- On failure, the address will be zero
 
 #### `create2`
 
@@ -424,7 +424,7 @@ pub fn emit_log(data: *const u8, len: usize, topics: usize);
 **Parameters:**
 
 - `data`: Pointer to event data (first bytes should be 32-byte aligned topics)
-- `len`: Total length of data including topics
+- `len`: Total length of data, including topics
 - `topics`: Number of topics (0-4)
 
 :::warning
@@ -460,7 +460,7 @@ pub fn evm_gas_left() -> u64;
 
 #### `evm_ink_left`
 
-Gets the amount of ink remaining. Stylus-specific metering unit.
+Gets the amount of ink remaining—a Stylus-specific metering unit.
 
 ```rust
 pub fn evm_ink_left() -> u64;
@@ -488,7 +488,7 @@ Cryptographic operations.
 
 #### `native_keccak256`
 
-Efficiently computes keccak256 hash. Equivalent to EVM's `SHA3` opcode.
+Efficiently computes the Keccak256 hash. Equivalent to EVM's `SHA3` opcode.
 
 ```rust
 pub fn native_keccak256(bytes: *const u8, len: usize, output: *mut u8);
@@ -521,7 +521,7 @@ pub fn read_args(dest: *mut u8);
 ```
 
 :::note
-This reads the entirety of the call's calldata.
+This reads all of the calldata of the call.
 :::
 
 #### `read_return_data`
@@ -543,7 +543,7 @@ pub fn read_return_data(dest: *mut u8, offset: usize, size: usize) -> usize;
 **Behavior:**
 
 - Does not revert if out of bounds
-- Copies overlapping portion only
+- Copies the overlapping portion only
 
 #### `return_data_size`
 
@@ -563,9 +563,9 @@ pub fn write_result(data: *const u8, len: usize);
 
 **Behavior:**
 
-- Does not cause program to exit
-- If not called, return data will be empty
-- Program exits naturally when entrypoint returns
+- Does not cause the program to exit
+- If not called, the return data will be empty
+- The program exits naturally when the entrypoint returns
 
 #### `contract_address`
 
@@ -581,7 +581,7 @@ Debug-only functions for development.
 
 #### `log_txt`
 
-Prints UTF-8 text to console. Only available in debug mode.
+Prints UTF-8 text to the console. Only available in debug mode.
 
 ```rust
 pub fn log_txt(text: *const u8, len: usize);
@@ -589,7 +589,7 @@ pub fn log_txt(text: *const u8, len: usize);
 
 #### `log_i32` / `log_i64`
 
-Prints integers to console. Only available in debug mode.
+Prints integers to the console. Only available in debug mode.
 
 ```rust
 pub fn log_i32(value: i32);
@@ -598,7 +598,7 @@ pub fn log_i64(value: i64);
 
 #### `log_f32` / `log_f64`
 
-Prints floating-point numbers to console. Only available in debug mode with floating point enabled.
+Prints floating-point numbers to the console. Only available in debug mode with floating point enabled.
 
 ```rust
 pub fn log_f32(value: f32);
@@ -618,7 +618,7 @@ console!("Value: {}", value);  // Prints in debug mode, no-op in production
 All hostio functions are marked `unsafe` because they:
 
 1. **Operate on raw pointers**: Require correct memory management
-2. **Lack bounds checking**: Can cause undefined behavior if pointers are invalid
+2. **Lack of bounds checking**: Can cause undefined behavior if pointers are invalid
 3. **Have side effects**: Can modify contract state or make external calls
 4. **May revert**: Some operations can cause the transaction to revert
 
@@ -732,7 +732,7 @@ Hostio behavior changes based on feature flags:
 
 ### `export-abi`
 
-When enabled, hostio functions are stubbed and return `unimplemented!()`. Used for ABI generation.
+When enabled, hostio functions are stubbed and return `unimplemented!()`—which is used for ABI generation.
 
 ### `stylus-test`
 
