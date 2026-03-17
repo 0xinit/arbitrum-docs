@@ -8,7 +8,7 @@ user_story: As an Arbitrum chain operator, I need to understand how to tune batc
 content_type: how-to
 ---
 
-The batch poster relies on an internal component, the data poster, to manage gas pricing for transactions submitted to the parent chain. When posting batches—whether as traditional calldata or [`EIP-4844`](https://eips.ethereum.org/EIPS/eip-4844) blob transactions—the data poster estimates fees, sets gas price caps, and handles Replace-by-Fee (RBF) escalation when transactions are not included promptly.
+The batch poster relies on an internal component, the data poster, to manage gas pricing for transactions submitted to the parent chain. When posting batches—whether as traditional calldata or [`EIP-4844`](https://eips.ethereum.org/EIPS/eip-4844) blob transactions—the data poster estimates fees, sets gas price caps, and handles Replace-by-Fee (RBF) escalation when transactions aren't included promptly.
 
 This guide covers how to tune fee-related parameters to balance cost efficiency against batch posting reliability. For initial setup of blob posting, see [Enabling blob transactions](/launch-arbitrum-chain/02-configure-your-chain/common/validation-and-security/14-enable-post-4844-blobs.mdx). For general batch poster configuration, see [Run a batch poster](/launch-arbitrum-chain/07-arbitrum-node-runners/run-batch-poster.mdx).
 
@@ -16,7 +16,7 @@ This guide covers how to tune fee-related parameters to balance cost efficiency 
 
 [`EIP-4844`](https://eips.ethereum.org/EIPS/eip-4844) introduces a separate fee market for blob transactions. Blob transactions have two fee components:
 
-- **Blob base fee**: Set by the protocol based on blob demand. This is not directly configurable—it is determined by the parent chain’s blob gas pricing mechanism.
+- **Blob base fee**: Set by the protocol based on blob demand. This isn't directly configurable—it's determined by the parent chain's blob gas pricing mechanism.
 - **Priority fee (tip cap)**: The amount the batch poster is willing to pay per gas as a tip to incentivize block producers to include the blob transaction.
 
 The data poster controls blob transaction tips through two parameters:
@@ -53,39 +53,39 @@ To allow the data poster to start with a `1 gwei` tip and escalate up to `5 gwei
 
 ## Gas price spike behavior
 
-When parent chain gas prices rise sharply, the data poster’s behavior is governed by fee cap parameters that control how high it will bid to get batch transactions included.
+When parent chain gas prices rise sharply, the data poster's behavior is governed by fee cap parameters that control how high it bids to get batch transactions included.
 
 ### Fee cap parameters
 
 <!-- UNDOCUMENTED DEFAULTS
 
-Unable to find this specific parameter in the dataposter.go, Found similar but unsure if the same parameters set to 1 or 5.
+Unable to find this specific parameter in the dataposter.go. Found similar parameters but unsure if they're the same, set to 1 or 5.
 
-The max-fee-cap-gwei parameter sets the highest gas price the data poster can use for batch posting transactions. The specific default value is not included in the current documentation. Check the [Nitro source code](https://github.com/OffchainLabs/nitro/blob/master/arbnode/dataposter/dataposter.go) for the default or set it manually based on your cost limit.
+The max-fee-cap-gwei parameter sets the highest gas price the data poster can use for batch posting transactions. The specific default value isn't included in the current documentation. Check the [Nitro source code](https://github.com/OffchainLabs/nitro/blob/master/arbnode/dataposter/dataposter.go) for the default or set it manually based on your cost limit.
 
 -->
 
 | Flag                                               | Description                                                                                                                                                                                                                              |
 | -------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `--node.batch-poster.data-poster.max-fee-cap-gwei` | The maximum fee cap (in gwei) the data poster will use when posting transactions to the parent chain. If parent chain gas prices exceed this cap, the data poster will not post new transactions until prices fall below this threshold. |
+| `--node.batch-poster.data-poster.max-fee-cap-gwei` | The maximum fee cap (in gwei) the data poster uses when posting transactions to the parent chain. If parent chain gas prices exceed this cap, the data poster won't post new transactions until prices fall below this threshold. |
 
 - **Trade-off**: Setting this value too low risks halting batch posting during gas spikes, causing a backlog of unposted batches. Setting it too high means the batch poster may post at very expensive gas prices. Choose a value that reflects your cost tolerance while ensuring batches continue to post during moderate price increases.
 
 ### Replace-by-Fee escalation
 
-When a batch transaction is pending in the parent chain mempool, the data poster uses RBF to gradually increase the gas price to improve inclusion chances. For blob transactions, this escalation schedule is controlled by:
+When a batch transaction is pending in the parent chain mempool, the data poster uses RBF to gradually increase the gas price to improve inclusion chances. For blob transactions, the following parameter controls this escalation schedule:
 
 | Flag                                                        | Default                                                        | Description                                                              |
 | ----------------------------------------------------------- | -------------------------------------------------------------- | ------------------------------------------------------------------------ |
 | `--node.batch-poster.data-poster.blob-tx-replacement-times` | `5m0s, 10m0s, 30m0s, 1h0m0s, 4h0m0s, 8h0m0s, 16h0m0s, 22h0m0s` | Durations since first posting a blob transaction at which to attempt RBF |
 
-Each duration triggers a replacement attempt with a higher fee. The schedule starts with an aggressive posture (five minutes, then ten minutes) and becomes more conservative over time. This prevents overspending while ensuring that transactions are eventually included.
+Each duration triggers a replacement attempt with a higher fee. The schedule starts with an aggressive posture (five minutes, then ten minutes) and becomes more conservative over time. This prevents overspending while ensuring that the parent chain eventually includes the transactions.
 
 ### What happens during a gas spike
 
 1. The data poster estimates the current gas price from the parent chain.
 2. If the estimated price is within the configured fee cap, the batch is posted.
-3. If the transaction is not included, the RBF schedule triggers replacement attempts with incrementally higher fees.
+3. If the parent chain doesn't include the transaction, the RBF schedule triggers replacement attempts with incrementally higher fees.
 4. If gas prices exceed `max-fee-cap-gwei`, the data poster pauses new batch submissions until prices decrease.
 5. During this pause, batches queue up. Once prices fall, the data poster resumes and works through the backlog.
 

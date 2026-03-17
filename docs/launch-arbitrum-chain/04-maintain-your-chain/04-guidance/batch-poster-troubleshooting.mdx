@@ -47,14 +47,14 @@ This error indicates that the parent chain node's mempool has rejected a transac
 
 ### What causes this error
 
-- **Too many pending transactions**: The batch poster has submitted multiple transactions that have not yet been included in a block, and the parent chain node’s mempool has reached its limit for pending transactions from a single account or overall.
+- **Too many pending transactions**: The batch poster has submitted multiple transactions that haven't yet been included in a block, and the parent chain node's mempool has reached its limit for pending transactions from a single account or overall.
 - **Gas price too low for inclusion**: If gas prices have risen since the transactions were submitted, older transactions may remain in the mempool and not be included. New submissions then push against the mempool’s size limits.
 - **RBF not escalating fast enough**: When using DB or Redis storage (which support RBF), the replacement fee schedule may not be aggressive enough to get transactions included during congestion, causing the mempool to fill with stale transactions.
 
 ### Resolution
 
-1. **Check the parent chain’s current gas prices** and compare them to your data poster’s fee cap configuration. If gas prices are above your max-fee-cap-gwei, the data poster cannot bid high enough to cover the fee. See [Batch poster fee tuning](/launch-arbitrum-chain/02-configure-your-chain/common/validation-and-security/batch-poster-fee-tuning.mdx) for guidance on adjustments.
-2. **Review your queued transaction storage configuration**: If you are using DB or Redis storage, pending transactions accumulate and rely on RBF for inclusion. Consider whether your RBF schedule (blob-tx-replacement-times) is escalating fees quickly enough. See Queued transaction database selection for storage option details.
+1. **Check the parent chain's current gas prices** and compare them to your data poster's fee cap configuration. If gas prices are above your `max-fee-cap-gwei`, the data poster can't bid high enough to cover the fee. See [Batch poster fee tuning](/launch-arbitrum-chain/02-configure-your-chain/common/validation-and-security/batch-poster-fee-tuning.mdx) for guidance on adjustments.
+2. **Review your queued transaction storage configuration**: If you're using DB or Redis storage, pending transactions accumulate and rely on RBF for inclusion. Consider whether your RBF schedule (`blob-tx-replacement-times`) is escalating fees quickly enough. See Queued transaction database selection for storage option details.
 3. **Consider Noop storage for parent chains without mempools**: If your parent chain is an Arbitrum chain or another chain without a traditional mempool, Noop storage avoids this issue entirely by waiting for each transaction receipt before submitting the next one.
 
 :::info Mempool size limits
@@ -92,10 +92,10 @@ The specific log messages and metrics that indicate a backlog depend on the Nitr
 ### Resolution approaches
 
 1. **Check the batch poster balance**: ensures the EOA has sufficient funds on the parent chain.
-2. **Check the parent chain gas prices**: if prices exceed your fee cap, either wait for prices to drop or increase `max-fee-cap-gwei` (see [Batch poster fee tuning](/launch-arbitrum-chain/02-configure-your-chain/common/validation-and-security/batch-poster-fee-tuning.mdx)).
-3. **Verify parent chain connectivity**: ensures the batch poster node can reach the parent chain RPC endpoint and that the parent chain node is fully synced.
-4. **Check for reverted transactions**: if using DB or Redis storage, a reverted transaction halts the batch poster. Check the batch poster logs for revert errors. Restarting the batch poster or clearing the queued transaction storage (with caution) may be necessary.
-5. **Review node sync status**: confirms the batch poster node is synced with both the Arbitrum chain and the parent chain.
+2. **Check the parent chain gas prices**: If prices exceed your fee cap, either wait for prices to drop or increase `max-fee-cap-gwei` (see [Batch poster fee tuning](/launch-arbitrum-chain/02-configure-your-chain/common/validation-and-security/batch-poster-fee-tuning.mdx)).
+3. **Verify parent chain connectivity**: Ensure the batch poster node can reach the parent chain RPC endpoint and that the parent chain node is fully synced.
+4. **Check for reverted transactions**: If using DB or Redis storage, a reverted transaction halts the batch poster. Check the batch poster logs for revert errors. Restarting the batch poster or clearing the queued transaction storage (with caution) may be necessary.
+5. **Review node sync status**: Confirm the batch poster node is synced with both the Arbitrum chain and the parent chain.
 
 ## Retry errors
 
@@ -106,12 +106,12 @@ This error appears when the data poster attempts to resubmit a batch posting tra
 ### What causes this error
 
 - **Nonce conflicts**: The original transaction may have already been included onchain, making the replacement attempt invalid because the nonce has already been consumed.
-- **Storage inconsistencies**: When using DB or Redis for queued transaction tracking, mismatches between the stored transaction state and the onchain state can cause resubmission failures. This can happen after a node restart if the storage was not cleanly synced.
-- **Parent chain rejection**: The parent chain node may reject the replacement transaction for various reasons—the replacement fee is not high enough (must be at least 10% higher for standard RBF), the transaction format is invalid, or the parent chain node is experiencing issues.
+- **Storage inconsistencies**: When using DB or Redis for queued transaction tracking, mismatches between the stored transaction state and the onchain state can cause resubmission failures. This can happen after a node restart if the storage wasn't cleanly synced.
+- **Parent chain rejection**: The parent chain node may reject the replacement transaction for various reasons—the replacement fee isn't high enough (must be at least 10% higher for standard RBF), the transaction format is invalid, or the parent chain node is experiencing issues.
 
 :::info Error context
 
-The exact phrasing and context of retry errors can vary across Nitro versions. The “failed to re-send transaction” message generally indicates an RBF attempt that did not succeed. Check the surrounding log lines for more specific error details (e.g., “nonce too low”, “replacement transaction underpriced”, or connection errors).
+The exact phrasing and context of retry errors can vary across Nitro versions. The "failed to re-send transaction" message generally indicates an RBF attempt that didn't succeed. Check the surrounding log lines for more specific error details (for example, "nonce too low", "replacement transaction underpriced", or connection errors).
 
 :::
 
@@ -130,7 +130,7 @@ The exact phrasing and context of retry errors can vary across Nitro versions. T
 | Batch posting stopped, no error in logs | Batch poster balance depleted                         | Fund the batch poster EOA on the parent chain                       |
 | "Mempool weight limit exceeded"         | Too many pending transactions in parent chain mempool | Review fee cap settings; check RBF escalation schedule              |
 | Batches not posting during gas spike    | Gas prices exceed `max-fee-cap-gwei`                  | Increase fee cap or wait for prices to normalize                    |
-| "Failed to re-send transaction"         | Nonce conflict or RBF underpriced                     | Check if original tx was included; review fee escalation            |
+| "Failed to re-send transaction"         | Nonce conflict or RBF underpriced                     | Check if original transaction was included; review fee escalation   |
 | Growing sequencer backlog               | Multiple possible causes                              | Check balance, gas prices, parent chain connectivity, and node sync |
 | Batch poster halted after revert        | Using DB/Redis storage with a reverted transaction    | Review revert cause; restart batch poster or clear storage          |
 | Blob transactions pending for hours     | Blob tip cap too low                                  | Increase `max-blob-tx-tip-cap-gwei`; review replacement schedule    |
