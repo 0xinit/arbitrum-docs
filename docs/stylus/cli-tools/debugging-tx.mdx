@@ -277,7 +277,7 @@ The format is `ADDRESS:PATH` pairs separated by commas, where:
 
 ### Handling Solidity contracts
 
-If your transaction interacts with both Stylus and Solidity contracts, mark the Solidity addresses with the `--addr-solidity` flag. The debugger displays contract addresses and function selectors for Solidity calls but cannot provide source-level debugging for Solidity code:
+If your transaction interacts with both Stylus and Solidity contracts, mark the Solidity addresses with the `--addr-solidity` flag. The debugger displays contract addresses and function selectors for Solidity calls, but cannot provide source-level debugging for Solidity code:
 
 ```shell
 cargo stylus replay --debugger stylusdb --tx=$TX_HASH \
