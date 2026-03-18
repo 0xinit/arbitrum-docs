@@ -142,7 +142,346 @@ class VendingMachine {
 
 The `VendingMachine` class uses _state variables_ and _functions_ to implement _predefined rules_. This implementation is useful because it automates cupcake distribution, but there's a problem: it's hosted by a centralized server controlled by a third-party service provider.
 
-Let's decentralize our vending machine's business logic and data by porting the above JavaScript implementation into a Solidity smart contract.
+:::info Working web2 version
+
+To use the Vending Machine (web2), copy and paste the HTML code below into a text document, then open it in your web browser.
+
+<CustomDetails summary="VendingMachine.html">
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cupcake Vending Machine - Arbitrum Quickstart</title>
+  <script src="https://cdn.ethers.io/lib/ethers-5.7.umd.min.js"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #0d1117;
+      color: #e6edf3;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 2rem 1rem;
+    }
+
+    h1 {
+      font-size: 1.8rem;
+      margin-bottom: 0.25rem;
+      color: #58a6ff;
+    }
+
+    .subtitle {
+      color: #8b949e;
+      margin-bottom: 2rem;
+      font-size: 0.95rem;
+    }
+
+    .machines {
+      display: flex;
+      gap: 2rem;
+      flex-wrap: wrap;
+      justify-content: center;
+      width: 100%;
+      max-width: 900px;
+    }
+
+    .vending-machine {
+      background: #161b22;
+      border: 1px solid #30363d;
+      border-radius: 12px;
+      padding: 1.5rem;
+      width: 400px;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    .vending-machine h2 {
+      font-size: 1.25rem;
+      color: #e6edf3;
+    }
+
+    .vending-machine .badge {
+      display: inline-block;
+      font-size: 0.7rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      padding: 0.2em 0.6em;
+      border-radius: 4px;
+      width: fit-content;
+    }
+
+    .badge-web2 { background: #238636; color: #fff; }
+    .badge-web3 { background: #1f6feb; color: #fff; }
+
+    label {
+      font-size: 0.85rem;
+      color: #8b949e;
+      font-weight: 500;
+    }
+
+    input[type="text"] {
+      background: #0d1117;
+      border: 1px solid #30363d;
+      border-radius: 6px;
+      padding: 0.6rem 0.75rem;
+      color: #e6edf3;
+      font-size: 0.9rem;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    input[type="text"]:focus {
+      border-color: #58a6ff;
+    }
+
+    input[type="text"]::placeholder {
+      color: #484f58;
+    }
+
+    .btn {
+      padding: 0.6rem 1rem;
+      border: none;
+      border-radius: 6px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .btn-primary {
+      background: #238636;
+      color: #fff;
+    }
+
+    .btn-primary:hover { background: #2ea043; }
+
+    .btn-secondary {
+      background: transparent;
+      color: #58a6ff;
+      border: 1px solid #30363d;
+    }
+
+    .btn-secondary:hover { background: #161b22; border-color: #58a6ff; }
+
+    .cupcake-display {
+      font-size: 3rem;
+      text-align: center;
+      height: 4rem;
+      line-height: 4rem;
+      transition: opacity 0.3s;
+    }
+
+    .balance {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #0d1117;
+      border-radius: 6px;
+      padding: 0.6rem 0.75rem;
+      font-size: 0.9rem;
+    }
+
+    .balance-count {
+      font-weight: 700;
+      color: #58a6ff;
+      font-size: 1.1rem;
+    }
+
+    .status {
+      font-size: 0.8rem;
+      min-height: 1.2rem;
+      color: #f85149;
+      text-align: center;
+    }
+
+    .status.success { color: #3fb950; }
+
+    .hidden { display: none; }
+
+    .actions {
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    .actions .btn { flex: 1; }
+
+    .description {
+      font-size: 0.8rem;
+      color: #8b949e;
+      line-height: 1.4;
+      border-left: 2px solid #30363d;
+      padding-left: 0.75rem;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Cupcake Vending Machine</h1>
+  <p class="subtitle">From the Arbitrum Solidity + Remix Quickstart</p>
+
+  <div class="machines">
+
+    <!-- WEB2 Vending Machine -->
+    <div class="vending-machine">
+      <span class="badge badge-web2">Web2</span>
+      <h2>Free Cupcakes</h2>
+      <p class="description">Pure JavaScript vending machine. Business logic runs in your browser — no blockchain involved.</p>
+
+      <label for="web2-name">Name</label>
+      <input type="text" id="web2-name" placeholder="Enter name" />
+
+      <div class="actions">
+        <button class="btn btn-primary" id="web2-vend">Cupcake please!</button>
+        <button class="btn btn-secondary" id="web2-refresh">Refresh balance</button>
+      </div>
+
+      <div class="cupcake-display" id="web2-cupcake"></div>
+
+      <div class="balance">
+        <span>Cupcake balance for <strong id="web2-who">—</strong>:</span>
+        <span class="balance-count" id="web2-balance">0</span>
+      </div>
+
+      <div class="status" id="web2-status"></div>
+    </div>
+
+
+
+<script>
+// ============================================================
+// VendingMachine.js — the JavaScript class from the quickstart
+// ============================================================
+class VendingMachine {
+  // state variables = internal memory of the vending machine
+  cupcakeBalances = {};
+  cupcakeDistributionTimes = {};
+
+  // Vend a cupcake to the caller
+  giveCupcakeTo(userId) {
+    if (this.cupcakeDistributionTimes[userId] === undefined) {
+      this.cupcakeBalances[userId] = 0;
+      this.cupcakeDistributionTimes[userId] = 0;
+    }
+
+    // Rule 1: The vending machine will distribute a cupcake to anyone who hasn't recently received one.
+    const fiveSeconds = 5000;
+    const userCanReceiveCupcake = this.cupcakeDistributionTimes[userId] + fiveSeconds <= Date.now();
+    if (userCanReceiveCupcake) {
+      this.cupcakeBalances[userId]++;
+      this.cupcakeDistributionTimes[userId] = Date.now();
+      console.log(`Enjoy your cupcake, ${userId}!`);
+      return true;
+    } else {
+      console.error(
+        'HTTP 429: Too Many Cupcakes (you must wait at least 5 seconds between cupcakes)',
+      );
+      return false;
+    }
+  }
+
+  getCupcakeBalanceFor(userId) {
+    return this.cupcakeBalances[userId] || 0;
+  }
+}
+
+// ============================================================
+// VendingMachine.sol ABI (from the compiled Solidity contract)
+// ============================================================
+const VENDING_MACHINE_ABI = [
+  {
+    inputs: [{ internalType: "address", name: "userAddress", type: "address" }],
+    name: "getCupcakeBalanceFor",
+    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+    stateMutability: "view",
+    type: "function"
+  },
+  {
+    inputs: [{ internalType: "address", name: "userAddress", type: "address" }],
+    name: "giveCupcakeTo",
+    outputs: [{ internalType: "bool", name: "", type: "bool" }],
+    stateMutability: "nonpayable",
+    type: "function"
+  }
+];
+
+// ============================================================
+// Helper: flash a cupcake emoji with fade-out
+// ============================================================
+function flashCupcake(elementId) {
+  const el = document.getElementById(elementId);
+  el.textContent = '\u{1F9C1}';
+  el.style.opacity = 1;
+  el.style.transition = 'none';
+  requestAnimationFrame(() => {
+    el.style.transition = 'opacity 4.5s ease-out';
+    el.style.opacity = 0;
+  });
+}
+
+function truncateAddress(text) {
+  if (!text) return '—';
+  if (text.length < 10) return text;
+  return text.slice(0, 6) + '...' + text.slice(-4);
+}
+
+// ============================================================
+// WEB2 Vending Machine
+// ============================================================
+(function initWeb2() {
+  const vm = new VendingMachine();
+
+  const nameInput    = document.getElementById('web2-name');
+  const vendBtn      = document.getElementById('web2-vend');
+  const refreshBtn   = document.getElementById('web2-refresh');
+  const balanceEl    = document.getElementById('web2-balance');
+  const whoEl        = document.getElementById('web2-who');
+  const statusEl     = document.getElementById('web2-status');
+
+  function refreshBalance() {
+    const name = nameInput.value.trim() || 'no name';
+    const bal = vm.getCupcakeBalanceFor(name);
+    balanceEl.textContent = bal;
+    whoEl.textContent = truncateAddress(name);
+  }
+
+  vendBtn.addEventListener('click', () => {
+    const name = nameInput.value.trim() || 'no name';
+    const got = vm.giveCupcakeTo(name);
+    if (got) {
+      statusEl.textContent = `Enjoy your cupcake, ${name}!`;
+      statusEl.className = 'status success';
+      flashCupcake('web2-cupcake');
+      refreshBalance();
+    } else {
+      statusEl.textContent = 'Too many cupcakes! Wait at least 5 seconds.';
+      statusEl.className = 'status';
+    }
+  });
+
+  refreshBtn.addEventListener('click', refreshBalance);
+})();
+
+</script>
+
+</body>
+</html>
+
+
+```
+
+</CustomDetails>
+
+:::
+
+Now, let's decentralize our vending machine's business logic and data by porting the above JavaScript implementation into a Solidity smart contract.
 
 ## Review the Solidity vending machine
 
