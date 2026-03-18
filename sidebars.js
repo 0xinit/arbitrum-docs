@@ -1038,28 +1038,8 @@ const sidebars = {
             },
             {
               type: 'doc',
-              label: 'Geth',
-              id: 'how-arbitrum-works/deep-dives/geth',
-            },
-            {
-              type: 'doc',
               label: 'Parent chain pricing',
-              id: 'how-arbitrum-works/deep-dives/parent-chain-pricing',
-            },
-            {
-              type: 'doc',
-              label: 'Sequencer',
-              id: 'how-arbitrum-works/deep-dives/sequencer',
-            },
-            {
-              type: 'doc',
-              label: 'STF',
-              id: 'how-arbitrum-works/deep-dives/stf-gentle-intro',
-            },
-            {
-              type: 'doc',
-              label: 'STF inputs',
-              id: 'how-arbitrum-works/deep-dives/stf-inputs',
+              id: 'how-arbitrum-works/reference/parent-chain-pricing',
             },
             {
               type: 'doc',
@@ -1070,6 +1050,32 @@ const sidebars = {
               type: 'doc',
               label: 'Gas and fees',
               id: 'how-arbitrum-works/deep-dives/gas-and-fees',
+            },
+            {
+              type: 'doc',
+              label: 'STF inputs',
+              id: 'how-arbitrum-works/reference/stf-inputs',
+            },
+          ],
+        },
+        {
+          type: 'category',
+          label: 'Reference',
+          items: [
+            {
+              type: 'doc',
+              label: 'Sequencer',
+              id: 'how-arbitrum-works/deep-dives/sequencer',
+            },
+            {
+              type: 'doc',
+              label: 'Geth',
+              id: 'how-arbitrum-works/reference/geth',
+            },
+            {
+              type: 'doc',
+              label: 'Parent chain pricing',
+              id: 'how-arbitrum-works/reference/parent-chain-pricing',
             },
           ],
         },
@@ -1283,42 +1289,48 @@ const sidebars = {
           items: [
             {
               type: 'doc',
-              label: 'Overview',
-              id: 'build-decentralized-apps/token-bridging/overview',
+              label: 'Get started',
+              id: 'build-decentralized-apps/token-bridging/get-started',
             },
             {
               type: 'doc',
-              label: 'ETH bridging',
-              id: 'build-decentralized-apps/token-bridging/token-bridge-ether',
+              label: 'Deposit tokens',
+              id: 'build-decentralized-apps/token-bridging/deposit-tokens',
             },
             {
               type: 'doc',
-              label: 'ERC-20 token bridging',
-              id: 'build-decentralized-apps/token-bridging/token-bridge-erc20',
+              label: 'Withdraw tokens',
+              id: 'build-decentralized-apps/how-to-bridge-from-parent-chain',
             },
+            {
+              type: 'doc',
+              label: 'Bridge to child chain',
+              id: 'build-decentralized-apps/how-to-bridge-from-parent-chain',
+            },
+            {
+              type: 'doc',
+              label: 'Bridge to parent chain',
+              id: 'build-decentralized-apps/how-to-bridge-to-parent-chain',
+            },
+            ,
             {
               type: 'category',
-              label: 'Bridge tokens programmatically',
+              label: 'Configure token bridging',
               items: [
                 {
                   type: 'doc',
-                  label: 'Get started',
-                  id: 'build-decentralized-apps/token-bridging/bridge-tokens-programmatically/get-started',
+                  label: 'Set up custom gateway',
+                  id: 'build-decentralized-apps/token-bridging/configure-token-bridging/setup-custom-gateway',
                 },
                 {
                   type: 'doc',
-                  label: 'Use the standard gateway',
-                  id: 'build-decentralized-apps/token-bridging/bridge-tokens-programmatically/how-to-bridge-tokens-standard',
+                  label: 'Set up generic custom gateway',
+                  id: 'build-decentralized-apps/token-bridging/configure-token-bridging/setup-generic-custom-gateway',
                 },
                 {
                   type: 'doc',
-                  label: 'Use the generic-custom gateway',
-                  id: 'build-decentralized-apps/token-bridging/bridge-tokens-programmatically/how-to-bridge-tokens-generic-custom',
-                },
-                {
-                  type: 'doc',
-                  label: 'Use the custom gateway',
-                  id: 'build-decentralized-apps/token-bridging/bridge-tokens-programmatically/how-to-bridge-tokens-custom-gateway',
+                  label: 'Set up standard gateway',
+                  id: 'build-decentralized-apps/token-bridging/configure-token-bridging/setup-standard-gateway',
                 },
               ],
             },
@@ -1499,54 +1511,6 @@ const sidebars = {
               type: 'doc',
               label: 'Reference',
               id: 'build-decentralized-apps/nodeinterface/reference',
-            },
-          ],
-        },
-        {
-          type: 'category',
-          label: 'Token bridging',
-          collapsed: true,
-          items: [
-            {
-              type: 'doc',
-              label: 'Overview',
-              id: 'build-decentralized-apps/token-bridging/overview',
-            },
-            {
-              type: 'doc',
-              label: 'ETH bridging',
-              id: 'build-decentralized-apps/token-bridging/token-bridge-ether',
-            },
-            {
-              type: 'doc',
-              label: 'ERC-20 token bridging',
-              id: 'build-decentralized-apps/token-bridging/token-bridge-erc20',
-            },
-            {
-              type: 'category',
-              label: 'Bridge tokens programmatically',
-              items: [
-                {
-                  type: 'doc',
-                  label: 'Get started',
-                  id: 'build-decentralized-apps/token-bridging/bridge-tokens-programmatically/get-started',
-                },
-                {
-                  type: 'doc',
-                  label: 'Use the standard gateway',
-                  id: 'build-decentralized-apps/token-bridging/bridge-tokens-programmatically/how-to-bridge-tokens-standard',
-                },
-                {
-                  type: 'doc',
-                  label: 'Use the generic-custom gateway',
-                  id: 'build-decentralized-apps/token-bridging/bridge-tokens-programmatically/how-to-bridge-tokens-generic-custom',
-                },
-                {
-                  type: 'doc',
-                  label: 'Use the custom gateway',
-                  id: 'build-decentralized-apps/token-bridging/bridge-tokens-programmatically/how-to-bridge-tokens-custom-gateway',
-                },
-              ],
             },
           ],
         },
