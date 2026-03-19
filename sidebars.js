@@ -132,6 +132,10 @@ const sidebars = {
             },
             {
               type: 'doc',
+              id: 'for-devs/oracles/dia/dia',
+            },
+            {
+              type: 'doc',
               id: 'for-devs/oracles/ora/ora',
             },
             {
