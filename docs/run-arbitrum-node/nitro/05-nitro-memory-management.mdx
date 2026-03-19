@@ -214,8 +214,6 @@ To disable the protection:
 
 Nitro exposes the `arb/validator/memory/limit_exceeded` gauge metric (`1` when paused, `0` otherwise) and logs error-level messages when validation is paused or memory checks fail. Alert on this metric to detect when validation is paused due to memory pressure — sustained pauses may indicate that the node needs more memory or that cache sizes should be reduced.
 
-The two settings protect different subsystems and can be used independently or together. For RPC nodes that don't run validation, `node.resource-mgmt.mem-free-limit` is the relevant setting. For validator nodes, the block validator setting is already active by default and provides protection against validation-driven OOM.
-
 ## Tuning recommendations
 
 1. **Set `MALLOC_ARENA_MAX=2`**: This is the single most impactful change for containerized nodes. Without it, glibc can waste gigabytes on arena overhead, causing RSS to drift upward over days. Set this environment variable on every Nitro container.
