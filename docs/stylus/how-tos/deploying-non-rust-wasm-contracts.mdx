@@ -82,7 +82,7 @@ See the [hostio exports documentation](/stylus/advanced/hostio-exports) for the 
 - Linear memory must be exported as `"memory"`
 - Memory growth must be explicitly paid for
 - Initial memory size should be minimal (often `0 0`)
-- Maximum memory is limited by gas costs
+- Gas costs limit maximum memory
 
 ### Compilation target
 
@@ -94,7 +94,7 @@ See the [hostio exports documentation](/stylus/advanced/hostio-exports) for the 
 
 ## WebAssembly Text (WAT)
 
-WAT provides direct control over WASM bytecode using human-readable text format.
+WAT provides direct control over WASM bytecode using a human-readable text format.
 
 ### Minimal contract
 
@@ -384,7 +384,7 @@ int main(int argc, char *argv[]) {
 
 ## AssemblyScript contracts
 
-AssemblyScript is TypeScript-like language that compiles to WebAssembly.
+AssemblyScript is a TypeScript-like language that compiles to WebAssembly.
 
 ### Installation
 
@@ -443,7 +443,7 @@ asc contract.ts \
     -o contract.wasm
 ```
 
-### Deploy AssemblyScript contract
+### Deploy the AssemblyScript contract
 
 ```shell
 cargo stylus deploy \
