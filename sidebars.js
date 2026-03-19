@@ -132,7 +132,7 @@ const sidebars = {
             },
             {
               type: 'doc',
-              id: 'for-devs/oracles/dia/dia',
+              id: 'for-devs/oracles/DIA/dia',
             },
             {
               type: 'doc',
