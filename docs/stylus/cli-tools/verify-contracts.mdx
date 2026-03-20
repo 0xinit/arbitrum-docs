@@ -13,7 +13,7 @@ displayed_sidebar: buildStylusSidebar
 
 import ImageZoom from '@site/src/components/ImageZoom';
 
-Stylus contracts can be verified in two ways: locally using `cargo stylus`, or on [Arbiscan](https://arbiscan.io/), Arbitrum's block explorer. This guide covers both methods.
+You can verify a Stylus contract in two ways: locally with `cargo stylus` or on [Arbiscan](https://arbiscan.io/), Arbitrum’s block explorer. This guide covers both methods.
 
 :::info
 Stylus contract verification on Arbiscan is only supported for contracts deployed using `cargo-stylus` 0.5.0 or higher.
@@ -24,7 +24,7 @@ Stylus contract verification on Arbiscan is only supported for contracts deploye
 Contract verification ensures that:
 
 - Your deployment is reproducible by anyone running the same environment
-- Users can independently verify that deployed bytecode matches published source code
+- Users can independently verify that the deployed bytecode matches the published source code
 - The contract source code is publicly available on block explorers
 - Trust and transparency are established with your users
 
@@ -62,8 +62,8 @@ Anyone with the same codebase can rebuild your contract and verify the output ma
 
 ### Prerequisites for local verification
 
-1. Docker installed and running
-2. The exact same codebase used for deployment
+1. Docker is installed and running
+2. The same codebase is used for deployment
 3. `cargo-stylus` CLI installed (version ≥ 0.4.2)
 
 ### Running local verification
@@ -113,7 +113,7 @@ If verification fails, common causes:
 - Modified source code
 - Different build flags
 
-Ensure you're using the exact same codebase and Rust version as the deployment.
+Ensure you're using the same codebase and Rust version as the deployment.
 
 ---
 
@@ -143,7 +143,10 @@ Visit [Arbiscan Verify Contract](https://arbiscan.io/verifyContract) directly if
 2. Click the "Contract" tab
 3. Click the "Verify and Publish" link
 
-<ImageZoom src="/img/stylus/verify-and-publish.webp" alt="Verify and Publish link on Arbiscan" />
+<ImageZoom
+  src="/img/stylus-arbiscan-verification-1.png"
+  alt="Verify and Publish link on Arbiscan"
+/>
 
 ### Step 2: Enter contract details
 
@@ -151,16 +154,9 @@ On the verification page, provide:
 
 1. **Contract address**: The deployed contract address (e.g., `0xe85a...3ca`)
 2. **Compiler type**: Select **"Stylus (Rust)"** from the dropdown
-
-<ImageZoom
-  src="/img/stylus/compiler-type-stylus-rust.webp"
-  alt="Select Stylus Rust compiler type"
-/>
-
 3. **cargo-stylus version**: Select the version you used for deployment (must be ≥ 0.5.0)
 
-<ImageZoom src="/img/stylus/cargo-stylus-version.webp" alt="Select cargo-stylus version" />
-
+<ImageZoom src="/img/stylus-arbiscan-verification-2.png" alt="Select Stylus Rust compiler type" />
 Then click **Continue**.
 
 ### Step 3: Submit source code
@@ -229,7 +225,7 @@ Common causes:
 
 - Wrong cargo-stylus version selected
 - Source code doesn't match deployed bytecode
-- Missing dependencies in JSON file
+- Missing dependencies in the JSON file
 
 Solution: Ensure you're using the exact source code from deployment and the correct cargo-stylus version.
 
