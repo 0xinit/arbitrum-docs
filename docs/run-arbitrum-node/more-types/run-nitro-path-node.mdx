@@ -1,0 +1,112 @@
+---
+title: 'Run a Path-based Archive node'
+sidebar_label: 'Path-based Archive node'
+description: 'Learn how to run Arbitrum Nitro path-based nodes — including path full nodes, path archive nodes, and partial path archive nodes — for reduced disk usage and configurable state retention.'
+author: pete-vielhaber
+sme:
+user_story: As a node operator, I want to set up and configure a path-based state scheme node so I can significantly reduce disk usage while choosing the level of historical state access I need.
+content_type: how-to
+---
+
+<!--
+NEED LINK TO PATH FULL NODE SNAPSHOT
+NEED LINK TO PATH ARCHIVE NODE SNAPSHOT
+-->
+
+Currently, Geth supports two archive node types for querying the chain: hash-based and path-based. In the future, Geth will stop supporting the hash-based methodology.
+
+## Path-based features
+
+In Geth v1.16.0, the path-based archive node type was introduced. The key benefits of this type are:
+
+- **Low disk usage**: ~4 TB for Arbitrum One
+- **Configurable retention**: users can choose how many historical states to retain
+
+## Path Full node
+
+A Path Full Node has state access up to 129 recent blocks.
+
+1. Download path full node snapshot or prepare sync from genesis.
+
+- Arbitrum One: [@@arbOneClassicArchiveSnapshot=https://snapshot.arbitrum.foundation/arb1/classic-archive.tar@@](@@arbOneClassicArchiveSnapshot=https://snapshot.arbitrum.foundation/arb1/classic-archive.tar@@)
+
+2. Start the node with following additional flag to set the state scheme:
+
+```shell
+execution.caching.state-scheme=path
+```
+
+### Limitations
+
+- RPC calls can only access state from recent 129 blocks (~32 seconds at Arb1 block speed)
+  - e.g. `eth_getBalance` will work for latest block (default if block is not specified), but will return error if balance at block `HEAD - 130` is requested
+- block validation in not yet supported with path state scheme
+- reorg depth is limited to `execution.caching.state-history + execution.caching.pathdb-max-diff-layers` blocks, in case of non-archive node `execution.caching.state-history` defaults to 24 hours at configured block speed
+
+## Run a Nitro Path Archive node
+
+A Nitro Path node is similar to a standard Archive node; with the exception that a Nitro Path Node takes significantly less disk space ~4TB (Arbitrum One). During sync and serving RPC calls it should be equivalent or potentially slightly better than the Archive (hash) node.
+
+1. Download path archive node snapshot or prepare sync from genesis.
+
+- Arbitrum One: [@@arbOneClassicArchiveSnapshot=https://snapshot.arbitrum.foundation/arb1/classic-archive.tar@@](@@arbOneClassicArchiveSnapshot=https://snapshot.arbitrum.foundation/arb1/classic-archive.tar@@)
+
+2. Start the node with following additional flags:
+
+```shell
+execution.caching.state-scheme=path
+execution.caching.state-history=0
+execution.caching.archive=true
+```
+
+### Limitations
+
+- Fast NVMe storage is required for reasonable sync speed
+- Currently ~30% slower than a path full node, performance will be improved in upcoming Nitro releases
+
+## Partial Path Archive node
+
+State access up to 6240 recent blocks (~26 min at Arb1 block speed)
+
+1. Download path full node snapshot or prepare sync from genesis.
+
+- Arbitrum One: [@@arbOneClassicArchiveSnapshot=https://snapshot.arbitrum.foundation/arb1/classic-archive.tar@@](@@arbOneClassicArchiveSnapshot=https://snapshot.arbitrum.foundation/arb1/classic-archive.tar@@)
+
+2. Start the node with following additional flags:
+
+```shell
+execution.caching.state-scheme=path
+execution.caching.archive
+execution.caching.state-history=6112 # 6112 + 128 (diff layers) = 6240
+```
+
+### Limitations
+
+- RPC calls can only access state from recent 6240 blocks (~26 minutes at Arb1 block speed)
+- reorg depth is limited to last 6240 blocks (~26 min at Arb1 block speed)
+- block validation in not yet supported with path state scheme
+- because the node is started from full node snapshot, after first startup, node will need to index the state history (background job):
+  - the historical state won’t be available immediately after first startup
+  - the node will use more CPU after first startup
+  - consecutive startups won’t require re-indexing as the state index is maintained during the chain sync
+
+## Configuration details
+
+- `execution.caching.state-scheme=path` - sets state scheme → chooses TrieDB implementation
+  - path state scheme is not compatible with hash state scheme - the node can only be started from a snapshot that was created with the same state scheme
+  - to use path scheme, you need to either sync from genesis or use a public snapshot
+    - in case of Arb1, the sync from genesis involves [classic state import](https://docs.arbitrum.io/run-arbitrum-node/nitro/migrate-state-and-history-from-classic#step-3-initialize-your-nitro-node-importing-the-exported-data)
+- `execution.caching.state-history` - specifies number of blocks from the chain head for which state histories are retained
+  - `state-history=0` means “entire chain”
+  - state history is preserved in form of reverse-diffs and those are stored in cold database (also called state freezer, or ancients)
+  - state history allows recovery of the historical state—that should allow reorg to historical block (**not tested**)
+  - **important**: on its own, state history doesn’t allow retrieving historical state by RPC calls (see: `execution.caching.archive` )
+  - historical state is state older then `pathdb-max-diff-layers+1` (by default 129) blocks from current head block of the node
+  - defaults:
+    - if `execution.caching.archive` is set, `state-history` defaults to `0`
+    - otherwise `state-history` defaults to 24 hours of blocks at configured block speed
+- `execution.caching.archive` - if set to true enables archive mode; in case of path state scheme:
+  - archive mode enables state history indexing:
+    - state history index is an extra data that needs to be persisted in hot database (pebble)
+    - the state history index allows accessing historical state → RPC calls can access state from older blocks then `pathdb-max-diff-layers+1`
+  - when archive mode is enabled, `execution.caching.state-history` will default to `0` (entire chain), unless set otherwise
