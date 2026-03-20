@@ -761,26 +761,33 @@ The `Address` type from `alloy_primitives` represents Ethereum addresses.
 use alloy_primitives::Address;
 use stylus_sdk::prelude::*;
 
+sol_storage! {
+    #[entrypoint]
+    pub struct MyContract {
+        address owner;
+    }
+}
+
 #[public]
 impl MyContract {
     pub fn get_owner(&self) -> Address {
-        Address::ZERO
+        self.owner.get()
     }
 
-    pub fn is_owner(&self, account: Address) -> bool {
-        account == self.vm().msg_sender()
+    pub fn is_owner(&self) -> bool {
+        self.owner.get() == self.vm().msg_sender()
     }
 
     pub fn transfer_ownership(&mut self, new_owner: Address) {
-        // Address validation and logic
         if new_owner == Address::ZERO {
-            // Handle error
+            // Handle error: reject zero address
         }
+        self.owner.set(new_owner);
     }
 }
 ```
 
-### Address constants
+### Address initialization
 
 ```rust
 use alloy_primitives::Address;
@@ -1041,27 +1048,7 @@ impl PrimitiveExample {
 
 ## Best practices
 
-1. **Use U256 for token amounts**: Solidity commonly uses `uint256` for token balances and amounts.
-
-   ```rust
-   use alloy_primitives::U256;
-
-   pub fn transfer(&mut self, amount: U256) {
-       // amount is uint256 in Solidity
-   }
-   ```
-
-2. **Use Address for account addresses**: Always use `alloy_primitives::Address` for Ethereum addresses.
-
-   ```rust
-   use alloy_primitives::Address;
-
-   pub fn get_balance(&self, account: Address) -> U256 {
-       // Query balance
-   }
-   ```
-
-3. **Use Bytes for dynamic byte data**: For Solidity `bytes`, use `alloy_primitives::Bytes`, not `Vec<u8>`.
+1. **Use `Bytes` for dynamic byte data**: For Solidity `bytes`, use `alloy_primitives::Bytes`, not `Vec<u8>`.
 
    ```rust
    use alloy_primitives::Bytes;
@@ -1071,7 +1058,7 @@ impl PrimitiveExample {
    }
    ```
 
-4. **Use `FixedBytes` for hashes and signatures**: for fixed-size byte data
+2. **Use `FixedBytes` for hashes and signatures**: For fixed-size byte data, use `FixedBytes<N>` instead of `[u8; N]`.
 
    ```rust
    use alloy_primitives::FixedBytes;
@@ -1079,18 +1066,6 @@ impl PrimitiveExample {
    pub fn verify(&self, hash: FixedBytes<32>) -> bool {
        // hash maps to Solidity bytes32
        true
-   }
-   ```
-
-5. **Check for zero addresses**: Always validate addresses before use.
-
-   ```rust
-   use alloy_primitives::Address;
-
-   pub fn set_admin(&mut self, admin: Address) {
-       if admin == Address::ZERO {
-           // Handle error
-       }
    }
    ```
 
