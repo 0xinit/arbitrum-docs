@@ -1,42 +1,66 @@
 // @ts-nocheck
 // Note: type annotations allow type checking and IDEs autocompletion
-
 require('dotenv').config();
 
 const markdownPreprocessor = require('./scripts/markdown-preprocessor');
 const sdkCodebasePath = './submodules/arbitrum-sdk';
 import remarkMath from 'remark-math';
 import rehypeKatex from 'rehype-katex';
+import { inkeepBaseSettings, inkeepModalSettings, inkeepExampleQuestions } from './inkeep.js';
 
-// Shared Inkeep configuration
-const inkeepBaseSettings = {
-  apiKey: process.env.INKEEP_API_KEY,
-  primaryBrandColor: '#213147',
-  organizationDisplayName: 'Arbitrum',
-  theme: {
-    syntaxHighlighter: {
-      lightTheme: require('prism-react-renderer/themes/github'),
-      darkTheme: require('prism-react-renderer/themes/palenight'),
-    },
-  },
+// Inkeep analytics event handler - forwards events to PostHog
+const handleInkeepEvent = (event) => {
+  // Only run on client side where PostHog is available
+  if (typeof window === 'undefined' || !window.posthog) {
+    return;
+  }
+
+  const { eventName, properties } = event;
+
+  // Events we want to track in PostHog
+  const trackedEvents = [
+    // Chat events
+    'assistant_message_received',
+    'user_message_submitted',
+    'assistant_positive_feedback_submitted',
+    'assistant_negative_feedback_submitted',
+    'assistant_source_item_clicked',
+    'chat_share_button_clicked',
+    // Search events
+    'search_query_submitted',
+    'search_result_clicked',
+    'search_query_response_received',
+  ];
+
+  if (trackedEvents.includes(eventName)) {
+    // Extract relevant properties to avoid sending excessive data
+    const eventProperties = {
+      component_type: properties?.componentType,
+      widget_version: properties?.widgetLibraryVersion,
+    };
+
+    // Add event-specific properties
+    if (eventName.includes('search')) {
+      eventProperties.search_query = properties?.searchQuery;
+      if (properties?.totalResults !== undefined) {
+        eventProperties.total_results = properties.totalResults;
+      }
+      if (properties?.title) {
+        eventProperties.result_title = properties.title;
+      }
+    }
+
+    if (eventName.includes('feedback')) {
+      eventProperties.feedback_reasons = properties?.reasons;
+    }
+
+    if (eventName === 'assistant_source_item_clicked') {
+      eventProperties.source_link = properties?.link;
+    }
+
+    window.posthog.capture(`inkeep_${eventName}`, eventProperties);
+  }
 };
-
-const inkeepModalSettings = {
-  placeholder: 'Search documentation...',
-  defaultQuery: '',
-  maxResults: 40,
-  debounceTimeMs: 300,
-  shouldOpenLinksInNewTab: true,
-};
-
-const inkeepExampleQuestions = [
-  'How to estimate gas in Arbitrum?',
-  'What is the difference between Arbitrum One and Nova?',
-  'How to deploy a smart contract on Arbitrum?',
-  'What are Arbitrum Orbit chains?',
-  'How does Arbitrum handle L1 to L2 messaging?',
-  'What is Arbitrum Stylus?',
-];
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
@@ -46,6 +70,7 @@ const config = {
   baseUrl: '/',
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'throw',
+  onBrokenAnchors: 'throw',
   favicon: 'img/logo.svg',
   markdown: {
     mermaid: true,
@@ -66,6 +91,9 @@ const config = {
 
       return result;
     },
+  },
+  customFields: {
+    inkeepApiKey: process.env.INKEEP_API_KEY,
   },
   themes: ['@docusaurus/theme-mermaid', '@docusaurus/theme-live-codeblock'],
   // GitHub pages deployment config.
@@ -94,7 +122,7 @@ const config = {
       /** @type {import('@docusaurus/preset-classic').Options} */
       ({
         docs: {
-          exclude: ['**/api/**'],
+          exclude: ['**/api/**', '**/*.pdf'],
           remarkPlugins: [remarkMath],
           rehypePlugins: [rehypeKatex],
           sidebarPath: require.resolve('./sidebars.js'),
@@ -104,7 +132,7 @@ const config = {
             // troubleshooting docs content has external source-of-truth; node-providers uses form-submission
             if (s.docPath.includes('troubleshooting') || s.docPath.includes('node-providers'))
               return undefined;
-            return 'https://github.com/OffchainLabs/arbitrum-docs/edit/master/' + s.docPath;
+            return 'https://github.com/OffchainLabs/arbitrum-docs/edit/master/docs/' + s.docPath;
           },
           showLastUpdateTime: true,
         },
@@ -130,12 +158,14 @@ const config = {
 
         // Output options
         out: './docs/sdk',
+        cleanOutputDir: false, // Don't clean output dir to preserve manual files
         hideGenerator: true,
         validation: {
           notExported: false,
           invalidLink: true,
           notDocumented: true,
         },
+        skipErrorChecking: true,
         logLevel: 'Verbose',
         sidebar: {
           autoConfiguration: false,
@@ -157,9 +187,12 @@ const config = {
         useCodeBlocks: true,
         expandParameters: true,
         parametersFormat: 'table',
-        propertiesFormat: 'table',
+        classPropertiesFormat: 'list',
+        interfacePropertiesFormat: 'list',
         enumMembersFormat: 'table',
         typeDeclarationFormat: 'table',
+        useCustomAnchors: true,
+        customAnchorsFormat: 'curlyBrace',
         sanitizeComments: true,
         frontmatterGlobals: {
           layout: 'docs',
@@ -215,7 +248,7 @@ const config = {
         backgroundColor: '#e3246e',
         textColor: 'white',
         content:
-          'Reactivate your Stylus contracts to ensure they remain callable - <a href="https://docs.arbitrum.io/stylus/concepts/how-it-works#activation" target="_blank">here’s how to do it.</a>',
+          'Reactivate your Stylus contracts to ensure they remain callable - <a href="https://docs.arbitrum.io/stylus/gentle-introduction#activation" target="_blank">here’s how to do it.</a>',
         isCloseable: false,
       },
       navbar: {
@@ -273,9 +306,9 @@ const config = {
           },
           {
             type: 'docSidebar',
-            sidebarId: 'additionalResourcesSidebar',
+            sidebarId: 'noticeSidebar',
             position: 'right',
-            label: 'Resources',
+            label: 'Notices',
           },
         ],
       },
@@ -297,8 +330,8 @@ const config = {
                 to: 'https://arbitrum.io/anytrust',
               },
               {
-                label: 'Arbitrum Orbit',
-                to: 'https://arbitrum.io/orbit',
+                label: 'Arbitrum chains',
+                to: 'https://arbitrum.io/launch-chain',
               },
               {
                 label: 'Arbitrum Stylus',
@@ -309,8 +342,7 @@ const config = {
                 to: 'https://arbitrum.foundation/',
               },
               {
-                label: 'Nitro whitepaper',
-                to: 'https://github.com/OffchainLabs/nitro/blob/master/docs/Nitro-whitepaper.pdf',
+                html: '<a href="/nitro-whitepaper.pdf">Arbitrum whitepaper</a>',
               },
             ],
           },
