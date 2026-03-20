@@ -1046,29 +1046,6 @@ impl PrimitiveExample {
 }
 ```
 
-## Best practices
-
-1. **Use `Bytes` for dynamic byte data**: For Solidity `bytes`, use `alloy_primitives::Bytes`, not `Vec<u8>`.
-
-   ```rust
-   use alloy_primitives::Bytes;
-
-   pub fn process(&self, data: Bytes) {
-       // data maps to Solidity bytes
-   }
-   ```
-
-2. **Use `FixedBytes` for hashes and signatures**: For fixed-size byte data, use `FixedBytes<N>` instead of `[u8; N]`.
-
-   ```rust
-   use alloy_primitives::FixedBytes;
-
-   pub fn verify(&self, hash: FixedBytes<32>) -> bool {
-       // hash maps to Solidity bytes32
-       true
-   }
-   ```
-
 ## Type conversion
 
 ### Between integer types
