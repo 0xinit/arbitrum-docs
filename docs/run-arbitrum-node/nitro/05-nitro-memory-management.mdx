@@ -7,7 +7,7 @@ user_story: As a node operator, I need to understand how Nitro allocates memory 
 content_type: how-to
 ---
 
-Although Nitro is a Go application, it can use significantly more memory than Go's runtime reports. This occurs because Nitro relies on multiple allocators: the Go garbage-collected heap, CGO (Go's mechanism for calling C code) allocations via `calloc`, and direct `mmap` system calls. Each allocator has its own accounting. Understanding where memory lives and which configuration knobs control it is essential for sizing containers, setting `GOMEMLIMIT`, and avoiding out-of-memory (OOM) kills. Nitro also includes built-in [runtime memory protection](#runtime-memory-protection) settings. These can throttle RPC requests or pause block validation when free memory runs low, providing a safety net against OOM kills.
+Although Nitro is a Go application, it can use significantly more memory than Go's runtime reports. This is because Nitro relies on multiple allocators: the Go garbage-collected heap, CGO (Go's mechanism for calling C code) allocations via `calloc`, and direct `mmap` system calls, each with its own accounting. Understanding where memory lives and which configuration knobs control it is essential for sizing containers, setting `GOMEMLIMIT`, and avoiding out-of-memory (OOM) kills. Nitro also includes built-in [runtime memory protection](#runtime-memory-protection) settings. These can throttle RPC requests or pause block validation when free memory runs low, providing a safety net against OOM kills.
 
 ## Memory allocators in Nitro
 
