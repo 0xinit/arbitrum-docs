@@ -20,7 +20,7 @@ Nitro's total resident memory (RSS) is the sum of four distinct categories:
 | **mmap**                | fastcache (trie-clean and snapshot caches)                                             | No                        | `trie-clean-cache`, `snapshot-cache`          |
 | **glibc malloc arenas** | Per-thread arena overhead for CGO allocations                                          | No                        | `MALLOC_ARENA_MAX`                            |
 
-Only the Go heap is subject to Go's garbage collector and `GOMEMLIMIT`. The CGO and `mmap` allocations are invisible to Go's runtime. They don't appear in `runtime.MemStats` or standard Go memory profiles, but they still consume container memory and count toward your memory limit.
+Only the Go heap is subject to Go's garbage collector and `GOMEMLIMIT`. The CGO and `mmap` allocations are invisible to Go's runtime. They don't appear in `runtime.MemStats` or standard Go memory profiles, but they still consume er memory and count toward your memory limit.
 
 ### Go heap
 
@@ -156,7 +156,7 @@ If `GOMEMLIMIT` is set too high (not accounting for non-Go memory), the Go garba
 
 Even with well-sized caches and tuned `GOMEMLIMIT`, nodes can face OOM due to workload spikes or unexpected memory pressure. Nitro provides two memory protection mechanisms. These use Linux cgroups to monitor real-time container memory usage and intervene before the kernel's OOM killer takes action.
 
-Both mechanisms read the contain'ers cgroup memory files (v1 or v2). They compute memory usage while exlcuding page cache, while the kernel can reclaim. They compare the result against the container's memory limit minus a configurable free-memory threshold:
+Both mechanisms read the container's cgroup memory files (v1 or v2). They compute memory usage while exlcuding page cache, while the kernel can reclaim. They compare the result against the container's memory limit minus a configurable free-memory threshold:
 
 ```
 effective_usage = cgroup_memory_usage - (active_file_cache + inactive_file_cache)
