@@ -893,6 +893,11 @@ const sidebars = {
           items: [
             {
               type: 'doc',
+              id: 'run-arbitrum-node/more-types/run-nitro-path-node',
+              label: 'Run a path-based archive node',
+            },
+            {
+              type: 'doc',
               id: 'run-arbitrum-node/more-types/run-archive-node',
               label: 'Run an archive node',
             },
