@@ -15,15 +15,6 @@ build
 # Generated docusaurus
 .docusaurus
 .cache-loader
-# Generated sdk
-sdk-sidebar.js
-docs/sdk/
-# Generated notion export CSVs
-scripts/out/*.csv
-# Generated stylus
-docs/stylus-by-example/
-# Generated api:mutes Typedoc quirk
-docs/api/
 
 # Misc
 .DS_Store
@@ -41,8 +32,6 @@ yarn-error.log*
 .yarn
 
 /i18n/*/docusaurus-plugin-content-docs/current/*
-
-sdk-sidebar.js
 
 # Audit output
 .audit/

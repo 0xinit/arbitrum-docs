@@ -1,28 +1,5 @@
 // @ts-check
 
-// Use the generated SDK sidebar for API reference
-const sdkApiSidebar = require('./sdk-sidebar.js');
-// Use the generated stylus-by-example sidebars
-const stylusByExampleBasicExamples = require('./docs/stylus-by-example/basic_examples/sidebar.js');
-const stylusByExampleApplications = require('./docs/stylus-by-example/applications/sidebar.js');
-
-// Create a custom SDK sidebar that combines manual intro pages with generated API docs
-const sdkSidebar = {
-  sdkSidebar: [
-    {
-      type: 'doc',
-      id: 'sdk/index',
-      label: 'Introduction',
-    },
-    {
-      type: 'doc',
-      id: 'sdk/migrate',
-      label: 'Migrate from v3 to v4',
-    },
-    ...sdkApiSidebar.sdkSidebar,
-  ],
-};
-
 /** @type {import('@docusaurus/plugin-content-docs').SidebarsConfig} */
 const sidebars = {
   // Get started sidebar - shared entry point
@@ -1452,9 +1429,9 @@ const sidebars = {
           id: 'for-devs/troubleshooting-building',
         },
         {
-          type: 'category',
+          type: 'link',
           label: 'Arbitrum SDK',
-          items: sdkSidebar.sdkSidebar,
+          href: 'https://github.com/OffchainLabs/arbitrum-sdk',
         },
         {
           type: 'link',
@@ -1493,7 +1470,11 @@ const sidebars = {
               id: 'stylus/reference/project-structure',
               label: 'Structure of a Contract',
             },
-            ...stylusByExampleBasicExamples,
+            {
+              type: 'link',
+              label: 'Stylus by Example',
+              href: 'https://stylus-by-example.org',
+            },
             {
               type: 'doc',
               id: 'stylus/how-tos/using-inheritance',
@@ -1563,7 +1544,11 @@ const sidebars = {
           label: 'Examples',
           collapsed: true,
           items: [
-            ...stylusByExampleApplications,
+            {
+              type: 'link',
+              label: 'Stylus by Example',
+              href: 'https://stylus-by-example.org',
+            },
             {
               type: 'link',
               label: 'Awesome Stylus',
