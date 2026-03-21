@@ -7,23 +7,20 @@ Arbitrum Docs, built with docusaurus; docs are live at https://developer.arbitru
 This repository is organized as follows:
 
 ### Documentation Content
-
-- **`docs/`**: Main documentation content directory
-  - `arbitrum-bridge/`: Bridge-related documentation
-  - `build-decentralized-apps/`: Developer guides and references
-  - `for-devs/`: Developer tools and third-party integrations
-  - `for-users/`: User-focused documentation
-  - `how-arbitrum-works/`: Technical explanations of Arbitrum
-  - `intro/`: Introduction and glossary
-  - `launch-arbitrum-chain/`: Arbitrum chain deployment guides
-  - `learn-more/`: Additional learning resources
-  - `node-running/`: Node operation guides
-  - `partials/`: Reusable content components and troubleshooting guides
-  - `run-arbitrum-node/`: Node setup and configuration
-  - `sdk/`: Auto-generated SDK documentation—Do not edit
-  - `stylus/`: Stylus smart contract development
-  - `stylus-by-example/`: Generated Stylus examples—Do not edit
-  - `welcome/`: Getting started content
+- **`docs/`** - Main documentation content directory
+  - `arbitrum-bridge/` - Bridge-related documentation
+  - `build-decentralized-apps/` - Developer guides and references
+  - `for-devs/` - Developer tools and third-party integrations
+  - `for-users/` - User-focused documentation
+  - `how-arbitrum-works/` - Technical explanations of Arbitrum
+  - `intro/` - Introduction and glossary
+  - `launch-arbitrum-chain/` - Arbitrum Orbit chain deployment guides
+  - `learn-more/` - Additional learning resources
+  - `node-running/` - Node operation guides
+  - `partials/` - Reusable content components and troubleshooting guides
+  - `run-arbitrum-node/` - Node setup and configuration
+  - `stylus/` - Stylus smart contract development
+  - `welcome/` - Getting started content
 
 ### Application Code
 
@@ -36,12 +33,8 @@ This repository is organized as follows:
   - `theme/`: Docusaurus theme customizations
 
 ### Configuration & Dependencies
-
-- **`submodules/`**: Git submodule containing SDK source code
-  - **`arbitrum-sdk/`**: Git submodule containing SDK source code
-  - **`stylus-by-example/`**: Git submodule containing Stylus examples
-- **`scripts/`**: Repository maintenance, build scripts, and content generators
-- **`static/`**: Static assets (images, files, JSON data)
+- **`scripts/`** - Repository maintenance and build scripts
+- **`static/`** - Static assets (images, files, JSON data)
 
 ## Contribution
 
@@ -54,8 +47,8 @@ The following are the only exceptions:
 - To request to have your project added to the [3rd party node providers page](docs/build-decentralized-apps/reference/01-node-providers.mdx), use [this form](https://docs.google.com/forms/d/e/1FAIpQLSc_v8j7sc4ffE6U-lJJyLMdBoIubf7OIhGtCqvK3cGPGoLr7w/viewform).
 
 ### Initial set up
-
-1. Clone this repo
+1. `git clone git@github.com:OffchainLabs/arbitrum-docs.git`
+2. `cd arbitrum-docs`
 
 ```shell
 git clone git@github.com:OffchainLabs/arbitrum-docs.git
@@ -67,19 +60,13 @@ git clone git@github.com:OffchainLabs/arbitrum-docs.git
 yarn
 ```
 
-3. Update the submodules
-
-```shell
-git submodule update --init --recursive
-```
-
-4. Build
+3. Build
 
 ```shell
 yarn build
 ```
 
-5. Start the development server
+4. Start the development server
 
 ```shell
 yarn start
@@ -141,4 +128,8 @@ This part will update the glossary.
 
 ### Formatting
 
-1. Run `yarn format` from the root directory.
+1. Run `yarn format` from the root directory (`arbitrum-docs`).
+
+### Redirects
+
+1. From the root directory, run `yarn check-redirects`.
