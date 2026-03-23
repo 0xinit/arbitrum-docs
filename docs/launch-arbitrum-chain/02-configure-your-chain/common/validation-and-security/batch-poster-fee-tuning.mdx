@@ -57,17 +57,12 @@ When parent chain gas prices rise sharply, the data poster's behavior is governe
 
 ### Fee cap parameters
 
-<!-- UNDOCUMENTED DEFAULTS
+| Flag                                                                              | Description                                                                                                                                                                                                                                              |
+| --------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `--node.batch-poster.data-poster.node.batch-poster.data-poster.target-price-gwei` | The target price to use for maximum fee cap calculation (default: 60). The default formula for this is: `[Default formula](https://github.com/OffchainLabs/nitro/blob/02a590530cffa9a1f79ab8f692d66582b2ec4371/arbnode/dataposter/data_poster.go#L1451): |
 
-Unable to find this specific parameter in the dataposter.go. Found similar parameters but unsure if they're the same, set to 1 or 5.
-
-The max-fee-cap-gwei parameter sets the highest gas price the data poster can use for batch posting transactions. The specific default value isn't included in the current documentation. Check the [Nitro source code](https://github.com/OffchainLabs/nitro/blob/master/arbnode/dataposter/dataposter.go) for the default or set it manually based on your cost limit.
-
--->
-
-| Flag                                               | Description                                                                                                                                                                                                                              |
-| -------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `--node.batch-poster.data-poster.max-fee-cap-gwei` | The maximum fee cap (in gwei) the data poster uses when posting transactions to the parent chain. If parent chain gas prices exceed this cap, the data poster won't post new transactions until prices fall below this threshold. |
+((BacklogOfBatches _ UrgencyGWei) ** 2) + ((ElapsedTime/ElapsedTimeBase) ** 2) _ ElapsedTimeImportance +
+TargetPriceGWei` |
 
 - **Trade-off**: Setting this value too low risks halting batch posting during gas spikes, causing a backlog of unposted batches. Setting it too high means the batch poster may post at very expensive gas prices. Choose a value that reflects your cost tolerance while ensuring batches continue to post during moderate price increases.
 
@@ -86,7 +81,7 @@ Each duration triggers a replacement attempt with a higher fee. The schedule sta
 1. The data poster estimates the current gas price from the parent chain.
 2. If the estimated price is within the configured fee cap, the batch is posted.
 3. If the parent chain doesn't include the transaction, the RBF schedule triggers replacement attempts with incrementally higher fees.
-4. If gas prices exceed `max-fee-cap-gwei`, the data poster pauses new batch submissions until prices decrease.
+4. If gas prices exceed [`node.batch-poster.data-poster.target-price-gwei` formula](https://github.com/OffchainLabs/nitro/blob/02a590530cffa9a1f79ab8f692d66582b2ec4371/arbnode/dataposter/data_poster.go#L1451), the data poster pauses new batch submissions until prices decrease.
 5. During this pause, batches queue up. Once prices fall, the data poster resumes and works through the backlog.
 
 :::caution
@@ -99,12 +94,12 @@ If the data poster pauses due to gas prices exceeding the fee cap for an extende
 
 The right fee configuration depends on your chain’s activity level and cost sensitivity. The following table provides general guidance:
 
-| Scenario                 | `max-blob-tx-tip-cap-gwei` | `min-blob-tx-tip-cap-gwei` | `max-fee-cap-gwei` | `blob-tx-replacement-times`                                  | Notes                                                                  |
-| ------------------------ | -------------------------- | -------------------------- | ------------------ | ------------------------------------------------------------ | ---------------------------------------------------------------------- |
-| Low-activity chain       | `1` (default)              | `1` (default)              | Conservative (low) | Default schedule                                             | Batch posting is infrequent; gas spikes are unlikely to cause backlogs |
-| High-throughput chain    | `5-10`                     | `1`                        | Moderate to high   | Consider shorter initial intervals (e.g., `2m0s, 5m0s, ...`) | Timely batch posting is critical; willing to pay more for reliability  |
-| Volatile parent chain    | `10+`                      | `1`                        | High               | Default or shorter intervals                                 | Gas spikes are common; higher caps prevent frequent posting pauses     |
-| Cost-sensitive operation | `1-2`                      | `1`                        | Low to moderate    | Default schedule                                             | Willing to tolerate occasional delays for lower costs                  |
+| Scenario                 | `max-blob-tx-tip-cap-gwei` | `min-blob-tx-tip-cap-gwei` | `node.batch-poster.data-poster.target-price-gwei` | `blob-tx-replacement-times`                                  | Notes                                                                  |
+| ------------------------ | -------------------------- | -------------------------- | ------------------------------------------------- | ------------------------------------------------------------ | ---------------------------------------------------------------------- |
+| Low-activity chain       | `1` (default)              | `1` (default)              | Conservative (low)                                | Default schedule                                             | Batch posting is infrequent; gas spikes are unlikely to cause backlogs |
+| High-throughput chain    | `5-10`                     | `1`                        | Moderate to high                                  | Consider shorter initial intervals (e.g., `2m0s, 5m0s, ...`) | Timely batch posting is critical; willing to pay more for reliability  |
+| Volatile parent chain    | `10+`                      | `1`                        | High                                              | Default or shorter intervals                                 | Gas spikes are common; higher caps prevent frequent posting pauses     |
+| Cost-sensitive operation | `1-2`                      | `1`                        | Low to moderate                                   | Default schedule                                             | Willing to tolerate occasional delays for lower costs                  |
 
 :::info Determining appropriate values
 
