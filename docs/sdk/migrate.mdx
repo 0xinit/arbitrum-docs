@@ -25,15 +25,15 @@ Most instances of "L1" and "L2" have been replaced with "parent" and "child" res
 - The `L1Network` is no longer required to be registered before bridging.
 - Only Arbitrum networks need to be registered.
 - Arbitrum networks are defined as Arbitrum One, Arbitrum testnets, and any Orbit chain.
-- If you need a full list of Arbitrum networks, you can use the new [`getArbitrumNetworks`](https://github.com/OffchainLabs/arbitrum-sdk/blob/main/packages/sdk/src/lib/dataEntities/networks.ts#getarbitrumnetworks) function.
-- To list all of the children of a network, use the new [`getChildrenForNetwork`](https://github.com/OffchainLabs/arbitrum-sdk/blob/main/packages/sdk/src/lib/dataEntities/networks.ts#getchildrenfornetwork) function.
+- If you need a full list of Arbitrum networks, you can use the new [`getArbitrumNetworks`](https://github.com/OffchainLabs/arbitrum-sdk/blob/main/packages/sdk/src/lib/dataEntities/networks.ts#L322) function.
+- To list all of the children of a network, use the new [`getChildrenForNetwork`](https://github.com/OffchainLabs/arbitrum-sdk/blob/main/packages/sdk/src/lib/dataEntities/networks.ts#L300) function.
 
 | v3 Name               | v4 Name                                                                                            |
 | --------------------- | -------------------------------------------------------------------------------------------------- |
-| `L2Network`           | [`ArbitrumNetwork`](https://github.com/OffchainLabs/arbitrum-sdk/blob/main/packages/sdk/src/lib/dataEntities/networks.ts#arbitrumnetwork)                             |
+| `L2Network`           | [`ArbitrumNetwork`](https://github.com/OffchainLabs/arbitrum-sdk/blob/main/packages/sdk/src/lib/dataEntities/networks.ts#L32)                             |
 | `getL2Network`        | [`getArbitrumNetwork`](https://github.com/OffchainLabs/arbitrum-sdk/blob/main/packages/sdk/src/lib/dataEntities/networks.ts#getarbitrumnetwork)                       |
-| `l2Networks`          | [`getArbitrumNetworks`](https://github.com/OffchainLabs/arbitrum-sdk/blob/main/packages/sdk/src/lib/dataEntities/networks.ts#getarbitrumnetworks)                     |
-| `addCustomNetwork`    | [`registerCustomArbitrumNetwork`](https://github.com/OffchainLabs/arbitrum-sdk/blob/main/packages/sdk/src/lib/dataEntities/networks.ts#registercustomarbitrumnetwork) |
+| `l2Networks`          | [`getArbitrumNetworks`](https://github.com/OffchainLabs/arbitrum-sdk/blob/main/packages/sdk/src/lib/dataEntities/networks.ts#L318)                     |
+| `addCustomNetwork`    | [`registerCustomArbitrumNetwork`](https://github.com/OffchainLabs/arbitrum-sdk/blob/main/packages/sdk/src/lib/dataEntities/networks.ts#L417) |
 | `Network`             | *removed*                                                                                          |
 | `L1Network`           | *removed*                                                                                          |
 | `getL1Network`        | *removed*                                                                                          |
@@ -41,7 +41,7 @@ Most instances of "L1" and "L2" have been replaced with "parent" and "child" res
 
 #### `ArbitrumNetwork` type
 
-`Network` type has been replaced with the [`ArbitrumNetwork`](https://github.com/OffchainLabs/arbitrum-sdk/blob/main/packages/sdk/src/lib/dataEntities/networks.ts#arbitrumnetwork) type and some properties have been removed or renamed.
+`Network` type has been replaced with the [`ArbitrumNetwork`](https://github.com/OffchainLabs/arbitrum-sdk/blob/main/packages/sdk/src/lib/dataEntities/networks.ts#L32) type and some properties have been removed or renamed.
 
 | v3 Name               | v4 Name         |
 | --------------------- | --------------- |
@@ -57,7 +57,7 @@ Most instances of "L1" and "L2" have been replaced with "parent" and "child" res
 
 #### `TokenBridge` type
 
-The `TokenBridge` type within the[`ArbitrumNetwork`](https://github.com/OffchainLabs/arbitrum-sdk/blob/main/packages/sdk/src/lib/dataEntities/networks.ts#arbitrumnetwork) object has been updated.
+The `TokenBridge` type within the[`ArbitrumNetwork`](https://github.com/OffchainLabs/arbitrum-sdk/blob/main/packages/sdk/src/lib/dataEntities/networks.ts#L32) object has been updated.
 
 | v3 Name           | v4 Name               |
 | ----------------- | --------------------- |
