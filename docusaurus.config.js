@@ -5,6 +5,61 @@ require('dotenv').config();
 const markdownPreprocessor = require('./scripts/markdown-preprocessor');
 import remarkMath from 'remark-math';
 import rehypeKatex from 'rehype-katex';
+import { inkeepBaseSettings, inkeepModalSettings, inkeepExampleQuestions } from './inkeep.js';
+
+// Inkeep analytics event handler - forwards events to PostHog
+const handleInkeepEvent = (event) => {
+  // Only run on client side where PostHog is available
+  if (typeof window === 'undefined' || !window.posthog) {
+    return;
+  }
+
+  const { eventName, properties } = event;
+
+  // Events we want to track in PostHog
+  const trackedEvents = [
+    // Chat events
+    'assistant_message_received',
+    'user_message_submitted',
+    'assistant_positive_feedback_submitted',
+    'assistant_negative_feedback_submitted',
+    'assistant_source_item_clicked',
+    'chat_share_button_clicked',
+    // Search events
+    'search_query_submitted',
+    'search_result_clicked',
+    'search_query_response_received',
+  ];
+
+  if (trackedEvents.includes(eventName)) {
+    // Extract relevant properties to avoid sending excessive data
+    const eventProperties = {
+      component_type: properties?.componentType,
+      widget_version: properties?.widgetLibraryVersion,
+    };
+
+    // Add event-specific properties
+    if (eventName.includes('search')) {
+      eventProperties.search_query = properties?.searchQuery;
+      if (properties?.totalResults !== undefined) {
+        eventProperties.total_results = properties.totalResults;
+      }
+      if (properties?.title) {
+        eventProperties.result_title = properties.title;
+      }
+    }
+
+    if (eventName.includes('feedback')) {
+      eventProperties.feedback_reasons = properties?.reasons;
+    }
+
+    if (eventName === 'assistant_source_item_clicked') {
+      eventProperties.source_link = properties?.link;
+    }
+
+    window.posthog.capture(`inkeep_${eventName}`, eventProperties);
+  }
+};
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
@@ -14,10 +69,30 @@ const config = {
   baseUrl: '/',
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'throw',
+  onBrokenAnchors: 'throw',
   favicon: 'img/logo.svg',
   markdown: {
     mermaid: true,
     preprocessor: markdownPreprocessor,
+    parseFrontMatter: async (params) => {
+      // Use the default parser
+      const result = await params.defaultParseFrontMatter(params);
+
+      // Check if this is a partial file (starts with underscore)
+      const fileName = params.filePath.split('/').pop();
+      const isPartialFile = fileName && fileName.startsWith('_');
+
+      // For partial files, clear frontmatter to prevent Docusaurus warnings
+      // The documentation-graph tool reads raw files directly, so this doesn't affect analysis
+      if (isPartialFile) {
+        result.frontMatter = {};
+      }
+
+      return result;
+    },
+  },
+  customFields: {
+    inkeepApiKey: process.env.INKEEP_API_KEY,
   },
   themes: ['@docusaurus/theme-mermaid', '@docusaurus/theme-live-codeblock'],
   // GitHub pages deployment config.
@@ -71,77 +146,22 @@ const config = {
       '@inkeep/cxkit-docusaurus',
       {
         SearchBar: {
-          baseSettings: {
-            apiKey: process.env.INKEEP_API_KEY,
-            primaryBrandColor: '#213147', // Arbitrum's primary brand color
-            organizationDisplayName: 'Arbitrum',
-            theme: {
-              syntaxHighlighter: {
-                lightTheme: require('prism-react-renderer/themes/github'),
-                darkTheme: require('prism-react-renderer/themes/palenight'),
-              },
-            },
-          },
-          modalSettings: {
-            placeholder: 'Search documentation...',
-            defaultQuery: '',
-            maxResults: 40,
-            debounceTimeMs: 300,
-            shouldOpenLinksInNewTab: true,
-          },
-          searchSettings: {
-            // optional settings
-          },
+          baseSettings: inkeepBaseSettings,
+          modalSettings: inkeepModalSettings,
           aiChatSettings: {
-            aiAssistantAvatar: '/img/logo.svg', // Using Arbitrum logo as AI assistant avatar
-            exampleQuestions: [
-              'How to estimate gas in Arbitrum?',
-              'What is the difference between Arbitrum One and Nova?',
-              'How to deploy a smart contract on Arbitrum?',
-              'What are Arbitrum Orbit chains?',
-              'How does Arbitrum handle L1 to L2 messaging?',
-              'What is Arbitrum Stylus?',
-            ],
+            aiAssistantAvatar: '/img/logo.svg',
+            exampleQuestions: inkeepExampleQuestions,
             botName: 'Arbitrum Assistant',
             getStartedMessage:
               "Hi! I'm here to help you navigate Arbitrum documentation. Ask me anything about building on Arbitrum, deploying contracts, or understanding our technology.",
           },
         },
         ChatButton: {
-          baseSettings: {
-            // see https://docusaurus.io/docs/deployment#using-environment-variables to use docusaurus environment variables
-            apiKey: process.env.INKEEP_API_KEY,
-            primaryBrandColor: '#213147', // Arbitrum's primary brand color
-            organizationDisplayName: 'Arbitrum',
-            // ...optional settings
-            theme: {
-              syntaxHighlighter: {
-                lightTheme: require('prism-react-renderer/themes/github'),
-                darkTheme: require('prism-react-renderer/themes/palenight'),
-              },
-            },
-          },
-          modalSettings: {
-            placeholder: 'Search documentation...',
-            defaultQuery: '',
-            maxResults: 40,
-            debounceTimeMs: 300,
-            shouldOpenLinksInNewTab: true,
-          },
-          searchSettings: {
-            // optional settings
-          },
+          baseSettings: inkeepBaseSettings,
+          modalSettings: inkeepModalSettings,
           aiChatSettings: {
-            // optional settings
-            aiAssistantAvatar: '/img/logo.svg', // optional -- use your own AI assistant avatar
-            exampleQuestions: [
-              'How to estimate gas in Arbitrum?',
-              'What is the difference between Arbitrum One and Nova?',
-              'How to deploy a smart contract on Arbitrum?',
-              'What are Arbitrum Orbit chains?',
-              'How does Arbitrum handle L1 to L2 messaging?',
-              'What is Arbitrum Stylus?',
-            ],
+            aiAssistantAvatar: '/img/logo.svg',
+            exampleQuestions: inkeepExampleQuestions,
           },
         },
       },
@@ -169,7 +189,7 @@ const config = {
         backgroundColor: '#e3246e',
         textColor: 'white',
         content:
-          'Reactivate your Stylus contracts to ensure they remain callable - <a href="https://docs.arbitrum.io/stylus/gentle-introduction#activation" target="_blank">here\'s how to do it.</a>',
+          'Reactivate your Stylus contracts to ensure they remain callable - <a href="https://docs.arbitrum.io/stylus/gentle-introduction#activation" target="_blank">here’s how to do it.</a>',
         isCloseable: false,
       },
       navbar: {
