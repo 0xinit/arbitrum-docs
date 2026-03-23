@@ -70,6 +70,7 @@ const config = {
   baseUrl: '/',
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'throw',
+  onBrokenAnchors: 'throw',
   favicon: 'img/logo.svg',
   markdown: {
     mermaid: true,
@@ -186,9 +187,12 @@ const config = {
         useCodeBlocks: true,
         expandParameters: true,
         parametersFormat: 'table',
-        propertiesFormat: 'table',
+        classPropertiesFormat: 'list',
+        interfacePropertiesFormat: 'list',
         enumMembersFormat: 'table',
         typeDeclarationFormat: 'table',
+        useCustomAnchors: true,
+        customAnchorsFormat: 'curlyBrace',
         sanitizeComments: true,
         frontmatterGlobals: {
           layout: 'docs',
