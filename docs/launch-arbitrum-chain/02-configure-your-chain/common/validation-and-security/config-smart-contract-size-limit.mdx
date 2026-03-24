@@ -1,6 +1,6 @@
 ---
 title: 'Configure smart contract size limit'
-description: 'Learn about how to configure the smart contract size limits on your Arbitrum chain'
+description: 'Learn how to configure the smart contract size limits on your Arbitrum chain'
 author: pete-vielhaber
 sme: jason-w123
 content_type: how-to
@@ -21,7 +21,7 @@ import SizeLimit from '../../../partials/_size-limit.mdx';
 
 <SizeLimit />
 
-#### Process overview
+### Process overview
 
 1. Prepare the chain configuration using the Chain SDK's `prepareChainConfig` function, where you specify the parameters.
 2. Use this config in `prepareNodeConfig` to generate the full node configuration (e.g., for nitro-node.toml).
@@ -41,7 +41,7 @@ import SizeLimit from '../../../partials/_size-limit.mdx';
 
 The example below assumes you've set up a project with the SDK installed and have environment variables for your private key and RPC URLs.
 
-#### 1. Basic chain configuration (setting the parameters)
+### 1. Basic chain configuration (setting the parameters)
 
 - The snippet below demonstrates how to prepare the chain config JSON, including the size limit parameters. Place this in a file like `prepareChainConfigExample.ts`.
 
@@ -77,7 +77,7 @@ console.log(JSON.stringify(chainConfig, null, 2));
 
 - Run this with `ts-node prepareChainConfigExample.ts` to generate the config JSON.
 
-#### 2. Full node configuration and deployment example
+### 2. Full node configuration and deployment example
 
 - This extends Step 1 in preparation of the full node config (e.g., for running a sequencer or validator node). Place this in a file like `deployOrbitChain.ts`. It assumes you’re deploying to a parent chain, such as Sepolia (testnet).
 
@@ -88,7 +88,7 @@ import { writeFileSync } from 'fs'; // For saving config files
 
 // Load environment variables (e.g., from .env file)
 const parentChainRpcUrl = process.env.PARENT_RPC_URL; // e.g., https://sepolia.infura.io/v3/YOUR_KEY
-const privateKey = process.env.PRIVATE_KEY; // Your wallet private key (funded with ETH)
+const privateKey = process.env.PRIVATE_KEY; // Your wallet private key (funded with `ETH`)
 
 // Step 1: Prepare chain config with increased size limits
 const orbitChainParams = {

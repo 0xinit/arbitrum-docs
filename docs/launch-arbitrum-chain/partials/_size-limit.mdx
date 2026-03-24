@@ -9,7 +9,7 @@ The `chainId` and `InitialChainOwner` parameters must be equal to the `chainId` 
 
 #### `MaxInitCodeSize` limitations
 
-**For L2's building on top of Ethereum (L1):**
+**For L2s building on top of Ethereum (parent chain):**
 
 The effective limit on calldata seems to be 128KB:
 
@@ -18,9 +18,9 @@ The effective limit on calldata seems to be 128KB:
 
 The conclusion is that using a 96KB code size limit is conservative and safe.
 
-**For L3's building on top of Arbitrum One:**
+**For L3s building on top of Arbitrum One:**
 
-- The sequencer has a default limit on `TxMaxDataSize` of `95000`, so L3's should use a lower preimage limit than that, roughly 85KB.
+- The sequencer has a default limit on `TxMaxDataSize` of `95000`, so L3s should use a lower preimage limit than that, roughly 85KB.
 
 **Other chains:**
 
