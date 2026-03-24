@@ -106,7 +106,7 @@ The implications of reducing the block speed below 100ms are that an increased b
 
 ### Can I set fast deposits for an L3?
 
-Yes, we have documented fast deposits in [how to configure delayed inbox finality](/launch-arbitrum-chain/how-tos/arbitrum-chain-finality).
+Yes, we have documented fast deposits in [how to configure delayed inbox finality](/launch-arbitrum-chain/how-tos/arbitrum-chain-finality.mdx).
 
 There is a flag that can be changed, which allows an Arbitrum chain to wait for finality on the parent chain before depositing a transaction.
 
@@ -120,7 +120,7 @@ For an L2, however, we recommend waiting ~12 minutes for L1 finality, as there i
 
 Test this thoroughly on a testnet first.
 
-1. This is a hard limit in the codebase to prevent DoS attacks. If you want to modify this, you'll need to follow this [procedure](/launch-arbitrum-chain/05-customize-your-chain/customize-stf) to create a new WASM module root with an updated max L2 message size. Other limits might also need to be updated, such as the maximum decompressed batch size. Be sure to modify everything starting with the latest version, which includes a couple of extra safety checks that may help prevent issues.
+1. This is a hard limit in the codebase to prevent DoS attacks. If you want to modify this, you'll need to follow this [procedure](/launch-arbitrum-chain/05-customize-your-chain/customize-stf.mdx) to create a new WASM module root with an updated max L2 message size. Other limits might also need to be updated, such as the maximum decompressed batch size. Be sure to modify everything starting with the latest version, which includes a couple of extra safety checks that may help prevent issues.
 2. You could disable this limit if you were confident you would stick to AnyTrust and not need to fall back to posting data onchain.
 3. Defaults are in place for non-AnyTrust batch posting, which would need to fit the L3 user's transaction into a batch posted as an L2 transaction, thus respecting L2 transaction size limits.
 
@@ -208,4 +208,4 @@ Using Nitro's split validation, it can be run as a separate container using:
 node.block-validator.validation-server-configs-list
 ```
 
-It's possible to run it in the same container. That is the default way, and then Nitro uses a loopback connection. You can read more about this in [running a split-validator](/run-arbitrum-node/more-types/04-run-split-validator-node).
+It's possible to run it in the same container. That is the default way, and then Nitro uses a loopback connection. You can read more about this in [running a split-validator](/run-arbitrum-node/more-types/04-run-split-validator-node.mdx).
