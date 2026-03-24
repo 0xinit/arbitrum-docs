@@ -17,9 +17,9 @@ In Geth v1.16.0, the path-based archive node type was introduced. The key benefi
 - **Low disk usage**: ~4 TB for Arbitrum One
 - **Configurable retention**: users can choose how many historical states to retain
 
-## Path Full node
+## Path full node
 
-A Path Full Node has state access up to 129 recent blocks.
+A Path Full node has state access up to 129 recent blocks.
 
 1. Download [path full node snapshot](https://snapshot-explorer.arbitrum.io/?chain=arb1) or prepare sync from genesis.
 
@@ -36,7 +36,7 @@ execution.caching.state-scheme=path
 - block validation in not yet supported with path state scheme
 - reorg depth is limited to `execution.caching.state-history + execution.caching.pathdb-max-diff-layers` blocks, in case of non-archive node `execution.caching.state-history` defaults to 24 hours at configured block speed
 
-## Run a Nitro Path Archive node
+## Run a Nitro path archive node
 
 A Nitro Path node is similar to a standard Archive node; with the exception that a Nitro Path Node takes significantly less disk space ~4TB (Arbitrum One). During sync and serving RPC calls it should be equivalent or potentially slightly better than the Archive (hash) node.
 
@@ -55,7 +55,7 @@ execution.caching.archive=true
 - Fast NVMe storage is required for reasonable sync speed
 - Currently ~30% slower than a path full node, performance will be improved in upcoming Nitro releases
 
-## Partial Path Archive node
+## Partial path archive node
 
 State access up to 6240 recent blocks (~26 min at Arb1 block speed)
 
