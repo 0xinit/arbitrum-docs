@@ -157,18 +157,18 @@ Again, most of these parameters don't need to be configured, since the Chain SDK
 
 The `chainId` and `InitialChainOwner` parameters must be equal to the `chainId` and `owner` defined in the `Config` struct.
 
-#### `MaxCodeSize` limitations:
+#### `MaxCodeSize` limitations
 
-- Entering a contract requires reading its code from the database, which means more code = more work. The EVM doesn't charge differently based on code size, but the computation cost could vary; however, that doesn't seem to be a strict limit compared to the readability aspect.
+- Entering a contract requires reading its code from the database, which means larger code requires more work. The EVM doesn't charge differently based on code size, but the computation cost could vary. However, that doesn't seem to be a strict limit compared to the readability aspect.
 - Reading code occurs via a preimage fetch (`code hash -> code`). The limit of preimage size is that a one-step proof (OSP) of a preimage must include the full preimage as part of the transaction.
 
-#### `MaxInitCodeSize` limitations:
+#### `MaxInitCodeSize` limitations
 
 **For L2's building on top of Ethereum (L1):**
 
 The effective limit on calldata seems to be 128KB:
 
-- Some clients (geth, AFAU) use 128KB as the limit, even though the protocol does not enforce it
+- Some clients (Geth, AFAU) use 128KB as the limit, even though the protocol doesn't enforce it
 - 128KB of calldata, with 40 gas per byte (according to [EIP-7623](https://eips.ethereum.org/EIPS/eip-7623)), would put the gas at 6M, which is within the limit for a transaction
 
 The conclusion is that using a 96KB code size limit is conservative and safe.
@@ -181,8 +181,8 @@ The conclusion is that using a 96KB code size limit is conservative and safe.
 
 - Should deduct limits from their prospective parent chain
 
-**Safe Values:**
-| Configuration | Max Contract Size Limit | Init Code size |
+**Safe values**
+| Configuration | Max contract size limit | Init code size |
 | ------------- | ----------------------- | -------------- |
 | Config A | 24kb | 48kb |
 | Config B | 48kb | 96kb |
