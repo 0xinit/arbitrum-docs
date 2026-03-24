@@ -17,6 +17,10 @@ The limit applies to both deployed contract code (`MaxCodeSize`) and initializat
 - **Where applicable**: Only in custom Arbitrum chains. Public chains like Arbitrum One or Nova remain fixed at 24KB without a network-wide upgrade.
 - **Requirements**: You'll need the Arbitrum Chain SDK (installed via `npm install @arbitrum/chain-sdk` or similar), a funded wallet on the parent chain (e.g., Ethereum or Arbitrum One), and access to deployment tools like Hardhat or Foundry for integration.
 
+import SizeLimit from '../../../partials/_size-limit.mdx';
+
+<SizeLimit />
+
 #### Process overview
 
 1. Prepare the chain configuration using the Chain SDK's `prepareChainConfig` function, where you specify the parameters.
