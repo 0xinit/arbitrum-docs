@@ -151,7 +151,7 @@ pub fn brotli_compress(wasm: impl Read, compression_level: u32) -> io::Result<Ve
 }
 ```
 
-Brotli compression typically reduces WASM size by 50-70%.
+Using Brotli compression typically reduces the WASM size by 50-70%.
 
 ### 0xEFF000 prefix
 
@@ -168,7 +168,7 @@ This prefix allows the Nitro VM to distinguish Stylus contracts from EVM bytecod
 
 ## Contract activation
 
-After deployment, contracts must be **activated** before execution:
+After deployment, **activating** a contract is required before execution:
 
 ### Activation process
 
@@ -193,7 +193,7 @@ Activation incurs a one-time gas cost but provides benefits:
 
 ### Verification
 
-The activation process checks for the `pay_for_memory_grow` function to verify correct entrypoint setup:
+The activation process checks for the `pay_for_memory_grow` function to verify the correct `entrypoint` setup:
 
 ```rust
 // From activation.rs
@@ -250,7 +250,7 @@ wasm-opt target/wasm32-unknown-unknown/release/my_contract.wasm \
   -o optimized.wasm
 ```
 
-Optimization can reduce size by an additional 10-30%.
+Optimization can reduce the size by an additional 10-30%.
 
 ### 4. Deploy and activate
 

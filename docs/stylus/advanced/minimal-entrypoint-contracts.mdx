@@ -52,11 +52,11 @@ fn revert_with_error() -> ArbResult {
 }
 ```
 
-## The `user_entrypoint` Function
+## The `user_entrypoint` function
 
 The `user_entrypoint` function is the WASM export that Stylus calls when a transaction invokes the contract. The `#[entrypoint]` macro generates this function automatically.
 
-### Generated Structure
+### Generated structure
 
 When you use `#[entrypoint]`, the macro generates:
 
@@ -95,18 +95,18 @@ pub extern "C" fn user_entrypoint(len: usize) -> usize {
 }
 ```
 
-### Key Points
+### Key points
 
 - **Signature**: `extern "C" fn user_entrypoint(len: usize) -> usize`
 - **Input**: `len` is the length of calldata to read
 - **Output**: `0` for success, `1` for revert
 - **Side effects**: Reads calldata, writes return data, flushes storage cache
 
-## The `Router` Trait
+## The `Router` trait
 
 The `Router` trait defines how function calls are dispatched to method implementations.
 
-### Trait Definition
+### Trait definition
 
 ```rust
 pub trait Router<S, I = Self>
@@ -130,7 +130,7 @@ where
 }
 ```
 
-### Routing Logic
+### Routing logic
 
 The `router_entrypoint` function implements the routing logic:
 
@@ -178,11 +178,11 @@ where
 }
 ```
 
-## The `TopLevelStorage` Trait
+## The `TopLevelStorage` trait
 
 The `TopLevelStorage` trait marks types that represent the contract's root storage.
 
-### Trait Definition
+### Trait definition
 
 ```rust
 pub unsafe trait TopLevelStorage {}
@@ -202,11 +202,11 @@ The trait is `unsafe` because:
 - Type must truly be top-level to prevent storage aliasing
 - Incorrectly implementing this trait can lead to undefined behavior
 
-## Building a Minimal Contract
+## Building a minimal contract
 
 Here's a minimal contract without using the high-level macros:
 
-### Step 1: Define Storage
+### Step 1: Define `Storage`
 
 ```rust
 #![cfg_attr(not(any(test, feature = "export-abi")), no_main)]
@@ -243,7 +243,7 @@ impl StorageType for MyContract {
 }
 ```
 
-### Step 2: Implement Router
+### Step 2: Implement `Router`
 
 ```rust
 impl Router<MyContract> for MyContract {
@@ -271,7 +271,7 @@ impl Router<MyContract> for MyContract {
 }
 ```
 
-### Step 3: Define Entrypoint
+### Step 3: Define entrypoint
 
 ```rust
 #[no_mangle]
@@ -305,11 +305,11 @@ pub extern "C" fn user_entrypoint(len: usize) -> usize {
 }
 ```
 
-## Function Selectors
+## Function selectors
 
 Function selectors are 4-byte identifiers computed from the function signature.
 
-### Computing Selectors
+### Computing selectors
 
 ```rust
 use stylus_sdk::function_selector;
@@ -325,7 +325,7 @@ const CONSTRUCTOR_SELECTOR: u32 =
     u32::from_be_bytes(function_selector!("constructor"));
 ```
 
-### Using in Router
+### Using in `Router`
 
 ```rust
 impl Router<MyContract> for MyContract {
@@ -368,9 +368,9 @@ impl Router<MyContract> for MyContract {
 }
 ```
 
-## Implementing Special Functions
+## Implementing special functions
 
-### Receive Function
+### Receive function
 
 Handles plain ETH transfers (no calldata):
 
@@ -382,7 +382,7 @@ fn receive(storage: &mut MyContract) -> Option<Result<(), Vec<u8>>> {
 }
 ```
 
-### Fallback Function
+### Fallback function
 
 Handles unknown selectors or when no receive is defined:
 
@@ -406,7 +406,7 @@ fn constructor(storage: &mut MyContract, calldata: &[u8]) -> Option<ArbResult> {
 }
 ```
 
-## Complete Minimal Example
+## Complete minimal example
 
 Here's a complete working minimal contract:
 
@@ -513,7 +513,7 @@ pub extern "C" fn user_entrypoint(len: usize) -> usize {
 }
 ```
 
-## Why Use High-Level Macros?
+## Why use high-level macros?
 
 While minimal contracts are educational, the `#[entrypoint]` and `#[public]` macros provide:
 
@@ -549,9 +549,9 @@ impl MyContract {
 
 This generates all the low-level code automatically while providing a clean, type-safe interface.
 
-## Advanced Use Cases
+## Advanced use cases
 
-### Custom Routing Logic
+### Custom routing logic
 
 Implement custom routing for multi-contract systems:
 
@@ -572,7 +572,7 @@ impl Router<MultiContract> for MultiContract {
 }
 ```
 
-### Custom Entrypoint Logic
+### Custom entrypoint logic
 
 Add custom logic before/after routing:
 
@@ -607,9 +607,9 @@ pub extern "C" fn user_entrypoint(len: usize) -> usize {
 }
 ```
 
-## Debugging Tips
+## Debugging tips
 
-### Enable Debug Mode
+### Enable debug mode
 
 ```rust
 #[cfg(feature = "debug")]
@@ -623,7 +623,7 @@ fn route(storage: &mut MyContract, selector: u32, input: &[u8]) -> Option<ArbRes
 }
 ```
 
-### Check Selector Computation
+### Check selector computation
 
 ```rust
 #[test]
@@ -637,8 +637,8 @@ fn test_selectors() {
 }
 ```
 
-## See Also
+## See also
 
-- [Contracts](../fundamentals/contracts.mdx) - High-level contract development
-- [Global Variables](../fundamentals/global-variables-and-functions.mdx) - VM context methods
-- [Storage Types](../fundamentals/data-types/storage.mdx) - Persistent storage
+- [Contracts](../fundamentals/contracts.mdx): High-level contract development
+- [Global Variables](../fundamentals/global-variables-and-functions.mdx): VM context methods
+- [Storage Types](../fundamentals/data-types/storage.mdx): Persistent storage
