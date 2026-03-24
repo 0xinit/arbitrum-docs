@@ -8,11 +8,6 @@ user_story: As a node operator, I want to set up and configure a path-based stat
 content_type: how-to
 ---
 
-<!--
-NEED LINK TO PATH FULL NODE SNAPSHOT
-NEED LINK TO PATH ARCHIVE NODE SNAPSHOT
--->
-
 Currently, Geth supports two archive node types for querying the chain: hash-based and path-based. In the future, Geth will stop supporting the hash-based methodology.
 
 ## Path-based features
@@ -26,9 +21,7 @@ In Geth v1.16.0, the path-based archive node type was introduced. The key benefi
 
 A Path Full Node has state access up to 129 recent blocks.
 
-1. Download path full node snapshot or prepare sync from genesis.
-
-- Arbitrum One: [@@arbOneClassicArchiveSnapshot=https://snapshot.arbitrum.foundation/arb1/classic-archive.tar@@](@@arbOneClassicArchiveSnapshot=https://snapshot.arbitrum.foundation/arb1/classic-archive.tar@@)
+1. Download [path full node snapshot](https://snapshot-explorer.arbitrum.io/?chain=arb1) or prepare sync from genesis.
 
 2. Start the node with following additional flag to set the state scheme:
 
@@ -47,9 +40,7 @@ execution.caching.state-scheme=path
 
 A Nitro Path node is similar to a standard Archive node; with the exception that a Nitro Path Node takes significantly less disk space ~4TB (Arbitrum One). During sync and serving RPC calls it should be equivalent or potentially slightly better than the Archive (hash) node.
 
-1. Download path archive node snapshot or prepare sync from genesis.
-
-- Arbitrum One: [@@arbOneClassicArchiveSnapshot=https://snapshot.arbitrum.foundation/arb1/classic-archive.tar@@](@@arbOneClassicArchiveSnapshot=https://snapshot.arbitrum.foundation/arb1/classic-archive.tar@@)
+1. Download [path archive node snapshot](https://snapshot-explorer.arbitrum.io/?chain=arb1) or prepare sync from genesis.
 
 2. Start the node with following additional flags:
 
@@ -68,9 +59,7 @@ execution.caching.archive=true
 
 State access up to 6240 recent blocks (~26 min at Arb1 block speed)
 
-1. Download path full node snapshot or prepare sync from genesis.
-
-- Arbitrum One: [@@arbOneClassicArchiveSnapshot=https://snapshot.arbitrum.foundation/arb1/classic-archive.tar@@](@@arbOneClassicArchiveSnapshot=https://snapshot.arbitrum.foundation/arb1/classic-archive.tar@@)
+1. Download [path full node snapshot](https://snapshot-explorer.arbitrum.io/?chain=arb1) or prepare sync from genesis.
 
 2. Start the node with following additional flags:
 
