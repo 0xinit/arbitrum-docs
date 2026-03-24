@@ -36,7 +36,7 @@
   },
   {
     "question": "Do Arbitrum chains have any built-in AA solution?",
-    "answer": "Not by default, but they can be customized to have native AA.\n\n",
+    "answer": "No, but ZeroDev is heavily tested, easy to use and to integrate.\n\n\n\n",
     "key": "do-arbitrum-chains-have-any-builtin-aa-solution"
   },
   {

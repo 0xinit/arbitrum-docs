@@ -37,7 +37,7 @@ Arbitrum chains are fully EVM-compatible. Most tools that support Ethereum shoul
 
 ### Do Arbitrum chains have any built-in AA solution?
 
-Not by default, but they can be customized to have native AA.
+No, but ZeroDev is heavily tested, easy to use, and to integrate.
 
 ### Is there any cross-chain bridging solution between two Arbitrum chains?
 
@@ -159,24 +159,24 @@ For example, in the case of plugging in the `USDT` address on Arbitrum One `0xfd
 
 ### What are the estimated infrastructure costs to run the Sequencer?
 
-The estimated cost is approximately $600 per sequencer replica per month for a low-to-medium activity chain. With networking and storage included, the estimated monthly cost would be $1,500 for the Sequencer.
+The estimated cost is approximately \$600 per sequencer replica per month for a low-to-medium activity chain. With networking and storage included, the estimated monthly cost would be \$1,500 for the Sequencer.
 
 ### What are the different validator modes?
 
-- **Defensive (allowlist required)**: Post stake and create a challenge if local state disagrees with the onchain assertion (wallet required, will only post stake onchain if a bad assertion is found.
+- **Defensive (allowlist required)**:- Post stake and create a challenge if local state disagrees with the onchain assertion (wallet required, will only post stake onchain if a bad assertion is found.
 
-- **StakeLatest (allowlist required)**: Stay staked on the latest assertion and challenge any bad assertions found (wallet required, always staked, uses some gas every time new assertion created)
+- **StakeLatest (allowlist required)**:- Stay staked on the latest assertion and challenge any bad assertions found (wallet required, always staked, uses some gas every time new assertion created)
 
-- **ResolveNodes (allowlist required)**: Stay staked on the latest assertion, resolve any unconfirmed assertions, and challenge any bad assertions found (wallet required, always staked, uses some gas every time an unconfirmed assertion is resolved or a new assertion is created)
+- **ResolveNodes (allowlist required)**:- Stay staked on the latest assertion, resolve any unconfirmed assertions, and challenge any bad assertions found (wallet required, always staked, uses some gas every time an unconfirmed assertion is resolved or a new assertion is created)
 
-- **MakeNodes (allowlist required)**: Continuously create new assertions, challenging any bad assertions found (wallet required, always staked, most expensive node to run)
+- **MakeNodes (allowlist required)**:- Continuously create new assertions, challenging any bad assertions found (wallet required, always staked, most expensive node to run)
 - Note that if there is more than one MakeNodes validator running, they might all try to create a new assertion at the same time. In that case, only one will be successful, and the others will have still spent gas on reverted calls that did nothing.
 
 - **Watchtower**: A node in Watchtower mode will immediately log an error if an onchain assertion deviates from the locally computed chain state. It doesn't require a wallet, as it never takes any action onchain. This mode is the default-enabled strategy for all nodes (full and archive).
 
 ### What are the costs to run a validator?
 
-The estimated monthly cost for Watchtower validators will be approximately $500. All other validators will cost $800 to $900 per month.
+The estimated monthly cost for Watchtower validators will be approximately \$500. All other validators will cost \$800 to \$900 per month.
 
 ### What is the amount of funds that a validator needs in its wallet to participate in fraud proofs?
 
