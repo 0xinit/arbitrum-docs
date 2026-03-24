@@ -56,7 +56,7 @@
   },
   {
     "question": "Can I increase the maximum contract size for my Arbitrum chain?",
-    "answer": "Yes, Arbitrum chains support an increased smart contract size limit of up to 96kB. You can use our [Chain SDK](https://github.com/OffchainLabs/arbitrum-orbit-sdk) and configure the parameters `[MaxCodeSize](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/main/src/prepareChainConfig.ts#L29)`[ and ](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/main/src/prepareChainConfig.ts#L29)`[MaxInitCodeSize](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/main/src/prepareChainConfig.ts#L29)` when calling `[prepareNodeConfig](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/main/examples/prepare-node-config/index.ts#L43)`. Once deployed, you cannot change the parameters for the smart contract size limit through an upgrade.\n\n\n\n",
+    "answer": "Yes, Arbitrum chains support an increased smart contract size limit of up to 96kB. You can use our [Chain SDK](https://github.com/OffchainLabs/arbitrum-orbit-sdk) and configure the parameters [`MaxCodeSize`](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/main/src/prepareChainConfig.ts#L29)[ and ](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/main/src/prepareChainConfig.ts#L29)[`MaxInitCodeSize`](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/main/src/prepareChainConfig.ts#L29) when calling [`prepareNodeConfig`](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/main/examples/prepare-node-config/index.ts#L43). Once deployed, you cannot change the parameters for the smart contract size limit through an upgrade.\n\n\n\n",
     "key": "can-i-increase-the-maximum-contract-size-for-my-arbitrum-chain"
   },
   {
@@ -91,12 +91,12 @@
   },
   {
     "question": "Can I set fast deposits for an L3?",
-    "answer": "Yes, we have documented fast deposits in [how to configure delayed inbox finality](https://www.notion.so/launch-arbitrum-chain/how-tos/arbitrum-chain-finality.mdx).\n\n\n\nThere is a flag that can be changed, which allows an Arbitrum chain to wait for finality on the parent chain before depositing a transaction.\n\n\nFor an L3 on Arb One, for example, we consider this a feature because they can instantly register a deposit on the child chain, as Arb One has an ultra-low re-org risk (having never re-organized).\n\n\nFor an L2, however, we recommend waiting ~12 minutes for L1 finality, as there is a greater risk of reorganization, for example, the deposit transaction not being included immediately in the fork-choice.\n\n",
+    "answer": "Yes, we have documented fast deposits in [how to configure delayed inbox finality](/launch-arbitrum-chain/how-tos/arbitrum-chain-finality).\n\n\n\nThere is a flag that can be changed, which allows an Arbitrum chain to wait for finality on the parent chain before depositing a transaction.\n\n\nFor an L3 on Arb One, for example, we consider this a feature because they can instantly register a deposit on the child chain, as Arb One has an ultra-low re-org risk (having never re-organized).\n\n\nFor an L2, however, we recommend waiting ~12 minutes for L1 finality, as there is a greater risk of reorganization, for example, the deposit transaction not being included immediately in the fork-choice.\n\n",
     "key": "can-i-set-fast-deposits-for-an-l3"
   },
   {
     "question": "How do I increase the max transaction data size?",
-    "answer": "**Warning: Always test first!!!**\n\nTest this thoroughly on a testnet first.\n\n1. This is a hard limit in the codebase to prevent DoS attacks. If you want to modify this, you'll need to follow this [procedure](https://www.notion.so/launch-arbitrum-chain/05-customize-your-chain/customize-stf.mdx) to create a new WASM module root with an updated max L2 message size. Other limits might also need to be updated, such as the maximum decompressed batch size. Be sure to modify everything starting with the latest version, which includes a couple of extra safety checks that may help prevent issues.\n2. You could disable this limit if you were confident you would stick to AnyTrust and not need to fall back to posting data onchain.\n3. Defaults are in place for non-AnyTrust batch posting, which would need to fit the L3 user's transaction into a batch posted as an L2 transaction, thus respecting L2 transaction size limits.\n",
+    "answer": "**Warning: Always test first!!!**\n\nTest this thoroughly on a testnet first.\n\n1. This is a hard limit in the codebase to prevent DoS attacks. If you want to modify this, you'll need to follow this [procedure](/launch-arbitrum-chain/05-customize-your-chain/customize-stf) to create a new WASM module root with an updated max L2 message size. Other limits might also need to be updated, such as the maximum decompressed batch size. Be sure to modify everything starting with the latest version, which includes a couple of extra safety checks that may help prevent issues.\n2. You could disable this limit if you were confident you would stick to AnyTrust and not need to fall back to posting data onchain.\n3. Defaults are in place for non-AnyTrust batch posting, which would need to fit the L3 user's transaction into a batch posted as an L2 transaction, thus respecting L2 transaction size limits.\n",
     "key": "how-do-i-increase-the-max-transaction-data-size"
   },
   {
@@ -141,7 +141,7 @@
   },
   {
     "question": "What happens if I don't post an assertion for a long period of time?",
-    "answer": "Over time, without creating assertions, the validator whitelist in the Rollup contract can become disabled. If you look at the `[removeWhitelistAfterValidatorAfk](https://github.com/OffchainLabs/nitro-contracts/blob/main/src/rollup/RollupUserLogic.sol#L62)` method, it allows you to disable the whitelist after `confirmPeriodBlocks + VALIDATOR_AFK_BLOCKS` L1 blocks have passed since the last assertion created.\n\nAs a default, that's 7200 + 45818 blocks (a bit less than eight days). Disabling the whitelist is not a significant issue if you continue to monitor the chain and run a validator. It can be enabled using `[setValidatorWhitelistDisabled()](https://github.com/OffchainLabs/nitro-contracts/blob/main/src/rollup/RollupAdminLogic.sol#L378)` by the chain owner. But it's always better to avoid reaching that point.\n\n",
+    "answer": "Over time, without creating assertions, the validator whitelist in the Rollup contract can become disabled. If you look at the [`removeWhitelistAfterValidatorAfk`](https://github.com/OffchainLabs/nitro-contracts/blob/main/src/rollup/RollupUserLogic.sol#L62) method, it allows you to disable the whitelist after `confirmPeriodBlocks + VALIDATOR_AFK_BLOCKS` L1 blocks have passed since the last assertion created.\n\nAs a default, that's 7200 + 45818 blocks (a bit less than eight days). Disabling the whitelist is not a significant issue if you continue to monitor the chain and run a validator. It can be enabled using [`setValidatorWhitelistDisabled()`](https://github.com/OffchainLabs/nitro-contracts/blob/main/src/rollup/RollupAdminLogic.sol#L378) by the chain owner. But it's always better to avoid reaching that point.\n\n",
     "key": "what-happens-if-i-dont-post-an-assertion-for-a-long-period-of-time"
   },
   {
@@ -151,7 +151,7 @@
   },
   {
     "question": "How do I run a split validator?",
-    "answer": "Using Nitro's split validation, it can be run as a separate container using:\n\n```plain text\nnode.block-validator.validation-server-configs-list\n```\nIt's possible to run it in the same container. That is the default way, and then Nitro uses a loopback connection. You can read more about this in [running a split-validator](https://www.notion.so/run-arbitrum-node/more-types/04-run-split-validator-node.mdx).\n\n",
+    "answer": "Using Nitro's split validation, it can be run as a separate container using:\n\n```text\nnode.block-validator.validation-server-configs-list\n```\nIt's possible to run it in the same container. That is the default way, and then Nitro uses a loopback connection. You can read more about this in [running a split-validator](/run-arbitrum-node/more-types/04-run-split-validator-node).\n\n",
     "key": "how-do-i-run-a-split-validator"
   }
 ]
