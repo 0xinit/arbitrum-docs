@@ -1,28 +1,34 @@
 ---
-title: 'Run a Path-based Archive node'
-sidebar_label: 'Path-based archive node'
-description: 'Learn how to run Arbitrum Nitro path-based nodes — including path full nodes, path archive nodes, and partial path archive nodes — for reduced disk usage and configurable state retention.'
+title: 'Run a Path-based node'
+sidebar_label: 'Path-based node'
+description: 'Learn how to run Arbitrum Nitro path-based nodes — including path full nodes, path archive nodes, and partial path nodes — for reduced disk usage and configurable state retention.'
 author: pete-vielhaber
 sme: magicxyyz
 user_story: As a node operator, I want to set up and configure a path-based state scheme node so I can significantly reduce disk usage while choosing the level of historical state access I need.
 content_type: how-to
 ---
 
-Currently, Geth supports two archive node types for querying the chain: hash-based and path-based. In the future, Geth will stop supporting the hash-based methodology.
+Currently, Geth supports two node types for querying the chain: hash-based and path-based. In the future, Geth will stop supporting the hash-based methodology.
 
 ## Path-based features
 
-In Geth v1.16.0, the path-based archive node type was introduced. The key benefits of this type are:
+Geth now contains the path-based archive node type, the key benefits of this type are:
 
-- **Low disk usage**: ~4 TB for Arbitrum One
+- **Low disk usage**: Under ~4 TB for Arbitrum One (archive), under ~2 TB (path full node)
 - **Configurable retention**: users can choose how many historical states to retain
+- **Path full node**: pathdb performs online pruning, so no need to stop node the perform the pruning action
+
+### Limitations
+
+- Fast NVMe storage is required for reasonable sync speed
+- Currently ~30% slower than a path full node, performance will be improved in upcoming Nitro releases
 
 ## Path full node
 
 A Path Full node has state access up to 129 recent blocks.
 
 1. Download [path full node snapshot](https://snapshot-explorer.arbitrum.io/?chain=arb1) or prepare sync from genesis.
-
+   - `--init.url{PATH}` similar to how it is described [here](/run-arbitrum-node/run-arbitrum-node/nitro/03-nitro-database-snapshots.mdx#downloading-the-snapshot-from-a-url).
 2. Start the node with following additional flag to set the state scheme:
 
 ```shell
@@ -38,7 +44,7 @@ execution.caching.state-scheme=path
 
 ## Run a Nitro path archive node
 
-A Nitro Path node is similar to a standard Archive node; with the exception that a Nitro Path Node takes significantly less disk space ~4TB (Arbitrum One). During sync and serving RPC calls it should be equivalent or potentially slightly better than the Archive (hash) node.
+A Nitro Path node is similar to a hash archive Archive node; with the exception that a Nitro Path Node takes significantly less disk space ~4TB (Arbitrum One). During sync and serving RPC calls it should be equivalent or potentially slightly better than the Archive (hash) node.
 
 1. Download [path archive node snapshot](https://snapshot-explorer.arbitrum.io/?chain=arb1) or prepare sync from genesis.
 
@@ -49,11 +55,6 @@ execution.caching.state-scheme=path
 execution.caching.state-history=0
 execution.caching.archive=true
 ```
-
-### Limitations
-
-- Fast NVMe storage is required for reasonable sync speed
-- Currently ~30% slower than a path full node, performance will be improved in upcoming Nitro releases
 
 ## Partial path archive node
 
