@@ -42,14 +42,14 @@ The `cargo stylus check` command validates that your contract can be deployed an
 ### What check does
 
 1. **Compiles** your Rust code to WASM with `wasm32-unknown-unknown` target
-2. **Compresses** the WASM using brotli compression
+2. **Compresses** the WASM using Brotli compression
 3. **Validates** the WASM structure:
    - Required exports (`user_entrypoint`)
    - Allowed imports (only `vm_hooks`)
    - Memory constraints
    - Size limits (24KB compressed)
 4. **Simulates activation** using `eth_call` to verify onchain compatibility
-5. **Estimates data fee** required for activation
+5. **Estimates the data fee** required for activation
 
 ### Basic usage
 
@@ -150,7 +150,7 @@ wasm data fee: 0.0001 ETH
 
 ### Full deployment
 
-Once estimation looks correct, deploy for real:
+Once the estimation looks correct, deploy for real:
 
 ```shell
 cargo stylus deploy \
@@ -278,7 +278,7 @@ cargo stylus deploy \
 
 Activation is the process of compiling WASM to native machine code onchain.
 
-### Why activation is required
+### Why is activation required
 
 - **Performance**: Native code executes 10-100x faster than interpreted WASM
 - **Validation**: Ensures WASM is well-formed and follows all constraints
@@ -429,7 +429,7 @@ cargo stylus deploy \
 
 ## Checking Existing Deployments
 
-### Check if contract is activated
+### Check if the contract is activated
 
 ```rust
 // From check.rs
@@ -458,7 +458,7 @@ cargo stylus activate \
   --private-key-path=./key.txt
 ```
 
-## Best Practices
+## Best practices
 
 ### 1. Always check before deploying
 
@@ -549,7 +549,7 @@ cargo stylus check
 # - Strip debug symbols
 ```
 
-### 7. Verify data fee is reasonable
+### 7. Verify the data fee is reasonable
 
 ```shell
 # Check data fee before deploying
@@ -572,7 +572,7 @@ cargo stylus deploy --private-key-path=./key.txt --estimate-gas
 
 **Solutions**:
 
-1. Use `#[no_std]` to eliminate standard library:
+1. Use `#[no_std]` to eliminate the standard library:
 
    ```rust
    #![no_std]
@@ -736,7 +736,7 @@ cargo stylus check [OPTIONS]
 - `--wasm-file=<PATH>`: Check specific WASM file
 - `--contract-address=<ADDRESS>`: Target contract address
 
-### cargo stylus deploy
+### `cargo stylus deploy`
 
 **Syntax**:
 
@@ -755,7 +755,7 @@ cargo stylus deploy [OPTIONS]
 - `--constructor-value=<ETH>`: ETH sent to constructor
 - `--max-fee-per-gas-gwei=<GWEI>`: Custom gas price
 
-### cargo stylus activate
+### `cargo stylus activate`
 
 **Syntax**:
 
@@ -774,6 +774,6 @@ cargo stylus activate --address=<ADDRESS> [OPTIONS]
 - [Stylus quickstart guide](https://docs.arbitrum.io/stylus/stylus-quickstart)
 - [Cargo Stylus repository](https://github.com/OffchainLabs/stylus-sdk-rs/tree/main/cargo-stylus)
 - [Testnet information](https://docs.arbitrum.io/stylus/reference/testnet-information)
-- [Contract verification guide](https://docs.arbitrum.io/stylus/how-tos/verifying-contracts)
+- [Contract verification guide](https://docs.arbitrum.io/stylus/guides/verifying-contracts)
 - [Optimizing WASM size](https://github.com/OffchainLabs/stylus-sdk-rs/tree/main/cargo-stylus/blob/main/OPTIMIZING_BINARIES.md)
 - [Valid WASM requirements](https://github.com/OffchainLabs/stylus-sdk-rs/tree/main/cargo-stylus/blob/main/VALID_WASM.md)
