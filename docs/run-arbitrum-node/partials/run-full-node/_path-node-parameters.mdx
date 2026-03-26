@@ -10,7 +10,8 @@
   - historical state is state older then `pathdb-max-diff-layers+1` (by default 129) blocks from current head block of the node
   - defaults:
     - if `execution.caching.archive` is set, `state-history` defaults to `0`
-    - otherwise `state-history` defaults to 24 hours of blocks at configured block speed
+      - It is important to set `state-history=0` if you want to preserve full history
+    - After Nitro 3.10, `state-history` will default to 24 hours of blocks at configured block speed
 - `execution.caching.archive` - if set to true enables archive mode; in case of path state scheme:
   - archive mode enables state history indexing:
     - state history index is an extra data that needs to be persisted in hot database (pebble)
