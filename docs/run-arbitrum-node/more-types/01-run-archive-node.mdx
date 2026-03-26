@@ -28,24 +28,21 @@ Running an Arbitrum One **full node** in **archive mode** lets you access both p
 | Send **pre-Nitro** archive requests                                             | Full node (Classic)                                       | [How to run a full node (Classic, pre-Nitro)](/run-arbitrum-node/more-types/03-run-classic-node.mdx) |
 | Send **post-Nitro** _and_ **pre-Nitro** archive requests                        | Full node (Nitro) _and_ full node (Classic)               | That's what this how-to is for; you're in the right place.                                           |
 
-:::info Path node
+:::info Archive-path node
 
-A Nitro Path node is similar to a hash archive Archive node; with the exception that a Nitro Path Node takes significantly less disk space ~4TB (Arbitrum One). During sync and serving RPC calls it should be equivalent or potentially slightly better than the Archive (hash) node.
+A Nitro Archive-path node is similar to a hash archive node; with the exception that a Nitro Path Node takes significantly less disk space ~4TB (Arbitrum One). During sync and serving RPC calls it should be equivalent or potentially slightly better than the Archive (hash) node.
+
+The recommendation is to use Nitro >= v.3.9.x to use Archive-path node.
 
 **Features**:
 
-- **Low disk usage**: Under ~4 TB for Arbitrum One (archive), under ~2 TB (path full node)
+- **Low disk usage**: Under ~4 TB for Arbitrum One (archive)
 - **Configurable retention**: users can choose how many historical states to retain
-- **Path full node**: pathdb performs online pruning, so no need to stop node the perform the pruning action
 
 **Limitations**:
 
-- RPC calls can only access state from recent 6240 blocks (~26 minutes at Arb1 block speed)
-- reorg depth is limited to last 6240 blocks (~26 min at Arb1 block speed)
-- because the node is started from full node snapshot, after first startup, node will need to index the state history (background job):
-  - the historical state won’t be available immediately after first startup
-  - the node will use more CPU after first startup
-  - consecutive startups won’t require re-indexing as the state index is maintained during the chain sync
+- block validation in not yet supported with path state scheme
+- fast NVME storage is required for reasonable sync speed
 
 :::
 
@@ -79,7 +76,7 @@ The minimum storage requirements will change as the Nitro chains grow (growing r
      - Note that other chains don't have Classic blocks and thus don't require an initial genesis database.
    - Snapshot Explorer
      - You can find more snapshots on our [snapshot explorer](https://snapshot-explorer.arbitrum.io/)
-   - [Path node explorer](https://snapshot-explorer.arbitrum.io/?chain=arb1)
+   - [Archive-Path section of the snapshot explorer](https://snapshot-explorer.arbitrum.io/?chain=arb1)
 
 ## Review and configure ports
 
@@ -127,22 +124,14 @@ To run both Arbitrum Nitro and/or Arbitrum Classic in archive mode, follow one o
 
 Note that the above commands both map to port `8547` on their hosts. To run both on the same host, you should edit those mapping to different ports and specify your Classic node RPC URL as `<classic node RPC>` in your Nitro start command. To verify the connection health of your node(s), see [Docker network between containers - Docker Networking Example](https://www.middlewareinventory.com/blog/docker-network-example/).
 
-:::note Path node additional flags
+:::note Archive-path node additional flags
 
-For a Nitro path archive node:
+For a Nitro path archive node, use the additional flags:
 
 ```shell
 execution.caching.state-scheme=path
 execution.caching.state-history=0
 execution.caching.archive=true
-```
-
-For a Nitro partial path archive node:
-
-```shell
-execution.caching.state-scheme=path
-execution.caching.archive
-execution.caching.state-history=6112
 ```
 
 :::
@@ -162,7 +151,7 @@ Both Nitro and Classic have multiple other parameters that can be used to config
 
 <!-- todo: FAQ -->
 
-## Path node configuration details
+## Archive-path node configuration details
 
 import PathNodeConfiguration from '../partials/run-full-node/_path-node-parameters.mdx';
 
