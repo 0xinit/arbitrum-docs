@@ -15,4 +15,4 @@
   - archive mode enables state history indexing:
     - state history index is an extra data that needs to be persisted in hot database (pebble)
     - the state history index allows accessing historical state → RPC calls can access state from older blocks then `pathdb-max-diff-layers+1`
-  - when archive mode is enabled, `execution.caching.state-history` will default to `0` (entire chain), unless set otherwise
+  - After Nitro 3.10, when archive mode is enabled, `execution.caching.state-history` will default to `0` (entire chain), unless set otherwise
