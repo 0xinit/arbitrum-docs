@@ -60,6 +60,7 @@ We provide a summary of the available parameters here, but we recommend reading 
 - Optionally, use the parameter `--init.latest-base` to set the base URL when searching for the latest snapshot
 - Note that these parameters get ignored if a database already exists
 - When running more than one node, it's easier to manually download the different parts of the snapshot, join them into a single archive, and host it locally for your nodes. Please see [Downloading the snapshot manually](/run-arbitrum-node/nitro/03-nitro-database-snapshots.mdx#downloading-the-snapshot-manually) for instructions on how to do that.
+- For running a path node, you can view the available [snapshots here]((https://snapshot-explorer.arbitrum.io/?chain=arb1).
 
 :::warning Fusaka upgrade: Historical blobs
 
@@ -121,6 +122,25 @@ docker run --rm -it -v /Path/to/mount/arbitrum:/home/user/.arbitrum -v /Path/to/
     </TabItem>
   </Tabs>
 </div>
+
+:::note Path nodes
+A Path Full node has state access up to 129 recent blocks.
+
+If running a path node an additional flag is needed for starting the node: `--execution.caching.state-scheme=path`
+
+**Features**:
+
+- **Low disk usage**: Under ~4 TB for Arbitrum One (archive), under ~2 TB (path full node)
+- **Configurable retention**: users can choose how many historical states to retain
+- **Path full node**: pathdb performs online pruning, so no need to stop node the perform the pruning action
+
+**Limitations**
+
+- RPC calls can only access state from recent 129 blocks (~32 seconds at Arb1 block speed)
+  - e.g. `eth_getBalance` will work for latest block (default if block is not specified), but will return error if balance at block `HEAD - 130` is requested
+- reorg depth is limited to `execution.caching.state-history + execution.caching.pathdb-max-diff-layers` blocks, in case of non-archive node `execution.caching.state-history` defaults to 24 hours at configured block speed
+
+:::
 
 - Note that it is important that `/some/local/dir/arbitrum` already exists; otherwise, the directory might be created with `root` as owner, and the Docker container won't be able to write to it.
 - Note that if you are running a node for the parent chain (e.g., Ethereum for Arbitrum One or Nova) on localhost, you may need to add `--network host` right after `docker run` to use Docker host-based networking
@@ -189,3 +209,9 @@ Below, we listed the most commonly used parameters when running a node. You can 
 import OptionalParameters from './partials/run-full-node/_optional-parameters.mdx';
 
 <OptionalParameters />
+
+### Path node configuration details
+
+import PathNodeConfiguration from './partials/run-full-node/_path-node-parameters.mdx';
+
+<PathNodeConfiguration />
