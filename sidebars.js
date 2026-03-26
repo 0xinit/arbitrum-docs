@@ -515,6 +515,11 @@ const sidebars = {
                     },
                     {
                       type: 'doc',
+                      id: 'launch-arbitrum-chain/configure-your-chain/common/validation-and-security/batch-poster-fee-tuning',
+                      label: `Batch poster fee tuning`,
+                    },
+                    {
+                      type: 'doc',
                       id: 'launch-arbitrum-chain/configure-your-chain/common/validation-and-security/arbitrum-chain-finality',
                       label: `Customize chain finality`,
                     },
@@ -663,6 +668,11 @@ const sidebars = {
                   type: 'doc',
                   id: 'launch-arbitrum-chain/maintain-your-chain/guidance/key-rotation',
                   label: `Node key rotation guide`,
+                },
+                {
+                  type: 'doc',
+                  id: 'launch-arbitrum-chain/maintain-your-chain/guidance/batch-poster-troubleshooting',
+                  label: `Batch poster troubleshooting`,
                 },
               ],
             },
