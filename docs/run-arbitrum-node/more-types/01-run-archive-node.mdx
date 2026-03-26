@@ -30,7 +30,7 @@ Running an Arbitrum One **full node** in **archive mode** lets you access both p
 
 :::info Archive-path node
 
-A Nitro Archive-path node is similar to a hash archive node; with the exception that a Nitro Path Node takes significantly less disk space ~4TB (Arbitrum One). During sync and serving RPC calls it should be equivalent or potentially slightly better than the Archive (hash) node.
+A Nitro Archive-path node is similar to a hash archive node; with the exception that a Nitro Archive-path Node takes significantly less disk space ~4TB (Arbitrum One). During sync and serving RPC calls it should be equivalent or potentially slightly better than the Archive (hash) node.
 
 The recommendation is to use Nitro >= v.3.9.x to use Archive-path node.
 
@@ -43,6 +43,8 @@ The recommendation is to use Nitro >= v.3.9.x to use Archive-path node.
 
 - block validation in not yet supported with path state scheme
 - fast NVME storage is required for reasonable sync speed
+- Snapshot can auto-download with:
+  - `--init.latest` is not yet supported, full snapshot url needs to be specified in `--init.url` or the snapshot needs to be downloaded manually.
 
 :::
 
