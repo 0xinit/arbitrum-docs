@@ -8,11 +8,9 @@
   - state history allows recovery of the historical state—that should allow reorg to historical block (**not tested**)
   - **important**: on its own, state history doesn’t allow retrieving historical state by RPC calls (see: `execution.caching.archive` )
   - historical state is state older then `pathdb-max-diff-layers+1` (by default 129) blocks from current head block of the node
-  - defaults:
-    - if `execution.caching.archive` is set, `state-history` defaults to `0`
-      - before nitro 3.10 `state-history` defaults to 24 hours of blocks at configured block speed
-      - after nitro 3.10, defaults are chosen based on archive flag:
-        - if `execution.caching.archive` is set, `state-history` defaults to `0`, otherwise `state-history` defaults to 24 hours of blocks at configured block speed
+  - before nitro 3.10 `state-history` defaults to 24 hours of blocks at configured block speed
+  - after nitro 3.10, defaults are chosen based on archive flag:
+    - if `execution.caching.archive` is set, `state-history` defaults to `0`, otherwise `state-history` defaults to 24 hours of blocks at configured block speed
 - `execution.caching.archive` - if set to true enables archive mode; in case of path state scheme:
   - archive mode enables state history indexing:
     - state history index is an extra data that needs to be persisted in hot database (pebble)
