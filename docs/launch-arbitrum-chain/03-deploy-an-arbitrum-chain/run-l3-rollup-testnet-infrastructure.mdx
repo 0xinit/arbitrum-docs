@@ -73,6 +73,7 @@ echo "PARENT_CHAIN_ID=$PARENT_CHAIN_ID"
 echo "PARENT_RPC=$PARENT_RPC"
 echo "chain-info.json saved"
 
+````
 </CustomDetails>
 
 - In Step 8, you will extract the batch poster private key—never commit it to Git or expose it in logs.
@@ -87,7 +88,7 @@ helm repo update
 
 kubectl create namespace my-l3-chain
 kubectl config set-context --current --namespace=my-l3-chain
-```
+````
 
 - Replace `my-l3-chain` with your preferred namespace in all commands below.
 
@@ -124,7 +125,7 @@ export REDIS_URL="redis://YOUR_REDIS_ENDPOINT:6379"
 - Deploy 3 sequencer replicas with the sequencer coordinator enabled. Replace placeholders with your values. Use `--set-file` for the chain info JSON to avoid shell escaping issues:
 
 <CustomDetails summary="Deploy sequencers:">
-  \ --set configmap.data.parent-chain.id=$PARENT_CHAIN_ID \ --set
+  ```shell \ --set configmap.data.parent-chain.id=$PARENT_CHAIN_ID \ --set
   configmap.data.parent-chain.connection.url=$PARENT_RPC \ --set configmap.data.chain.id=$CHAIN_ID \
   --set-file configmap.data.chain.info-json=chain-info.json \ --set
   configmap.data.node.sequencer=true \ --set configmap.data.node.delayed-sequencer.enable=true \
@@ -135,18 +136,12 @@ export REDIS_URL="redis://YOUR_REDIS_ENDPOINT:6379"
   --set perReplicaHeadlessService.enabled=true ```
 </CustomDetails>
 
-- If sequencers fail to coordinate, each needs a unique URL. Create `sequencer-extra-env.yaml`:
+- If sequencers fail to coordinate, each needs a unique URL.:
 
-```yaml
-extraEnv:
-  - name: POD_NAME
-    valueFrom:
-      fieldRef:
-        fieldPath: metadata.name
-  - name: NITRO_NODE_SEQ__COORDINATOR_MY__URL
-    value: 'http://$(POD_NAME).sequencer-nitro-headless.my-l3-chain.svc.cluster.local:8547/rpc'
-```
-
+<CustomDetails summary="Create sequencer-extra-env.yaml">
+  ```yaml extraEnv: - name: POD_NAME valueFrom: fieldRef: fieldPath: metadata.name - name:
+  NITRO_NODE_SEQ__COORDINATOR_MY__URL value:
+  'http://$(POD_NAME).sequencer-nitro-headless.my-l3-chain.svc.cluster.local:8547/rpc' ```
 </CustomDetails>
 
 - Then add `-f sequencer-extra-env.yaml` to the `helm install` command above.
@@ -168,7 +163,7 @@ After deploying sequencers, you must set at least one sequencer in the priority 
 Sequencer relays combine feeds from all sequencer replicas. Other components connect to these relays rather than directly to the sequencers.
 
 <CustomDetails summary="Run the following commands:">
-  replicaCount=2 \ --set configmap.data.chain.id=$CHAIN_ID \ --set
+  ```shell replicaCount=2 \ --set configmap.data.chain.id=$CHAIN_ID \ --set
   configmap.data.node.feed.input.url=ws://sequencer-nitro-0.sequencer-nitro-headless:9642\,ws://sequencer-nitro-1.sequencer-nitro-headless:9642\,ws://sequencer-nitro-2.sequencer-nitro-headless:9642
   ```
 </CustomDetails>
@@ -194,7 +189,7 @@ helm install external-relay offchainlabs/relay \
 Full nodes serve RPC requests and forward transactions to the active sequencer. They use Redis to find the active sequencer automatically.
 
 <CustomDetails summary="Run the following commands:">
-  \ --set configmap.data.parent-chain.id=$PARENT_CHAIN_ID \ --set
+  ```shell \ --set configmap.data.parent-chain.id=$PARENT_CHAIN_ID \ --set
   configmap.data.parent-chain.connection.url=$PARENT_RPC \ --set configmap.data.chain.id=$CHAIN_ID \
   --set-file configmap.data.chain.info-json=chain-info.json \ --set
   configmap.data.execution.forwarder.redis-url=$REDIS_URL \ --set
@@ -214,10 +209,8 @@ The batch poster posts transaction batches to the parent chain.
 printf '%s' "$(jq -r '.node["batch-poster"]["parent-chain-wallet"]["private-key"]' node-config.json)" > batch-poster-key.txt
 ```
 
-</CustomDetails>
-
 <CustomDetails summary="Deploy the batch poster:">
-  configmap.data.parent-chain.id=$PARENT_CHAIN_ID \ --set
+  ```shell configmap.data.parent-chain.id=$PARENT_CHAIN_ID \ --set
   configmap.data.parent-chain.connection.url=$PARENT_RPC \ --set configmap.data.chain.id=$CHAIN_ID \
   --set-file configmap.data.chain.info-json=chain-info.json \ --set-string
   configmap.data.execution.forwarding-target=null \ --set
@@ -233,8 +226,6 @@ printf '%s' "$(jq -r '.node["batch-poster"]["parent-chain-wallet"]["private-key"
 ```bash
 rm batch-poster-key.txt
 ```
-
-</CustomDetails>
 
 :::warning Do not add batch poster to sequencer priority
 
@@ -269,8 +260,6 @@ printf '%s' "$(jq -r '.node["staker"]["parent-chain-wallet"]["private-key"]' nod
 ```bash
 rm validator-key.txt
 ```
-
-</CustomDetails>
 
 ## Step 10: Set up Sequencer Coordinator Manager and set priority
 
