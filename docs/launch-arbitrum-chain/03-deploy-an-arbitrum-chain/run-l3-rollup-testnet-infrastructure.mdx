@@ -479,7 +479,7 @@ async function main() {
   const setWethTxReceipt = createTokenBridgePrepareSetWethGatewayTransactionReceipt(
     await parentChainPublicClient.waitForTransactionReceipt({ hash: setWethTxHash }),
 );
-const wethRetryableReceipts = await setWethTxReceipt.waitForRetryables({
+  const wethRetryableReceipts = await setWethTxReceipt.waitForRetryables({
     orbitPublicClient: chainPublicClient,
 });
   if (wethRetryableReceipts[0].status !== 'success') {
