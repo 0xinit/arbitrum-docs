@@ -482,7 +482,7 @@ await parentChainPublicClient.waitForTransactionReceipt({ hash: setWethTxHash })
 const wethRetryableReceipts = await setWethTxReceipt.waitForRetryables({
     orbitPublicClient: chainPublicClient,
 });
-if (wethRetryableReceipts[0].status !== 'success') {
+  if (wethRetryableReceipts[0].status !== 'success') {
 throw new Error('WETH gateway retryable failed');
 }
   console.log('WETH gateway configured. Token bridge ready.');
