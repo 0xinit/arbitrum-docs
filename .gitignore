@@ -44,7 +44,10 @@ yarn-error.log*
 
 sdk-sidebar.js
 
-# Audit output
+## Claude
+.agent/
 .audit/
-
+.cursor/
+.serena/
+.audit/
 .claude/plans

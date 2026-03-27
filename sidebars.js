@@ -132,6 +132,10 @@ const sidebars = {
             },
             {
               type: 'doc',
+              id: 'for-devs/oracles/DIA/dia',
+            },
+            {
+              type: 'doc',
               id: 'for-devs/oracles/ora/ora',
             },
             {
@@ -511,6 +515,11 @@ const sidebars = {
                     },
                     {
                       type: 'doc',
+                      id: 'launch-arbitrum-chain/configure-your-chain/common/validation-and-security/batch-poster-fee-tuning',
+                      label: `Batch poster fee tuning`,
+                    },
+                    {
+                      type: 'doc',
                       id: 'launch-arbitrum-chain/configure-your-chain/common/validation-and-security/arbitrum-chain-finality',
                       label: `Customize chain finality`,
                     },
@@ -518,6 +527,11 @@ const sidebars = {
                       type: 'doc',
                       id: 'launch-arbitrum-chain/configure-your-chain/common/validation-and-security/bold-adoption-for-arbitrum-chains',
                       label: `Adopt BoLD`,
+                    },
+                    {
+                      type: 'doc',
+                      id: 'launch-arbitrum-chain/configure-your-chain/common/validation-and-security/config-smart-contract-size-limit',
+                      label: `Smart contract size limit`,
                     },
                   ],
                 },
@@ -654,6 +668,11 @@ const sidebars = {
                   type: 'doc',
                   id: 'launch-arbitrum-chain/maintain-your-chain/guidance/key-rotation',
                   label: `Node key rotation guide`,
+                },
+                {
+                  type: 'doc',
+                  id: 'launch-arbitrum-chain/maintain-your-chain/guidance/batch-poster-troubleshooting',
+                  label: `Batch poster troubleshooting`,
                 },
               ],
             },
@@ -954,7 +973,11 @@ const sidebars = {
           id: 'run-arbitrum-node/nitro/how-to-convert-databases-from-leveldb-to-pebble',
           label: 'Convert databases from LevelDB to Pebble',
         },
-        ,
+        {
+          type: 'doc',
+          id: 'run-arbitrum-node/nitro/nitro-memory-management',
+          label: 'Nitro memory management',
+        },
         {
           type: 'doc',
           id: 'run-arbitrum-node/troubleshooting',
@@ -1078,18 +1101,8 @@ const sidebars = {
             },
             {
               type: 'doc',
-              label: 'Child to Parent chain Messaging',
+              label: 'Child to parent chain messaging',
               id: 'how-arbitrum-works/deep-dives/l2-to-l1-messaging',
-            },
-            {
-              type: 'doc',
-              label: 'Geth',
-              id: 'how-arbitrum-works/deep-dives/geth',
-            },
-            {
-              type: 'doc',
-              label: 'Parent chain pricing',
-              id: 'how-arbitrum-works/deep-dives/parent-chain-pricing',
             },
             {
               type: 'doc',
@@ -1100,11 +1113,6 @@ const sidebars = {
               type: 'doc',
               label: 'STF',
               id: 'how-arbitrum-works/deep-dives/stf-gentle-intro',
-            },
-            {
-              type: 'doc',
-              label: 'STF inputs',
-              id: 'how-arbitrum-works/deep-dives/stf-inputs',
             },
             {
               type: 'doc',
@@ -1125,12 +1133,38 @@ const sidebars = {
         },
         {
           type: 'category',
+          label: 'Reference',
+          items: [
+            {
+              type: 'doc',
+              label: 'STF inputs',
+              id: 'how-arbitrum-works/reference/stf-inputs',
+            },
+            {
+              type: 'doc',
+              label: 'Geth',
+              id: 'how-arbitrum-works/reference/geth',
+            },
+            {
+              type: 'doc',
+              label: 'Parent chain pricing',
+              id: 'how-arbitrum-works/reference/parent-chain-pricing',
+            },
+          ],
+        },
+        {
+          type: 'category',
           label: 'The BoLD dispute protocol',
           items: [
             {
               type: 'doc',
               id: 'how-arbitrum-works/bold/gentle-introduction',
               label: 'A gentle introduction',
+            },
+            {
+              type: 'doc',
+              id: 'how-arbitrum-works/bold/how-bold-bisection-works',
+              label: 'How bisection works',
             },
             {
               type: 'link',
@@ -1333,37 +1367,48 @@ const sidebars = {
           items: [
             {
               type: 'doc',
-              label: 'Overview',
-              id: 'build-decentralized-apps/token-bridging/overview',
+              label: 'Get started',
+              id: 'build-decentralized-apps/token-bridging/get-started',
             },
             {
               type: 'doc',
-              label: 'ETH bridging',
-              id: 'build-decentralized-apps/token-bridging/token-bridge-ether',
+              label: 'Deposit tokens',
+              id: 'build-decentralized-apps/token-bridging/deposit-tokens',
             },
             {
+              type: 'doc',
+              label: 'Withdraw tokens',
+              id: 'build-decentralized-apps/token-bridging/withdraw-tokens',
+            },
+            {
+              type: 'doc',
+              label: 'Bridge to child chain',
+              id: 'build-decentralized-apps/how-to-bridge-from-parent-chain',
+            },
+            {
+              type: 'doc',
+              label: 'Bridge to parent chain',
+              id: 'build-decentralized-apps/how-to-bridge-to-parent-chain',
+            },
+            ,
+            {
               type: 'category',
-              label: 'Bridge tokens programmatically',
+              label: 'Configure token bridging',
               items: [
                 {
                   type: 'doc',
-                  label: 'Get started',
-                  id: 'build-decentralized-apps/token-bridging/bridge-tokens-programmatically/get-started',
+                  label: 'Set up custom gateway',
+                  id: 'build-decentralized-apps/token-bridging/configure-token-bridging/setup-custom-gateway',
                 },
                 {
                   type: 'doc',
-                  label: 'Use the standard gateway',
-                  id: 'build-decentralized-apps/token-bridging/bridge-tokens-programmatically/how-to-bridge-tokens-standard',
+                  label: 'Set up generic custom gateway',
+                  id: 'build-decentralized-apps/token-bridging/configure-token-bridging/setup-generic-custom-gateway',
                 },
                 {
                   type: 'doc',
-                  label: 'Use the generic-custom gateway',
-                  id: 'build-decentralized-apps/token-bridging/bridge-tokens-programmatically/how-to-bridge-tokens-generic-custom',
-                },
-                {
-                  type: 'doc',
-                  label: 'Use the custom gateway',
-                  id: 'build-decentralized-apps/token-bridging/bridge-tokens-programmatically/how-to-bridge-tokens-custom-gateway',
+                  label: 'Set up standard gateway',
+                  id: 'build-decentralized-apps/token-bridging/configure-token-bridging/setup-standard-gateway',
                 },
               ],
             },
