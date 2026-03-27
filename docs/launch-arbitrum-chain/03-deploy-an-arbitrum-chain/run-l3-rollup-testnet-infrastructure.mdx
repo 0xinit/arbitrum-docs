@@ -56,6 +56,7 @@ The commands use shell variables (`$CHAIN_ID`, `$PARENT_CHAIN_ID`, `$PARENT_RPC`
 - On your local machine, in the folder that contains `node-config.json`, run:
 
 <CustomDetails summary="node-config.json">
+
 ```bash
 # Export so variables persist for all steps below
 export CHAIN_ID=$(jq -r '.chain["info-json"]' node-config.json | jq -r '.[0]["chain-id"]')
@@ -72,8 +73,8 @@ echo "CHAIN_ID=$CHAIN_ID"
 echo "PARENT_CHAIN_ID=$PARENT_CHAIN_ID"
 echo "PARENT_RPC=$PARENT_RPC"
 echo "chain-info.json saved"
+```
 
-````
 </CustomDetails>
 
 - In Step 8, you will extract the batch poster private key—never commit it to Git or expose it in logs.
@@ -88,7 +89,7 @@ helm repo update
 
 kubectl create namespace my-l3-chain
 kubectl config set-context --current --namespace=my-l3-chain
-````
+```
 
 - Replace `my-l3-chain` with your preferred namespace in all commands below.
 
@@ -125,7 +126,8 @@ export REDIS_URL="redis://YOUR_REDIS_ENDPOINT:6379"
 - Deploy 3 sequencer replicas with the sequencer coordinator enabled. Replace placeholders with your values. Use `--set-file` for the chain info JSON to avoid shell escaping issues:
 
 <CustomDetails summary="Deploy sequencers:">
-  ```shell \ --set configmap.data.parent-chain.id=$PARENT_CHAIN_ID \ --set
+
+```shell \ --set configmap.data.parent-chain.id=$PARENT_CHAIN_ID \ --set
   configmap.data.parent-chain.connection.url=$PARENT_RPC \ --set configmap.data.chain.id=$CHAIN_ID \
   --set-file configmap.data.chain.info-json=chain-info.json \ --set
   configmap.data.node.sequencer=true \ --set configmap.data.node.delayed-sequencer.enable=true \
@@ -133,15 +135,21 @@ export REDIS_URL="redis://YOUR_REDIS_ENDPOINT:6379"
   configmap.data.node.seq-coordinator.redis-url=$REDIS_URL \ --set
   configmap.data.node.feed.output.enable=true \ --set configmap.data.node.feed.output.port=9642 \
   --set configmap.data.execution.sequencer.enable=true \ --set configmap.data.init.empty=true \
-  --set perReplicaHeadlessService.enabled=true ```
+  --set perReplicaHeadlessService.enabled=true
+```
+
 </CustomDetails>
 
 - If sequencers fail to coordinate, each needs a unique URL.:
 
 <CustomDetails summary="Create sequencer-extra-env.yaml">
-  ```yaml extraEnv: - name: POD_NAME valueFrom: fieldRef: fieldPath: metadata.name - name:
-  NITRO_NODE_SEQ__COORDINATOR_MY__URL value:
-  'http://$(POD_NAME).sequencer-nitro-headless.my-l3-chain.svc.cluster.local:8547/rpc' ```
+
+```yaml
+extraEnv: - name: POD_NAME valueFrom: fieldRef: fieldPath: metadata.name - name:
+NITRO_NODE_SEQ__COORDINATOR_MY__URL value:
+'http://$(POD_NAME).sequencer-nitro-headless.my-l3-chain.svc.cluster.local:8547/rpc'
+```
+
 </CustomDetails>
 
 - Then add `-f sequencer-extra-env.yaml` to the `helm install` command above.
@@ -163,9 +171,12 @@ After deploying sequencers, you must set at least one sequencer in the priority 
 Sequencer relays combine feeds from all sequencer replicas. Other components connect to these relays rather than directly to the sequencers.
 
 <CustomDetails summary="Run the following commands:">
-  ```shell replicaCount=2 \ --set configmap.data.chain.id=$CHAIN_ID \ --set
-  configmap.data.node.feed.input.url=ws://sequencer-nitro-0.sequencer-nitro-headless:9642\,ws://sequencer-nitro-1.sequencer-nitro-headless:9642\,ws://sequencer-nitro-2.sequencer-nitro-headless:9642
-  ```
+
+```shell
+replicaCount=2 \ --set configmap.data.chain.id=$CHAIN_ID \ --set
+configmap.data.node.feed.input.url=ws://sequencer-nitro-0.sequencer-nitro-headless:9642\,ws://sequencer-nitro-1.sequencer-nitro-headless:9642\,ws://sequencer-nitro-2.sequencer-nitro-headless:9642
+```
+
 </CustomDetails>
 
 - The relay service names (`sequencer-nitro-0`, etc.) depend on your Helm release name. If you used a different release name for the sequencer, adjust accordingly (format: `<release>-nitro-<index>.<release>-nitro-headless`).
@@ -189,12 +200,16 @@ helm install external-relay offchainlabs/relay \
 Full nodes serve RPC requests and forward transactions to the active sequencer. They use Redis to find the active sequencer automatically.
 
 <CustomDetails summary="Run the following commands:">
-  ```shell \ --set configmap.data.parent-chain.id=$PARENT_CHAIN_ID \ --set
-  configmap.data.parent-chain.connection.url=$PARENT_RPC \ --set configmap.data.chain.id=$CHAIN_ID \
-  --set-file configmap.data.chain.info-json=chain-info.json \ --set
-  configmap.data.execution.forwarder.redis-url=$REDIS_URL \ --set
-  configmap.data.node.feed.input.url=ws://external-relay:9642 \ --set configmap.data.init.empty=true
-  \ --set configmap.data.execution.forwarding-target=http://sequencer-nitro:8547 ```
+
+```shell
+\ --set configmap.data.parent-chain.id=$PARENT_CHAIN_ID \ --set
+configmap.data.parent-chain.connection.url=$PARENT_RPC \ --set configmap.data.chain.id=$CHAIN_ID \
+--set-file configmap.data.chain.info-json=chain-info.json \ --set
+configmap.data.execution.forwarder.redis-url=$REDIS_URL \ --set
+configmap.data.node.feed.input.url=ws://external-relay:9642 \ --set configmap.data.init.empty=true
+\ --set configmap.data.execution.forwarding-target=http://sequencer-nitro:8547
+```
+
 </CustomDetails>
 
 - If your chain already has blocks, use `--set configmap.data.init.latest=pruned` instead of `init.empty=true`.
@@ -210,15 +225,19 @@ printf '%s' "$(jq -r '.node["batch-poster"]["parent-chain-wallet"]["private-key"
 ```
 
 <CustomDetails summary="Deploy the batch poster:">
-  ```shell configmap.data.parent-chain.id=$PARENT_CHAIN_ID \ --set
-  configmap.data.parent-chain.connection.url=$PARENT_RPC \ --set configmap.data.chain.id=$CHAIN_ID \
-  --set-file configmap.data.chain.info-json=chain-info.json \ --set-string
-  configmap.data.execution.forwarding-target=null \ --set
-  configmap.data.node.seq-coordinator.enable=true \ --set
-  configmap.data.node.seq-coordinator.redis-url=$REDIS_URL \ --set
-  configmap.data.node.batch-poster.enable=true \ --set
-  configmap.data.node.feed.input.url=ws://sequencer-relay:9642 \ --set-file
-  configmap.data.node.batch-poster.parent-chain-wallet.private-key=batch-poster-key.txt ```
+
+```shell
+configmap.data.parent-chain.id=$PARENT_CHAIN_ID \ --set
+configmap.data.parent-chain.connection.url=$PARENT_RPC \ --set configmap.data.chain.id=$CHAIN_ID \
+--set-file configmap.data.chain.info-json=chain-info.json \ --set-string
+configmap.data.execution.forwarding-target=null \ --set
+configmap.data.node.seq-coordinator.enable=true \ --set
+configmap.data.node.seq-coordinator.redis-url=$REDIS_URL \ --set
+configmap.data.node.batch-poster.enable=true \ --set
+configmap.data.node.feed.input.url=ws://sequencer-relay:9642 \ --set-file
+configmap.data.node.batch-poster.parent-chain-wallet.private-key=batch-poster-key.txt
+```
+
 </CustomDetails>
 
 - Remove the key file after deployment:
@@ -244,6 +263,8 @@ printf '%s' "$(jq -r '.node["staker"]["parent-chain-wallet"]["private-key"]' nod
 ```
 
 <CustomDetails summary="Deploy the validator:">
+
+```bash
   configmap.data.parent-chain.id=$PARENT_CHAIN_ID \ --set
   configmap.data.parent-chain.connection.url=$PARENT_RPC \ --set configmap.data.chain.id=$CHAIN_ID \
   --set-file configmap.data.chain.info-json=chain-info.json \ --set
@@ -252,7 +273,9 @@ printf '%s' "$(jq -r '.node["staker"]["parent-chain-wallet"]["private-key"]' nod
   --set configmap.data.node.feed.input.url=ws://external-relay:9642 \ --set
   configmap.data.execution.forwarding-target=http://sequencer-nitro:8547 \ --set-file
   configmap.data.node.staker.parent-chain-wallet.private-key=validator-key.txt \ --set
-  configmap.data.init.empty=true ```
+  configmap.data.init.empty=true
+```
+
 </CustomDetails>
 
 - Remove the key file after deployment:
@@ -384,6 +407,7 @@ This enables bridging tokens between your chain and Arbitrum Sepolia. Run this f
 - Create `deploy-token-bridge.mjs` in your project folder:
 
 <CustomDetails summary="deploy-token-bridge.mjs">
+
 ```javascript
 import { createPublicClient, http, defineChain } from 'viem';
 import { privateKeyToAccount } from 'viem/accounts';
@@ -402,93 +426,93 @@ config();
 
 const parentChain = arbitrumSepolia;
 const parentChainPublicClient = createPublicClient({
-chain: parentChain,
-transport: http(process.env.PARENT_CHAIN_RPC),
+  chain: parentChain,
+  transport: http(process.env.PARENT_CHAIN_RPC),
 });
 
 const rollupOwner = privateKeyToAccount(sanitizePrivateKey(process.env.DEPLOYER_PRIVATE_KEY));
 
 async function main() {
-const txHash = process.env.CHAIN_DEPLOYMENT_TRANSACTION_HASH;
-if (!txHash) throw new Error('Set CHAIN_DEPLOYMENT_TRANSACTION_HASH in .env');
+  const txHash = process.env.CHAIN_DEPLOYMENT_TRANSACTION_HASH;
+  if (!txHash) throw new Error('Set CHAIN_DEPLOYMENT_TRANSACTION_HASH in .env');
 
-const tx = createRollupPrepareTransaction(
-await parentChainPublicClient.getTransaction({ hash: txHash }),
-);
-const txReceipt = createRollupPrepareTransactionReceipt(
-await parentChainPublicClient.getTransactionReceipt({ hash: txHash }),
-);
-const coreContracts = txReceipt.getCoreContracts();
-const chainConfig = JSON.parse(tx.getInputs()[0].config.chainConfig);
-const chainId = chainConfig.chainId;
-const chainRpc = process.env.CHAIN_RPC || 'http://localhost:8547';
+  const tx = createRollupPrepareTransaction(
+    await parentChainPublicClient.getTransaction({ hash: txHash }),
+  );
+  const txReceipt = createRollupPrepareTransactionReceipt(
+    await parentChainPublicClient.getTransactionReceipt({ hash: txHash }),
+  );
+  const coreContracts = txReceipt.getCoreContracts();
+  const chainConfig = JSON.parse(tx.getInputs()[0].config.chainConfig);
+  const chainId = chainConfig.chainId;
+  const chainRpc = process.env.CHAIN_RPC || 'http://localhost:8547';
 
-const chain = defineChain({
-id: chainId,
-network: 'Arbitrum chain',
-name: 'arbitrum-chain',
-nativeCurrency: { name: 'Ether', symbol: 'ETH', decimals: 18 },
-rpcUrls: { default: { http: [chainRpc] } },
-testnet: true,
-});
-const chainPublicClient = createPublicClient({ chain, transport: http() });
+  const chain = defineChain({
+    id: chainId,
+    network: 'Arbitrum chain',
+    name: 'arbitrum-chain',
+    nativeCurrency: { name: 'Ether', symbol: 'ETH', decimals: 18 },
+    rpcUrls: { default: { http: [chainRpc] } },
+    testnet: true,
+  });
+  const chainPublicClient = createPublicClient({ chain, transport: http() });
 
-const txRequest = await createTokenBridgePrepareTransactionRequest({
-params: { rollup: coreContracts.rollup, rollupOwner: rollupOwner.address },
-parentChainPublicClient,
-chainPublicClient,
-account: rollupOwner.address,
-});
+  const txRequest = await createTokenBridgePrepareTransactionRequest({
+    params: { rollup: coreContracts.rollup, rollupOwner: rollupOwner.address },
+    parentChainPublicClient,
+    chainPublicClient,
+    account: rollupOwner.address,
+  });
 
-console.log('Deploying token bridge...');
-const bridgeTxHash = await parentChainPublicClient.sendRawTransaction({
-serializedTransaction: await rollupOwner.signTransaction(txRequest),
-});
-const bridgeTxReceipt = createTokenBridgePrepareTransactionReceipt(
-await parentChainPublicClient.waitForTransactionReceipt({ hash: bridgeTxHash }),
-);
-console.log('Token bridge deployed on parent chain');
+  console.log('Deploying token bridge...');
+  const bridgeTxHash = await parentChainPublicClient.sendRawTransaction({
+    serializedTransaction: await rollupOwner.signTransaction(txRequest),
+  });
+  const bridgeTxReceipt = createTokenBridgePrepareTransactionReceipt(
+    await parentChainPublicClient.waitForTransactionReceipt({ hash: bridgeTxHash }),
+  );
+  console.log('Token bridge deployed on parent chain');
 
-console.log('Waiting for retryables on your chain...');
-const retryableReceipts = await bridgeTxReceipt.waitForRetryables({
-orbitPublicClient: chainPublicClient,
-});
-if (retryableReceipts[0].status !== 'success' || retryableReceipts[1].status !== 'success') {
-throw new Error('Retryables failed');
-}
-console.log('Token bridge contracts created on your chain');
+  console.log('Waiting for retryables on your chain...');
+  const retryableReceipts = await bridgeTxReceipt.waitForRetryables({
+    orbitPublicClient: chainPublicClient,
+  });
+  if (retryableReceipts[0].status !== 'success' || retryableReceipts[1].status !== 'success') {
+    throw new Error('Retryables failed');
+  }
+  console.log('Token bridge contracts created on your chain');
 
-const setWethTxRequest = await createTokenBridgePrepareSetWethGatewayTransactionRequest({
-rollup: coreContracts.rollup,
-parentChainPublicClient,
-chainPublicClient,
-account: rollupOwner.address,
-});
-const setWethTxHash = await parentChainPublicClient.sendRawTransaction({
-serializedTransaction: await rollupOwner.signTransaction(setWethTxRequest),
-});
-const setWethTxReceipt = createTokenBridgePrepareSetWethGatewayTransactionReceipt(
-await parentChainPublicClient.waitForTransactionReceipt({ hash: setWethTxHash }),
-);
-const wethRetryableReceipts = await setWethTxReceipt.waitForRetryables({
-orbitPublicClient: chainPublicClient,
-});
-if (wethRetryableReceipts[0].status !== 'success') {
-throw new Error('WETH gateway retryable failed');
-}
-console.log('WETH gateway configured. Token bridge ready.');
+  const setWethTxRequest = await createTokenBridgePrepareSetWethGatewayTransactionRequest({
+    rollup: coreContracts.rollup,
+    parentChainPublicClient,
+    chainPublicClient,
+    account: rollupOwner.address,
+  });
+  const setWethTxHash = await parentChainPublicClient.sendRawTransaction({
+    serializedTransaction: await rollupOwner.signTransaction(setWethTxRequest),
+  });
+  const setWethTxReceipt = createTokenBridgePrepareSetWethGatewayTransactionReceipt(
+    await parentChainPublicClient.waitForTransactionReceipt({ hash: setWethTxHash }),
+  );
+  const wethRetryableReceipts = await setWethTxReceipt.waitForRetryables({
+    orbitPublicClient: chainPublicClient,
+  });
+  if (wethRetryableReceipts[0].status !== 'success') {
+    throw new Error('WETH gateway retryable failed');
+  }
+  console.log('WETH gateway configured. Token bridge ready.');
 }
 
 main().catch(console.error);
+```
 
-````
 </CustomDetails>
 
 - Run it with your chain's RPC URL (the LoadBalancer IP from Step 11):
 
 ```bash
 CHAIN_RPC=http://YOUR_LOADBALANCER_IP:8547/rpc node deploy-token-bridge.mjs
-````
+```
 
 - Replace `YOUR_LOADBALANCER_IP` with your external IP. The script reads from your `.env` file. When you see `Token bridge ready.`, you now have the testnet infrastructure running.
 
