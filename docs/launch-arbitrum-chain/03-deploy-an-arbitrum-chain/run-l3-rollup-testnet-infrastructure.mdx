@@ -480,7 +480,7 @@ const setWethTxReceipt = createTokenBridgePrepareSetWethGatewayTransactionReceip
 await parentChainPublicClient.waitForTransactionReceipt({ hash: setWethTxHash }),
 );
 const wethRetryableReceipts = await setWethTxReceipt.waitForRetryables({
-orbitPublicClient: chainPublicClient,
+    orbitPublicClient: chainPublicClient,
 });
 if (wethRetryableReceipts[0].status !== 'success') {
 throw new Error('WETH gateway retryable failed');
