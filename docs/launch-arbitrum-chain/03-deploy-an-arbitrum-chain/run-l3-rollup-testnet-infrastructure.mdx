@@ -63,7 +63,7 @@ export PARENT_CHAIN_ID=$(jq -r '.chain["info-json"]' node-config.json | jq -r '.
 export PARENT_RPC=$(jq -r '.["parent-chain"].connection.url' node-config.json)
 
 # Save chain info to file (used by Helm --set-file)
-
+# Save chain info to file (used by Helm --set-file)
 jq -r '.chain["info-json"]' node-config.json > chain-info.json
 
 echo "CHAIN_ID=$CHAIN_ID"
@@ -71,7 +71,6 @@ echo "PARENT_CHAIN_ID=$PARENT_CHAIN_ID"
 echo "PARENT_RPC=$PARENT_RPC"
 echo "chain-info.json saved"
 
-````
 </CustomDetails>
 
 - In Step 8, you will extract the batch poster private key—never commit it to Git or expose it in logs.
@@ -123,7 +122,6 @@ export REDIS_URL="redis://YOUR_REDIS_ENDPOINT:6379"
 - Deploy 3 sequencer replicas with the sequencer coordinator enabled. Replace placeholders with your values. Use `--set-file` for the chain info JSON to avoid shell escaping issues:
 
 <CustomDetails summary="Deploy sequencers:">
-  ```bash helm install sequencer offchainlabs/nitro \ --namespace my-l3-chain \ --set replicaCount=3
   \ --set configmap.data.parent-chain.id=$PARENT_CHAIN_ID \ --set
   configmap.data.parent-chain.connection.url=$PARENT_RPC \ --set configmap.data.chain.id=$CHAIN_ID \
   --set-file configmap.data.chain.info-json=chain-info.json \ --set
@@ -168,7 +166,6 @@ After deploying sequencers, you must set at least one sequencer in the priority 
 Sequencer relays combine feeds from all sequencer replicas. Other components connect to these relays rather than directly to the sequencers.
 
 <CustomDetails summary="Run the following commands:">
-  ```bash helm install sequencer-relay offchainlabs/relay \ --namespace my-l3-chain \ --set
   replicaCount=2 \ --set configmap.data.chain.id=$CHAIN_ID \ --set
   configmap.data.node.feed.input.url=ws://sequencer-nitro-0.sequencer-nitro-headless:9642\,ws://sequencer-nitro-1.sequencer-nitro-headless:9642\,ws://sequencer-nitro-2.sequencer-nitro-headless:9642
   ```
@@ -195,7 +192,6 @@ helm install external-relay offchainlabs/relay \
 Full nodes serve RPC requests and forward transactions to the active sequencer. They use Redis to find the active sequencer automatically.
 
 <CustomDetails summary="Run the following commands:">
-  ```bash helm install fullnode offchainlabs/nitro \ --namespace my-l3-chain \ --set replicaCount=2
   \ --set configmap.data.parent-chain.id=$PARENT_CHAIN_ID \ --set
   configmap.data.parent-chain.connection.url=$PARENT_RPC \ --set configmap.data.chain.id=$CHAIN_ID \
   --set-file configmap.data.chain.info-json=chain-info.json \ --set
@@ -219,7 +215,6 @@ printf '%s' "$(jq -r '.node["batch-poster"]["parent-chain-wallet"]["private-key"
 </CustomDetails>
 
 <CustomDetails summary="Deploy the batch poster:">
-  ```bash helm install batchposter offchainlabs/nitro \ --namespace my-l3-chain \ --set
   configmap.data.parent-chain.id=$PARENT_CHAIN_ID \ --set
   configmap.data.parent-chain.connection.url=$PARENT_RPC \ --set configmap.data.chain.id=$CHAIN_ID \
   --set-file configmap.data.chain.info-json=chain-info.json \ --set-string
@@ -256,7 +251,6 @@ printf '%s' "$(jq -r '.node["staker"]["parent-chain-wallet"]["private-key"]' nod
 ```
 
 <CustomDetails summary="Deploy the validator:">
-  ```bash helm install validator offchainlabs/nitro \ --namespace my-l3-chain \ --set
   configmap.data.parent-chain.id=$PARENT_CHAIN_ID \ --set
   configmap.data.parent-chain.connection.url=$PARENT_RPC \ --set configmap.data.chain.id=$CHAIN_ID \
   --set-file configmap.data.chain.info-json=chain-info.json \ --set
@@ -418,66 +412,66 @@ config();
 const parentChain = arbitrumSepolia;
 const parentChainPublicClient = createPublicClient({
   chain: parentChain,
-transport: http(process.env.PARENT_CHAIN_RPC),
+  transport: http(process.env.PARENT_CHAIN_RPC),
 });
 
 const rollupOwner = privateKeyToAccount(sanitizePrivateKey(process.env.DEPLOYER_PRIVATE_KEY));
 
 async function main() {
-const txHash = process.env.CHAIN_DEPLOYMENT_TRANSACTION_HASH;
-if (!txHash) throw new Error('Set CHAIN_DEPLOYMENT_TRANSACTION_HASH in .env');
+  const txHash = process.env.CHAIN_DEPLOYMENT_TRANSACTION_HASH;
+  if (!txHash) throw new Error('Set CHAIN_DEPLOYMENT_TRANSACTION_HASH in .env');
 
-const tx = createRollupPrepareTransaction(
-await parentChainPublicClient.getTransaction({ hash: txHash }),
+  const tx = createRollupPrepareTransaction(
+    await parentChainPublicClient.getTransaction({ hash: txHash }),
 );
-const txReceipt = createRollupPrepareTransactionReceipt(
-await parentChainPublicClient.getTransactionReceipt({ hash: txHash }),
+  const txReceipt = createRollupPrepareTransactionReceipt(
+    await parentChainPublicClient.getTransactionReceipt({ hash: txHash }),
 );
-const coreContracts = txReceipt.getCoreContracts();
-const chainConfig = JSON.parse(tx.getInputs()[0].config.chainConfig);
-const chainId = chainConfig.chainId;
-const chainRpc = process.env.CHAIN_RPC || 'http://localhost:8547';
+  const coreContracts = txReceipt.getCoreContracts();
+  const chainConfig = JSON.parse(tx.getInputs()[0].config.chainConfig);
+  const chainId = chainConfig.chainId;
+  const chainRpc = process.env.CHAIN_RPC || 'http://localhost:8547';
 
-const chain = defineChain({
-id: chainId,
-network: 'Arbitrum chain',
-name: 'arbitrum-chain',
-nativeCurrency: { name: 'Ether', symbol: 'ETH', decimals: 18 },
-rpcUrls: { default: { http: [chainRpc] } },
-testnet: true,
+  const chain = defineChain({
+    id: chainId,
+    network: 'Arbitrum chain',
+    name: 'arbitrum-chain',
+    nativeCurrency: { name: 'Ether', symbol: 'ETH', decimals: 18 },
+    rpcUrls: { default: { http: [chainRpc] } },
+    testnet: true,
 });
-const chainPublicClient = createPublicClient({ chain, transport: http() });
+  const chainPublicClient = createPublicClient({ chain, transport: http() });
 
-const txRequest = await createTokenBridgePrepareTransactionRequest({
-params: { rollup: coreContracts.rollup, rollupOwner: rollupOwner.address },
-parentChainPublicClient,
-chainPublicClient,
-account: rollupOwner.address,
+  const txRequest = await createTokenBridgePrepareTransactionRequest({
+    params: { rollup: coreContracts.rollup, rollupOwner: rollupOwner.address },
+    parentChainPublicClient,
+    chainPublicClient,
+    account: rollupOwner.address,
 });
 
-console.log('Deploying token bridge...');
-const bridgeTxHash = await parentChainPublicClient.sendRawTransaction({
-serializedTransaction: await rollupOwner.signTransaction(txRequest),
+  console.log('Deploying token bridge...');
+  const bridgeTxHash = await parentChainPublicClient.sendRawTransaction({
+    serializedTransaction: await rollupOwner.signTransaction(txRequest),
 });
-const bridgeTxReceipt = createTokenBridgePrepareTransactionReceipt(
-await parentChainPublicClient.waitForTransactionReceipt({ hash: bridgeTxHash }),
+  const bridgeTxReceipt = createTokenBridgePrepareTransactionReceipt(
+    await parentChainPublicClient.waitForTransactionReceipt({ hash: bridgeTxHash }),
 );
-console.log('Token bridge deployed on parent chain');
+  console.log('Token bridge deployed on parent chain');
 
-console.log('Waiting for retryables on your chain...');
-const retryableReceipts = await bridgeTxReceipt.waitForRetryables({
-orbitPublicClient: chainPublicClient,
+  console.log('Waiting for retryables on your chain...');
+  const retryableReceipts = await bridgeTxReceipt.waitForRetryables({
+    orbitPublicClient: chainPublicClient,
 });
-if (retryableReceipts[0].status !== 'success' || retryableReceipts[1].status !== 'success') {
-throw new Error('Retryables failed');
+  if (retryableReceipts[0].status !== 'success' || retryableReceipts[1].status !== 'success') {
+    throw new Error('Retryables failed');
 }
-console.log('Token bridge contracts created on your chain');
+  console.log('Token bridge contracts created on your chain');
 
-const setWethTxRequest = await createTokenBridgePrepareSetWethGatewayTransactionRequest({
-rollup: coreContracts.rollup,
-parentChainPublicClient,
-chainPublicClient,
-account: rollupOwner.address,
+  const setWethTxRequest = await createTokenBridgePrepareSetWethGatewayTransactionRequest({
+    rollup: coreContracts.rollup,
+    parentChainPublicClient,
+    chainPublicClient,
+    account: rollupOwner.address,
 });
 const setWethTxHash = await parentChainPublicClient.sendRawTransaction({
 serializedTransaction: await rollupOwner.signTransaction(setWethTxRequest),
