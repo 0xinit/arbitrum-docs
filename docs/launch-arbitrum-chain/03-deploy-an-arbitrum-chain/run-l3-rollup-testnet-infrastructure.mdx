@@ -63,7 +63,9 @@ export PARENT_CHAIN_ID=$(jq -r '.chain["info-json"]' node-config.json | jq -r '.
 export PARENT_RPC=$(jq -r '.["parent-chain"].connection.url' node-config.json)
 
 # Save chain info to file (used by Helm --set-file)
+
 # Save chain info to file (used by Helm --set-file)
+
 jq -r '.chain["info-json"]' node-config.json > chain-info.json
 
 echo "CHAIN_ID=$CHAIN_ID"
@@ -85,7 +87,7 @@ helm repo update
 
 kubectl create namespace my-l3-chain
 kubectl config set-context --current --namespace=my-l3-chain
-````
+```
 
 - Replace `my-l3-chain` with your preferred namespace in all commands below.
 
@@ -411,81 +413,81 @@ config();
 
 const parentChain = arbitrumSepolia;
 const parentChainPublicClient = createPublicClient({
-  chain: parentChain,
-  transport: http(process.env.PARENT_CHAIN_RPC),
+chain: parentChain,
+transport: http(process.env.PARENT_CHAIN_RPC),
 });
 
 const rollupOwner = privateKeyToAccount(sanitizePrivateKey(process.env.DEPLOYER_PRIVATE_KEY));
 
 async function main() {
-  const txHash = process.env.CHAIN_DEPLOYMENT_TRANSACTION_HASH;
-  if (!txHash) throw new Error('Set CHAIN_DEPLOYMENT_TRANSACTION_HASH in .env');
+const txHash = process.env.CHAIN_DEPLOYMENT_TRANSACTION_HASH;
+if (!txHash) throw new Error('Set CHAIN_DEPLOYMENT_TRANSACTION_HASH in .env');
 
-  const tx = createRollupPrepareTransaction(
-    await parentChainPublicClient.getTransaction({ hash: txHash }),
+const tx = createRollupPrepareTransaction(
+await parentChainPublicClient.getTransaction({ hash: txHash }),
 );
-  const txReceipt = createRollupPrepareTransactionReceipt(
-    await parentChainPublicClient.getTransactionReceipt({ hash: txHash }),
+const txReceipt = createRollupPrepareTransactionReceipt(
+await parentChainPublicClient.getTransactionReceipt({ hash: txHash }),
 );
-  const coreContracts = txReceipt.getCoreContracts();
-  const chainConfig = JSON.parse(tx.getInputs()[0].config.chainConfig);
-  const chainId = chainConfig.chainId;
-  const chainRpc = process.env.CHAIN_RPC || 'http://localhost:8547';
+const coreContracts = txReceipt.getCoreContracts();
+const chainConfig = JSON.parse(tx.getInputs()[0].config.chainConfig);
+const chainId = chainConfig.chainId;
+const chainRpc = process.env.CHAIN_RPC || 'http://localhost:8547';
 
-  const chain = defineChain({
-    id: chainId,
-    network: 'Arbitrum chain',
-    name: 'arbitrum-chain',
-    nativeCurrency: { name: 'Ether', symbol: 'ETH', decimals: 18 },
-    rpcUrls: { default: { http: [chainRpc] } },
-    testnet: true,
+const chain = defineChain({
+id: chainId,
+network: 'Arbitrum chain',
+name: 'arbitrum-chain',
+nativeCurrency: { name: 'Ether', symbol: 'ETH', decimals: 18 },
+rpcUrls: { default: { http: [chainRpc] } },
+testnet: true,
 });
-  const chainPublicClient = createPublicClient({ chain, transport: http() });
+const chainPublicClient = createPublicClient({ chain, transport: http() });
 
-  const txRequest = await createTokenBridgePrepareTransactionRequest({
-    params: { rollup: coreContracts.rollup, rollupOwner: rollupOwner.address },
-    parentChainPublicClient,
-    chainPublicClient,
-    account: rollupOwner.address,
+const txRequest = await createTokenBridgePrepareTransactionRequest({
+params: { rollup: coreContracts.rollup, rollupOwner: rollupOwner.address },
+parentChainPublicClient,
+chainPublicClient,
+account: rollupOwner.address,
 });
 
-  console.log('Deploying token bridge...');
-  const bridgeTxHash = await parentChainPublicClient.sendRawTransaction({
-    serializedTransaction: await rollupOwner.signTransaction(txRequest),
+console.log('Deploying token bridge...');
+const bridgeTxHash = await parentChainPublicClient.sendRawTransaction({
+serializedTransaction: await rollupOwner.signTransaction(txRequest),
 });
-  const bridgeTxReceipt = createTokenBridgePrepareTransactionReceipt(
-    await parentChainPublicClient.waitForTransactionReceipt({ hash: bridgeTxHash }),
+const bridgeTxReceipt = createTokenBridgePrepareTransactionReceipt(
+await parentChainPublicClient.waitForTransactionReceipt({ hash: bridgeTxHash }),
 );
-  console.log('Token bridge deployed on parent chain');
+console.log('Token bridge deployed on parent chain');
 
-  console.log('Waiting for retryables on your chain...');
-  const retryableReceipts = await bridgeTxReceipt.waitForRetryables({
-    orbitPublicClient: chainPublicClient,
+console.log('Waiting for retryables on your chain...');
+const retryableReceipts = await bridgeTxReceipt.waitForRetryables({
+orbitPublicClient: chainPublicClient,
 });
-  if (retryableReceipts[0].status !== 'success' || retryableReceipts[1].status !== 'success') {
-    throw new Error('Retryables failed');
+if (retryableReceipts[0].status !== 'success' || retryableReceipts[1].status !== 'success') {
+throw new Error('Retryables failed');
 }
-  console.log('Token bridge contracts created on your chain');
+console.log('Token bridge contracts created on your chain');
 
-  const setWethTxRequest = await createTokenBridgePrepareSetWethGatewayTransactionRequest({
-    rollup: coreContracts.rollup,
-    parentChainPublicClient,
-    chainPublicClient,
-    account: rollupOwner.address,
+const setWethTxRequest = await createTokenBridgePrepareSetWethGatewayTransactionRequest({
+rollup: coreContracts.rollup,
+parentChainPublicClient,
+chainPublicClient,
+account: rollupOwner.address,
 });
-  const setWethTxHash = await parentChainPublicClient.sendRawTransaction({
-    serializedTransaction: await rollupOwner.signTransaction(setWethTxRequest),
+const setWethTxHash = await parentChainPublicClient.sendRawTransaction({
+serializedTransaction: await rollupOwner.signTransaction(setWethTxRequest),
 });
-  const setWethTxReceipt = createTokenBridgePrepareSetWethGatewayTransactionReceipt(
-    await parentChainPublicClient.waitForTransactionReceipt({ hash: setWethTxHash }),
+const setWethTxReceipt = createTokenBridgePrepareSetWethGatewayTransactionReceipt(
+await parentChainPublicClient.waitForTransactionReceipt({ hash: setWethTxHash }),
 );
-  const wethRetryableReceipts = await setWethTxReceipt.waitForRetryables({
-    orbitPublicClient: chainPublicClient,
+const wethRetryableReceipts = await setWethTxReceipt.waitForRetryables({
+orbitPublicClient: chainPublicClient,
 });
-  if (wethRetryableReceipts[0].status !== 'success') {
-    throw new Error('WETH gateway retryable failed');
+if (wethRetryableReceipts[0].status !== 'success') {
+throw new Error('WETH gateway retryable failed');
 }
-  console.log('WETH gateway configured. Token bridge ready.');
+console.log('WETH gateway configured. Token bridge ready.');
 }
 
 main().catch(console.error);
