@@ -476,7 +476,7 @@ async function main() {
   const setWethTxHash = await parentChainPublicClient.sendRawTransaction({
     serializedTransaction: await rollupOwner.signTransaction(setWethTxRequest),
 });
-const setWethTxReceipt = createTokenBridgePrepareSetWethGatewayTransactionReceipt(
+  const setWethTxReceipt = createTokenBridgePrepareSetWethGatewayTransactionReceipt(
 await parentChainPublicClient.waitForTransactionReceipt({ hash: setWethTxHash }),
 );
 const wethRetryableReceipts = await setWethTxReceipt.waitForRetryables({
