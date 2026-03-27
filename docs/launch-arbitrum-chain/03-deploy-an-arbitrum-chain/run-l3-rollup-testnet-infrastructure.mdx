@@ -477,7 +477,7 @@ async function main() {
     serializedTransaction: await rollupOwner.signTransaction(setWethTxRequest),
 });
   const setWethTxReceipt = createTokenBridgePrepareSetWethGatewayTransactionReceipt(
-await parentChainPublicClient.waitForTransactionReceipt({ hash: setWethTxHash }),
+    await parentChainPublicClient.waitForTransactionReceipt({ hash: setWethTxHash }),
 );
 const wethRetryableReceipts = await setWethTxReceipt.waitForRetryables({
     orbitPublicClient: chainPublicClient,
