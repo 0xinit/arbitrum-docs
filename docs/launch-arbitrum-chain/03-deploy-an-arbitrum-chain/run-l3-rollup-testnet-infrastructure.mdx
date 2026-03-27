@@ -473,7 +473,7 @@ async function main() {
     chainPublicClient,
     account: rollupOwner.address,
 });
-const setWethTxHash = await parentChainPublicClient.sendRawTransaction({
+  const setWethTxHash = await parentChainPublicClient.sendRawTransaction({
 serializedTransaction: await rollupOwner.signTransaction(setWethTxRequest),
 });
 const setWethTxReceipt = createTokenBridgePrepareSetWethGatewayTransactionReceipt(
