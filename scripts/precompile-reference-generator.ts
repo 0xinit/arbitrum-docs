@@ -38,7 +38,7 @@ const interfaceBaseUrl = `https://github.com/OffchainLabs/${
     ? '/' + globalVars.nitroPrecompilesPathToInterfaces
     : ''
 }/`;
-const implementationBaseUrl = `https://github.com/OffchainLabs/${globalVars.nitroRepositorySlug}/blob/${globalVars.nitroVersionTag}/${globalVars.nitroPathToPrecompiles}/`;
+const implementationBaseUrl = `https://github.com/OffchainLabs/${globalVars.nitroRepositorySlug}/blob/master/${globalVars.nitroPathToPrecompiles}/`;
 // NodeInterface is in the nitro-contracts repository
 const nodeInterfaceInterfaceBaseUrl = `https://github.com/OffchainLabs/${globalVars.nitroContractsRepositorySlug}/blob/${globalVars.nitroContractsCommit}/${globalVars.nitroContractsPathToPrecompilesInterface}/`;
 const nodeInterfaceImplementationBaseUrl = `https://github.com/OffchainLabs/${globalVars.nitroRepositorySlug}/blob/${globalVars.nitroVersionTag}/execution/nodeInterface/`;
@@ -253,9 +253,11 @@ const generatePrecompileReferenceTables = async (
       .replace('blob/', '')}${precompileName}.sol`,
   );
   if (!interfaceCodeRawResponse.ok) {
-    throw new Error(`Failed fetching precompile ${precompileName} interface with status ${interfaceCodeRawResponse.status}`);
+    throw new Error(
+      `Failed fetching precompile ${precompileName} interface with status ${interfaceCodeRawResponse.status}`,
+    );
   }
-  
+
   const interfaceCode = await interfaceCodeRawResponse.text();
   const implementationCodeRawResponse = await fetch(
     `${implementationBaseUrl
@@ -263,7 +265,9 @@ const generatePrecompileReferenceTables = async (
       .replace('blob/', '')}${precompileName}.go`,
   );
   if (!implementationCodeRawResponse.ok) {
-    throw new Error(`Failed fetching precompile ${precompileName} implementation with status ${implementationCodeRawResponse.status}`);
+    throw new Error(
+      `Failed fetching precompile ${precompileName} implementation with status ${implementationCodeRawResponse.status}`,
+    );
   }
   const implementationCode = await implementationCodeRawResponse.text();
 
