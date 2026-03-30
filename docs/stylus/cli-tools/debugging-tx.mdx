@@ -11,13 +11,13 @@ sidebar_position: 2
 displayed_sidebar: buildStylusSidebar
 ---
 
-Debugging smart contracts can be challenging, especially when dealing with complex transactions. The `cargo-stylus` crate simplifies the debugging process by providing multiple tools for replaying, tracing, and interactively debugging <a data-quicklook-from="stylus">Stylus</a> transactions. These tools enable you to set breakpoints, inspect state changes, and trace execution flow step-by-step.
+Debugging smart contracts can be challenging, especially when dealing with complex transactions. The `cargo-stylus` crate simplifies the debugging process by providing multiple tools for replaying, tracing, and interactively debugging <a data-quicklook-from="stylus">Stylus</a> transactions. These tools enable you to set breakpoints, inspect state changes, and trace execution step by step.
 
 ## Overview
 
 Cargo Stylus provides several debugging capabilities:
 
-1. **Trace transactions** (`cargo stylus trace`): Perform trace calls against Stylus transactions using `debug_traceTransaction` RPC. This provides low-level function call data with <a data-quicklook-from="ink">Ink</a> consumption metrics.
+1. **Trace transactions** (`cargo stylus trace`): Perform trace calls against Stylus transactions using `debug_traceTransaction` RPC. This provides low-level function-call data along with Ink consumption metrics.
 
 2. **User function tracing** (`cargo stylus usertrace`): Generate human-readable function call trees showing your contract's execution flow without needing a full debugger session.
 
@@ -233,7 +233,7 @@ For LLDB command equivalents, see the [LLDB to GDB command map](https://lldb.llv
 
 ### Replay with StylusDB
 
-StylusDB provides enhanced debugging capabilities including multi-contract support and contract-specific breakpoints:
+StylusDB provides enhanced debugging capabilities, including multi-contract support and contract-specific breakpoints:
 
 ```shell
 cargo stylus replay --debugger stylusdb --tx=$TX_HASH --endpoint=$RPC_URL
@@ -277,7 +277,7 @@ The format is `ADDRESS:PATH` pairs separated by commas, where:
 
 ### Handling Solidity contracts
 
-If your transaction interacts with both Stylus and Solidity contracts, mark the Solidity addresses with the `--addr-solidity` flag. The debugger displays contract addresses and function selectors for Solidity calls but cannot provide source-level debugging for Solidity code:
+If your transaction interacts with both Stylus and Solidity contracts, mark the Solidity addresses with the `--addr-solidity` flag. The debugger displays contract addresses and function selectors for Solidity calls, but cannot provide source-level debugging for Solidity code:
 
 ```shell
 cargo stylus replay --debugger stylusdb --tx=$TX_HASH \
@@ -288,7 +288,7 @@ cargo stylus replay --debugger stylusdb --tx=$TX_HASH \
 
 ## RPC endpoint compatibility
 
-Both `cargo stylus trace` and `cargo stylus replay` require an RPC endpoint that supports `debug_traceTransaction`.
+Both `cargo stylus trace` and `cargo stylus replay` require an RPC endpoint that supports the `debug_traceTransaction` function.
 
 | Tracer type    | Flag                  | Provider support                            |
 | -------------- | --------------------- | ------------------------------------------- |

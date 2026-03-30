@@ -8,7 +8,7 @@ target_audience: Developers using the Stylus Rust SDK to write and deploy smart 
 displayed_sidebar: buildStylusSidebar
 ---
 
-Compound types allow you to group multiple values together in Stylus contracts. The SDK provides full support for tuples, structs, arrays, and vectors with automatic ABI encoding/decoding and Solidity type mappings.
+Compound types allow you to group multiple values in Stylus contracts. The SDK provides full support for tuples, structs, arrays, and vectors with automatic ABI encoding/decoding and Solidity type mappings.
 
 ## Tuples
 
@@ -81,7 +81,7 @@ impl MyContract {
 
 - Tuples support up to 24 elements
 - Tuples are always returned as `memory` in Solidity
-- Empty tuple `()` represents no return value
+- An empty tuple `()` represents no return value
 
 ## Structs
 
@@ -188,7 +188,7 @@ impl MyContract {
 
 ### Struct best practices
 
-1. **Always use `#[derive(AbiType)]`** for structs that will be used in contract interfaces:
+1. **Always use `#[derive(AbiType)]`** for structs that are to be used in contract interfaces:
 
    ```rust
    sol! {
@@ -840,6 +840,6 @@ impl MyContract {
 
 ## See also
 
-- [Primitives](./primitives.mdx) - Basic types (bool, integers, address, strings)
-- [Storage Types](./storage.mdx) - Persistent storage for compound types
-- [Type Conversions](./conversions-between-types.mdx) - Converting between types
+- [Primitives](./primitives.mdx): Basic types (bool, integers, address, strings)
+- [Storage Types](./storage.mdx): Persistent storage for compound types
+- [Type Conversions](./conversions-between-types.mdx): Converting between types
