@@ -33,7 +33,7 @@ Please note that:
 - The minimum requirements for RAM and CPU listed here are recommended for nodes that handle a limited number of RPC requests. For nodes that need to process multiple simultaneous requests, both the RAM size and the number of CPU cores should be increased to accommodate higher levels of traffic.
 - Single core performance is important. If the node is falling behind and a single core is 100% busy, the recommendation is to upgrade to a faster processor
 - The minimum storage requirements will change over time as the chain grows. Using more than the minimum requirements to run a robust full node is recommended.
-- Path based state schemes are supported for Nitro's state trie, but only for full nodes and archive nodes at this time and not validators yet. As a result, HashDB is still the default state scheme used by Nitro and explicit action is required to enable PathDB. More details can be found below in the table of Optional Parameters.
+- Path-based state schemes are supported for Nitro's state trie, but only for full nodes and archive nodes at this time, and not validators yet. As a result, HashDB is still the default state scheme used by Nitro, and explicit action is required to enable PathDB. More details can be found in the table below for Optional Parameters.
 
 ### Recommended Nitro version
 
@@ -51,7 +51,7 @@ Latest [Docker image](https://hub.docker.com/r/offchainlabs/nitro-node/tags): <c
 
 Database snapshots are available and located in the [snapshot explorer](https://snapshot-explorer.arbitrum.io/) for Arbitrum One, Arbitrum Nova, and Arbitrum Sepolia. At this time, only archive node snapshots using PathDB are available for Arbitrum One and Arbitrum Sepolia. Pruned PathDB snapshots for full nodes on Arbitrum One and Arbitrum Sepolia will be uploaded soon.
 
-Database snapshots for other Arbitrum chains may be available at the discretion of the team running the chain. Please get in touch with them if you're interested in using a database snapshot for their chains.
+Database snapshots for other Arbitrum chains may be available at the discretion of the chain's team. Please get in touch with them if you're interested in using a database snapshot for their chains.
 
 ::::
 
@@ -63,7 +63,7 @@ We provide a summary of the available parameters here, but we recommend reading 
 - Optionally, use the parameter `--init.latest-base` to set the base URL when searching for the latest snapshot
 - Note that these parameters get ignored if a database already exists
 - When running more than one node, it's easier to manually download the different parts of the snapshot, join them into a single archive, and host it locally for your nodes. Please see [Downloading the snapshot manually](/run-arbitrum-node/nitro/03-nitro-database-snapshots.mdx#downloading-the-snapshot-manually) for instructions on how to do that.
-- Only snapshots formatted with your node's specified state scheme will be compatible. In other words, a PathDB snapshot will not work for a node that is using HashDB and vice versa.
+- Only snapshots formatted with your node's specified state scheme will be compatible. In other words, a PathDB snapshot will not work for a node using HashDB, and vice versa.
 
 :::warning Fusaka upgrade: Historical blobs
 
@@ -164,20 +164,20 @@ docker run --rm -it -v /Path/to/mount/arbitrum:/home/user/.arbitrum -v /Path/to/
 
 ### Pruning
 
-By default, all node types will use HashDB, go-ethereum's original state trie storage scheme. This will be the case until a path based state scheme (e.g. PathDB) is supported across all Arbitrum node types. This means that, by default, pruning will continue to be an *manual opt-in* operation, should an operator decide to do so. As a refresher, pruning a full node refers to the action of removing older, unnecessary data from the local copy of the blockchain that the node maintains, thereby saving disk space and slightly improving the node's efficiency. Pruning will remove all states from blocks older than the latest 128. 
+By default, all node types will use HashDB, go-ethereum's original state trie storage scheme. This will be the case until a path-based state scheme (e.g., PathDB) is supported across all Arbitrum node types. This means that, by default, pruning will continue to be an _manual opt-in_ operation, should an operator decide to do so. As a refresher, pruning a full node means removing older, unnecessary data from the local copy of the blockchain the node maintains, thereby saving disk space and slightly improving the node's efficiency. Pruning will remove all states from blocks older than the latest 128.
 
-For nodes using PathDB, pruning: will be automatic, can done so online, and default to retaining only the last 24hrs worth of state history on disk.
+For nodes using PathDB, pruning will be automatic, can be done online, and defaults to retaining only the last 24 hours' worth of state history on disk.
 
 :::note
-The pruning process occurs when the node start (upon initialization) and will not serve RPC requests during pruning.
+The pruning process occurs when the node starts (upon initialization) and will not serve RPC requests during pruning.
 :::
 
 If you are using the default storage scheme (HashDB), then you can activate pruning by using the parameter:
+
 - `--init.prune <pruning mode>`, where `<pruning mode>` can be one of:
   - `minimal`: The most aggressive prune and retains only the genesis state and the head state (at the latest snapshot). Takes the least amount of time to complete (approx. several hours)
   - `full` : Mostly meant for full nodes serving RPC requests, this mode retains the genesis state, the state of the latest confirmed block, and the head state (at the latest snapshot). Will not work if the node is in `validator` mode. This may take a long time (~50hrs)
-  - `validator`: Meant to be used by validator nodes and requires an RPC URL for L1 Ethereum. This mode retains the genesis state, the state of the latest confirmed block, latest confirmed assertion root (obtained from L1), the last locally validated block root,and the head state (at the latest snapshot). This mode is expected to take a little less than half what `full` pruning mode would take.
-  
+  - `validator`: Meant to be used by validator nodes and requires an RPC URL for L1 Ethereum. This mode retains the genesis state, the state of the latest confirmed block, the latest confirmed assertion root (obtained from L1), the last locally validated block root,and the head state (at the latest snapshot). This mode is expected to take about half as long as `full` pruning mode.
 
 ### Transaction prechecker
 

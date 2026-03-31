@@ -28,11 +28,11 @@ Running an Arbitrum One **full node** in **archive mode** lets you access both p
 | Send **pre-Nitro** archive requests                                             | Full node (Classic)                                       | [How to run a full node (Classic, pre-Nitro)](/run-arbitrum-node/more-types/03-run-classic-node.mdx) |
 | Send **post-Nitro** _and_ **pre-Nitro** archive requests                        | Full node (Nitro) _and_ full node (Classic)               | That's what this how-to is for; you're in the right place.                                           |
 
-:::info Archive nodes using PathDB (path based state scheme)
+:::info Archive nodes using PathDB (path-based state scheme)
 
-A Nitro archive node using PathDB is similar to an archive node using HashDB (default); with the exception that a Nitro archive node using PathDB takes significantly less disk space (about ~4TB for Arbitrum One). During sync and serving RPC calls, an archive node using PathDB  should be equivalent or potentially slightly better than an archive node using HashDB.
+A Nitro archive node using PathDB is similar to an archive node using HashDB (default), with the exception that a Nitro archive node using PathDB takes significantly less disk space (about ~4TB for Arbitrum One). During sync and serving RPC calls, an archive node using PathDB should be equivalent to, or slightly better than, one using HashDB.
 
-We recommend using PathDB for archive nodes but only on Nitro versions >= v3.9.x. 
+We recommend using PathDB for archive nodes, but only on Nitro versions >= v3.9.x.
 
 **Benefits of PathDB**:
 
@@ -41,9 +41,10 @@ We recommend using PathDB for archive nodes but only on Nitro versions >= v3.9.x
 
 **Limitations**:
 
-- Block validation in not yet supported with path based state scheme. In other words, validators cannot use PathDB yet.
+Block validation is not yet supported with the path-based state scheme. In other words, validators cannot use PathDB yet.
+
 - Fast, local NVMe SSD storage is required for reasonable sync speed.
-- PathDB snapshot auto-downloads with `--init.latest` is not yet supported.
+- PathDB snapshot auto-downloads with `--init.latest` are not yet supported.
 
 To enable PathDB on your archive node, start your node with the following flags:
 
@@ -52,10 +53,11 @@ To enable PathDB on your archive node, start your node with the following flags:
 --execution.caching.state-history=0
 ```
 
-::: 
+:::
+
 ## System requirements
 
-The minimum storage requirements will change as the Nitro chains grow (growing rates are specified below). We recommend exceeding the minimum requirements as much as you can to minimize risk and maintenance overhead. The disk size for archive nodes is expected to grow over time. Careful monitoring of your node's disk requirements and disk growth rates are recommended to ensure your noe has adequate 
+The minimum storage requirements will change as the Nitro chains grow (see the growth rates below). We recommend exceeding the minimum requirements as much as you can to minimize risk and maintenance overhead. The disk size for archive nodes is expected to grow over time. Careful monitoring of your node's disk requirements and disk growth rates is recommended to ensure your node has adequate:
 
 1. **RAM:** 64GB+ for Nitro and 32GB+ for Classic
 2. **CPU:** 8+ core CPU
@@ -84,16 +86,16 @@ The minimum storage requirements will change as the Nitro chains grow (growing r
 
 ## Review and configure parameters
 
-| Arbitrum Nitro                                             | Arbitrum Classic                            | Description                                                                                                                                                                                       |
-| ---------------------------------------------------------- | ------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `--parent-chain.connection.url=<Layer 1 Ethereum RPC URL>` | `--l1.url=<Layer 1 Ethereum RPC URL>`       | Provide an standard L1 node RPC endpoint that you run yourself or from a third-party node provider (see [RPC endpoints and providers](/build-decentralized-apps/reference/01-node-providers.mdx)) |
-| `--chain.id=<L2 chain ID>`                                 | `--l2.chain-id=<L2 Chain ID>`               | See [RPC endpoints and providers](/build-decentralized-apps/reference/01-node-providers.mdx) for a list of Arbitrum chains and the respective child chain IDs                                     |
-| `--execution.caching.archive`                              | `--node.caching.archive`                    | Required for running an **Arbitrum One Nitro** archival node and retains past block state                                                                                                         |
-| `--execution.caching.state-scheme`.                        | Default: `hash`. This flag sets the schema used in Nitro's state trie, inherited from Geth. Teams may choose to set this to `path` to enable PathDB but note that PathDB is not yet supported for validators.                                                                                                                                                                                                       |
-| `--execution.caching.state-history`      | Default: ~345,600 blocks, or approximately 24 hours worth of blocks. Number of recent blocks of state history to retain on disk. Set to `0` for unlimited (i.e. Archive nodes). Only available for PathDB enabled nodes.                                                                                                                                                                                            | 
-| `--execution.caching.pathdb-max-diff-layers` | Default: 128 layers. Maximum in-memory diff layers before flushing to disk. Controls the tradeoff between memory usage and how often the node will flush its layered diffs to the disk layer. More layers usually implies higher memory usage and lower flush frequency. Only available for PathDB enabled nodes.                                                                                               |
-| -                                                          | `--node.cache.allow-slow-lookup`            | Required for running an **Arbitrum One Classic** archival node. When this option is present, it will load old blocks from disk if not in memory cache.                                            |
-| -                                                          | `--core.checkpoint-gas-frequency=156250000` | Required for running an **Arbitrum One Classic** archival node.                                                                                                                                   |
+| Arbitrum Nitro                                             | Arbitrum Classic                                                                                                                                                                                                                                                                                              | Description                                                                                                                                                                                       |
+| ---------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `--parent-chain.connection.url=<Layer 1 Ethereum RPC URL>` | `--l1.url=<Layer 1 Ethereum RPC URL>`                                                                                                                                                                                                                                                                         | Provide an standard L1 node RPC endpoint that you run yourself or from a third-party node provider (see [RPC endpoints and providers](/build-decentralized-apps/reference/01-node-providers.mdx)) |
+| `--chain.id=<L2 chain ID>`                                 | `--l2.chain-id=<L2 Chain ID>`                                                                                                                                                                                                                                                                                 | See [RPC endpoints and providers](/build-decentralized-apps/reference/01-node-providers.mdx) for a list of Arbitrum chains and the respective child chain IDs                                     |
+| `--execution.caching.archive`                              | `--node.caching.archive`                                                                                                                                                                                                                                                                                      | Required for running an **Arbitrum One Nitro** archival node and retains past block state                                                                                                         |
+| `--execution.caching.state-scheme`.                        | Default: `hash`. This flag sets the schema used in Nitro’s state trie, inherited from Geth. Teams may choose to set this to the `path` to enable PathDB, but note that PathDB is not yet supported for validators.                                                                                            |
+| `--execution.caching.state-history`                        | Default: ~345,600 blocks, or approximately 24 hours worth of blocks. Number of recent blocks of state history to retain on disk. Set to `0` for unlimited (i.e., Archive nodes). Only available for PathDB-enabled nodes.                                                                                     |
+| `--execution.caching.pathdb-max-diff-layers`               | Default: 128 layers. Maximum in-memory diff layers before flushing to disk. Controls the trade-off between memory usage and how often the node flushes its layered diffs to the disk layer. More layers usually imply higher memory usage and lower flush frequency. Only available for PathDB-enabled nodes. |
+| -                                                          | `--node.cache.allow-slow-lookup`                                                                                                                                                                                                                                                                              | Required for running an **Arbitrum One Classic** archival node. When this option is present, it will load old blocks from disk if not in memory cache.                                            |
+| -                                                          | `--core.checkpoint-gas-frequency=156250000`                                                                                                                                                                                                                                                                   | Required for running an **Arbitrum One Classic** archival node.                                                                                                                                   |
 |                                                            |
 
 ## Run the Docker image(s)
@@ -121,7 +123,6 @@ To run both Arbitrum Nitro and/or Arbitrum Classic in archive mode, follow one o
   ```
 
 Note that the above commands both map to port `8547` on their hosts. To run both on the same host, you should edit those mapping to different ports and specify your Classic node RPC URL as `<classic node RPC>` in your Nitro start command. To verify the connection health of your node(s), see [Docker network between containers - Docker Networking Example](https://www.middlewareinventory.com/blog/docker-network-example/).
-
 
 ### A note on permissions
 
