@@ -34,6 +34,11 @@ function load(app) {
   });
 
   app.renderer.on(RendererEvent.END, () => {
+    // Fix stale TypeDoc cross-references that produce numbered anchor suffixes
+    // TypeDoc resolves {@link L2Network.tokenBridge} to a numbered anchor (-2)
+    // that doesn't exist in the curlyBrace anchor format
+    fixStaleAnchors(sdkOutputDir);
+
     // Create manual SDK files only if they don't exist (bootstrap templates)
     // index.mdx and migrate.mdx are manually maintained and should not be regenerated
     if (!fs.existsSync(indexPath) || !fs.existsSync(migratePath)) {
@@ -653,6 +658,34 @@ Message classes have been renamed and their methods updated:
   // Bootstrap: Write template files (only called when files don't exist)
   fs.writeFileSync(indexPath, introductionContent, 'utf8');
   fs.writeFileSync(migratePath, migrationContent, 'utf8');
+}
+
+// Fix numbered anchor suffixes that TypeDoc generates for cross-references
+// when the target heading no longer has duplicate variants
+function fixStaleAnchors(directory) {
+  function processFile(filePath) {
+    const original = fs.readFileSync(filePath, 'utf8');
+    const fixed = original.replace(
+      /#mapl2networktoarbitrumnetwork-\d+/g,
+      '#mapl2networktoarbitrumnetwork',
+    );
+    if (fixed !== original) {
+      fs.writeFileSync(filePath, fixed, 'utf8');
+    }
+  }
+
+  function walkDir(dir) {
+    for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
+      const fullPath = path.join(dir, entry.name);
+      if (entry.isDirectory()) {
+        walkDir(fullPath);
+      } else if (entry.name.endsWith('.md')) {
+        processFile(fullPath);
+      }
+    }
+  }
+
+  walkDir(directory);
 }
 
 export { load };

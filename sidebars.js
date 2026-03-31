@@ -126,6 +126,10 @@ const sidebars = {
             },
             {
               type: 'doc',
+              id: 'for-devs/oracles/DIA/dia',
+            },
+            {
+              type: 'doc',
               id: 'for-devs/oracles/ora/ora',
             },
             {
@@ -495,6 +499,11 @@ const sidebars = {
                     },
                     {
                       type: 'doc',
+                      id: 'launch-arbitrum-chain/configure-your-chain/common/validation-and-security/batch-poster-fee-tuning',
+                      label: `Batch poster fee tuning`,
+                    },
+                    {
+                      type: 'doc',
                       id: 'launch-arbitrum-chain/configure-your-chain/common/validation-and-security/arbitrum-chain-finality',
                       label: `Customize chain finality`,
                     },
@@ -502,6 +511,11 @@ const sidebars = {
                       type: 'doc',
                       id: 'launch-arbitrum-chain/configure-your-chain/common/validation-and-security/bold-adoption-for-arbitrum-chains',
                       label: `Adopt BoLD`,
+                    },
+                    {
+                      type: 'doc',
+                      id: 'launch-arbitrum-chain/configure-your-chain/common/validation-and-security/config-smart-contract-size-limit',
+                      label: `Smart contract size limit`,
                     },
                   ],
                 },
@@ -909,7 +923,11 @@ const sidebars = {
           id: 'run-arbitrum-node/nitro/how-to-convert-databases-from-leveldb-to-pebble',
           label: 'Convert databases from LevelDB to Pebble',
         },
-        ,
+        {
+          type: 'doc',
+          id: 'run-arbitrum-node/nitro/nitro-memory-management',
+          label: 'Nitro memory management',
+        },
         {
           type: 'doc',
           id: 'run-arbitrum-node/troubleshooting',
