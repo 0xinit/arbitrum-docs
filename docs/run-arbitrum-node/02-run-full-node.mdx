@@ -93,7 +93,7 @@ import OrbitChainsExample from './partials/run-full-node/_orbit-chains-example.m
 
 :::warning Caution
 
-If you are running more than on node, you should [run a feed relay](/run-arbitrum-node/run-feed-relay.mdx).
+If you are running more than one node, you should [run a feed relay](/run-arbitrum-node/run-feed-relay.mdx).
 
 :::
 
@@ -104,7 +104,7 @@ If you are running more than on node, you should [run a feed relay](/run-arbitru
 If using a `node-config.json` file with Docker to mount, use the following command:
 
 ```
-docker run --rm -it -v /Path/to/mount/arbitrum:/home/user/.arbitrum -v /Path/to/node-config.json:/home/user/.arbitrum/node-config.json -p 0.0.0.0:8450:8450  offchainlabs/nitro-node:v3.9.0-cca645a --conf.file /home/user/.arbitrum/node-config.json
+docker run --rm -it -v /Path/to/mount/arbitrum:/home/user/.arbitrum -v /Path/to/node-config.json:/home/user/.arbitrum/node-config.json -p 0.0.0.0:8450:8450 @@latestNitroNodeImage=offchainlabs/nitro-node:v3.9.7-75e084e@@ --conf.file /home/user/.arbitrum/node-config.json
 ```
 
 :::
