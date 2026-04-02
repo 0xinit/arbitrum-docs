@@ -21,7 +21,7 @@ const sepoliaForceIncludePeriodBlocks = 5760;
 
 const globalVars = {
   // Node docker images
-  latestNitroNodeImage: 'offchainlabs/nitro-node:v3.9.7-75e084e',
+  latestNitroNodeImage: 'offchainlabs/nitro-node:v3.9.8-4624977',
   latestClassicNodeImage: 'offchainlabs/arb-node:v1.4.6-551a39b3',
 
   // Node snapshots (taken around April 20th, 2013)
