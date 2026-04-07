@@ -20,7 +20,7 @@ Nitro's total resident memory (RSS) is the sum of four distinct categories:
 | **mmap**                | fastcache (trie-clean and snapshot caches)                                             | No                        | `trie-clean-cache`, `snapshot-cache`          |
 | **glibc malloc arenas** | Per-thread arena overhead for CGO allocations                                          | No                        | `MALLOC_ARENA_MAX`                            |
 
-Only the Go heap is subject to Go's garbage collector and `GOMEMLIMIT`. The CGO and `mmap` allocations are invisible to Go's runtime. They don't appear in `runtime.MemStats` or standard Go memory profiles, but they still consume er memory and count toward your memory limit.
+Only the Go heap is subject to Go's garbage collector and `GOMEMLIMIT`. The CGO and `mmap` allocations are invisible to Go's runtime. They don't appear in `runtime.MemStats` or standard Go memory profiles, but they still consume container memory and count toward your memory limit.
 
 ### Go heap
 
