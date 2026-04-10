@@ -64,7 +64,7 @@ TXFEES = P * (L2G + ((L1P * L1S) / P))
 
 ## Where to get each variable
 
-We use the [`NodeInterface`](/build-decentralized-apps/nodeinterface/02-reference.mdx) to retrieve the fee components:
+You can use the [`NodeInterface`](/build-decentralized-apps/nodeinterface/02-reference.mdx) to retrieve the fee components:
 
 - **P** (L2 Gas Price): Price per gas unit. Starts at a gas floor price and increases with demand.
   - Call `NodeInterface.GasEstimateComponents()` and get the third element, `baseFee`.

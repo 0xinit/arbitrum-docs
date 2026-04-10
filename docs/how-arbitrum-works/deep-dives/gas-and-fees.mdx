@@ -1,5 +1,5 @@
 ---
-title: Gas and Fees
+title: Gas and fees
 description: 'Learn the fundamentals of how to calculate fees on Arbitrum, including parent chain pricing formulas and child chain gas mechanics.'
 author: pete-vielhaber
 sme: TucksonDev
@@ -101,7 +101,7 @@ The pricer module within ArbOS tracks:
 
 When the Sequencer posts a batch to the parent chain inbox:
 
-1. **Batch posting report generation**: The parent chain inbox inserts a "batch posting report" transaction into the chain's <a data-quicklook-from="delayed-inbox">Delayed Inbox</a>. After a delay, this report gets processed by ArbOS's pricer module.
+1. **Batch posting report generation**: The parent chain inbox inserts a "batch posting report" transaction into the chain's <a data-quicklook-from="delayed-inbox">Delayed Inbox</a>. After a delay, this report is processed by ArbOS's pricer module.
 
 2. **Processing the batch posting report**:
 
@@ -169,7 +169,7 @@ Recompression of existing batch segments may occur if the batch exceeds maximum 
 
 A transaction is charged for the parent chain gas if and only if it arrived as part of a sequencer batch. This means that someone would have paid for the parent chain gas to post the transaction on the parent chain.
 
-The estimated cost of posting a transaction on the parent chain is the product of the transaction's estimated size and the current parent chain gas basefee. This estimated cost is divided by the current child-chain gas used for the parent-chain operation (see [this article](https://medium.com/offchainlabs/understanding-arbitrum-2-dimensional-fees-fd1d582596c9) for more information).
+The estimated cost of posting a transaction on the parent chain is the product of the transaction's estimated size and the current parent chain gas basefee. This estimated cost is divided by the current child-chain gas used for the parent-chain operation (see [Understanding Arbitrum 2-dimensional fees](https://medium.com/offchainlabs/understanding-arbitrum-2-dimensional-fees-fd1d582596c9) for more information).
 
 The estimated size is measured in the parent chain gas. It is calculated as follows: first, compress the transaction's data using the Brotli-zero algorithm, then multiply the size of the result by 16 (because the parent chain charges 16 gas per byte—the parent chain charges less for bytes that are zero, but that doesn't apply here).
 
@@ -187,7 +187,7 @@ The child chain gas price on a given <a data-quicklook-from="arbitrum-chain">Arb
 
 Calling the Arbitrum Node's `eth_estimateGas` RPC returns a value sufficient to cover the full transaction fee at the given child chain gas price; i.e., the value returned from `eth_estimateGas` multiplied by the child chain gas price tells you how much total `ETH` is required for the transaction to succeed.
 
-This means that, for a given operation, the value returned by `eth_estimateGas` will change over time (as the parent chain's calldata price fluctuates). (See [2 Dimensional fees](https://medium.com/offchainlabs/understanding-arbitrum-2-dimensional-fees-fd1d582596c9) and [How to estimate gas in Arbitrum](/build-decentralized-apps/02-how-to-estimate-gas.mdx) for more.)
+This means that, for a given operation, the value returned by `eth_estimateGas` will change over time (as the parent chain's calldata price fluctuates). (See [2-dimensional fees](https://medium.com/offchainlabs/understanding-arbitrum-2-dimensional-fees-fd1d582596c9) and [How to estimate gas in Arbitrum](/build-decentralized-apps/02-how-to-estimate-gas.mdx) for more.)
 
 ### Child chain gas fees
 
