@@ -1,7 +1,6 @@
 import fs from 'fs';
 import path from 'path';
-import { Application, RendererEvent } from 'typedoc';
-import { parseMarkdownContentTitle } from '@docusaurus/utils';
+import { RendererEvent } from 'typedoc';
 
 // Manual SDK file constants
 const INDEX_FILENAME = 'introduction.mdx';
@@ -25,7 +24,6 @@ const GENERATED_EXCLUDES = ['index.md', 'README.md'];
  */
 function load(app) {
   const sdkOutputDir = app.options.getValue('out'); // This is the SDK directory
-  const sourceDir = path.join(sdkOutputDir, '../../submodules/arbitrum-sdk/docs');
 
   // Compute paths once
   const indexPath = path.join(sdkOutputDir, INDEX_FILENAME);
@@ -88,125 +86,8 @@ function cleanDirectory(directory, preserveFiles = []) {
   }
 }
 
-// Recursively copy all files and folders from source to target
-function copyFiles(source, target) {
-  if (!fs.existsSync(source)) {
-    console.error(`Source path does not exist: ${source}`);
-    return;
-  }
-
-  if (!fs.lstatSync(source).isDirectory()) {
-    console.error(`Source path is not a directory: ${source}`);
-    return;
-  }
-
-  fs.mkdirSync(target, { recursive: true });
-  fs.readdirSync(source, { withFileTypes: true }).forEach((entry) => {
-    const sourcePath = path.join(source, entry.name);
-    const targetPath = path.join(target, entry.name);
-    if (entry.isDirectory()) {
-      copyFiles(sourcePath, targetPath);
-    } else {
-      try {
-        fs.copyFileSync(sourcePath, targetPath);
-      } catch (err) {
-        console.error(`Failed to copy file from ${sourcePath} to ${targetPath}:`, err);
-      }
-    }
-  });
-}
-
-// Sort entries by leading numbers, then alphabetically, with 'index.md' first
-function sortEntries(a, b) {
-  if (a === 'index.md') return -1;
-  if (b === 'index.md') return 1;
-
-  const numA = a.match(/^\d+/);
-  const numB = b.match(/^\d+/);
-  if (numA && numB) {
-    return parseInt(numA[0], 10) - parseInt(numB[0], 10);
-  } else if (numA) {
-    return -1;
-  } else if (numB) {
-    return 1;
-  } else {
-    // Alphabetical order
-    return a.localeCompare(b);
-  }
-}
-
-// Generate an in-folder sidebar with sorting
-function generateSidebar(dir, basePath = '') {
-  const entries = fs.readdirSync(dir, { withFileTypes: true });
-  // Sort entries before processing
-  entries.sort((a, b) => sortEntries(a.name, b.name));
-
-  const items = entries
-    .map((entry) => {
-      const fullPath = path.join(dir, entry.name);
-      if (entry.isDirectory()) {
-        const subItems = generateSidebar(
-          fullPath,
-          basePath
-            ? `${basePath}/${entry.name.replace(/^\d+-/, '')}`
-            : entry.name.replace(/^\d+-/, ''),
-        );
-        const label = capitalizeFirstLetter(getLabelFromFilesystem(entry.name));
-        return {
-          type: 'category',
-          label,
-          items: subItems,
-        };
-      } else if (entry.isFile() && (entry.name.endsWith('.md') || entry.name.endsWith('.mdx'))) {
-        const docId = generateId(entry.name, basePath);
-        return {
-          type: 'doc',
-          id: docId,
-          label: generateLabel(entry),
-        };
-      }
-    })
-    .filter((item) => !!item);
-
-  return items;
-}
-
 function capitalizeFirstLetter(string) {
   return string.charAt(0).toUpperCase() + string.slice(1);
-}
-
-function generateId(name, basePath) {
-  // For consistency with Docusaurus ID generation, use the same logic as getLabelFromFilesystem
-  const idLabel = getLabelFromFilesystem(name);
-  if (basePath) {
-    return path.join(basePath, idLabel).replace(/\\/g, '/');
-  }
-  return idLabel;
-}
-
-function generateLabel(entry) {
-  const filePath = `${entry.path}/${entry.name}`;
-  const titleFromFile = getTitleFromFileContent(filePath);
-  const label = titleFromFile || getLabelFromFilesystem(entry.name);
-  return capitalizeFirstLetter(label);
-}
-
-function getLabelFromFilesystem(name) {
-  const label = name
-    .replace(/^\d+-/, '')
-    .replace(/\.md$/, '')
-    .replace(/\.mdx$/, '');
-  return label || '';
-}
-
-function getTitleFromFileContent(filePath) {
-  if (!fs.existsSync(filePath)) {
-    return '';
-  }
-  const fileContent = fs.readFileSync(filePath, 'utf8');
-  const { contentTitle } = parseMarkdownContentTitle(fileContent);
-
-  return contentTitle || '';
 }
 
 // Generate sidebar only from the actual SDK TypeDoc content
