@@ -248,8 +248,6 @@ const config = {
         description:
           'Official documentation for the Arbitrum ecosystem: building dApps, bridging tokens, running nodes, launching Arbitrum chains, and developing with Stylus.',
         ignoreFiles: [
-          'partials/**',
-          '**/partials/**',
           'sdk/assetBridger/**',
           'sdk/dataEntities/**',
           'sdk/inbox/**',
