@@ -4,7 +4,7 @@ import { Application, RendererEvent } from 'typedoc';
 import { parseMarkdownContentTitle } from '@docusaurus/utils';
 
 // Manual SDK file constants
-const INDEX_FILENAME = 'index.mdx';
+const INDEX_FILENAME = 'introduction.mdx';
 const MIGRATE_FILENAME = 'migrate.mdx';
 const MANUAL_FILES = [INDEX_FILENAME, MIGRATE_FILENAME];
 
@@ -664,6 +664,34 @@ Message classes have been renamed and their methods updated:
   // Bootstrap: Write template files (only called when files don't exist)
   fs.writeFileSync(indexPath, introductionContent, 'utf8');
   fs.writeFileSync(migratePath, migrationContent, 'utf8');
+}
+
+// Fix numbered anchor suffixes that TypeDoc generates for cross-references
+// when the target heading no longer has duplicate variants
+function fixStaleAnchors(directory) {
+  function processFile(filePath) {
+    const original = fs.readFileSync(filePath, 'utf8');
+    const fixed = original.replace(
+      /#mapl2networktoarbitrumnetwork-\d+/g,
+      '#mapl2networktoarbitrumnetwork',
+    );
+    if (fixed !== original) {
+      fs.writeFileSync(filePath, fixed, 'utf8');
+    }
+  }
+
+  function walkDir(dir) {
+    for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
+      const fullPath = path.join(dir, entry.name);
+      if (entry.isDirectory()) {
+        walkDir(fullPath);
+      } else if (entry.name.endsWith('.md')) {
+        processFile(fullPath);
+      }
+    }
+  }
+
+  walkDir(directory);
 }
 
 export { load };
