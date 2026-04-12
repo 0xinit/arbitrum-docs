@@ -246,7 +246,7 @@ const config = {
         removeDuplicateHeadings: true,
         title: 'Arbitrum Documentation',
         description:
-          'Official documentation for the Arbitrum ecosystem: building dApps, bridging tokens, running nodes, launching Arbitrum chains, and developing with Stylus.',
+          'Official documentation for the Arbitrum ecosystem: building apps, bridging tokens, running nodes, launching Arbitrum chains, and developing with Stylus.',
         ignoreFiles: [
           'sdk/assetBridger/**',
           'sdk/dataEntities/**',
