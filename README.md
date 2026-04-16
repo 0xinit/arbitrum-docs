@@ -7,6 +7,7 @@ Arbitrum Docs, built with docusaurus; docs are live at https://developer.arbitru
 This repository is organized as follows:
 
 ### Documentation Content
+
 - **`docs/`** - Main documentation content directory
   - `arbitrum-bridge/` - Bridge-related documentation
   - `build-decentralized-apps/` - Developer guides and references
@@ -14,7 +15,7 @@ This repository is organized as follows:
   - `for-users/` - User-focused documentation
   - `how-arbitrum-works/` - Technical explanations of Arbitrum
   - `intro/` - Introduction and glossary
-  - `launch-arbitrum-chain/` - Arbitrum Orbit chain deployment guides
+  - `launch-arbitrum-chain/` - Arbitrum chain deployment guides
   - `learn-more/` - Additional learning resources
   - `node-running/` - Node operation guides
   - `partials/` - Reusable content components and troubleshooting guides
@@ -33,8 +34,9 @@ This repository is organized as follows:
   - `theme/`: Docusaurus theme customizations
 
 ### Configuration & Dependencies
-- **`scripts/`** - Repository maintenance and build scripts
-- **`static/`** - Static assets (images, files, JSON data)
+
+- **`scripts/`**: Repository maintenance, build scripts, and content generators
+- **`static/`**: Static assets (images, files, JSON data)
 
 ## Contribution
 
@@ -47,8 +49,8 @@ The following are the only exceptions:
 - To request to have your project added to the [3rd party node providers page](docs/build-decentralized-apps/reference/01-node-providers.mdx), use [this form](https://docs.google.com/forms/d/e/1FAIpQLSc_v8j7sc4ffE6U-lJJyLMdBoIubf7OIhGtCqvK3cGPGoLr7w/viewform).
 
 ### Initial set up
-1. `git clone git@github.com:OffchainLabs/arbitrum-docs.git`
-2. `cd arbitrum-docs`
+
+1. Clone this repo
 
 ```shell
 git clone git@github.com:OffchainLabs/arbitrum-docs.git
@@ -128,8 +130,4 @@ This part will update the glossary.
 
 ### Formatting
 
-1. Run `yarn format` from the root directory (`arbitrum-docs`).
-
-### Redirects
-
-1. From the root directory, run `yarn check-redirects`.
+1. Run `yarn format` from the root directory.

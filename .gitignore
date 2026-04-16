@@ -15,6 +15,10 @@ build
 # Generated docusaurus
 .docusaurus
 .cache-loader
+# Generated notion export CSVs
+scripts/out/*.csv
+# Generated api:mutes Typedoc quirk
+docs/api/
 
 # Misc
 .DS_Store
@@ -33,7 +37,9 @@ yarn-error.log*
 
 /i18n/*/docusaurus-plugin-content-docs/current/*
 
-# Audit output
+## Claude
+.agent/
 .audit/
-
+.cursor/
+.serena/
 .claude/plans
