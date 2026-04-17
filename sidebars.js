@@ -374,6 +374,11 @@ const sidebars = {
                           id: 'launch-arbitrum-chain/configure-your-chain/common/data-availability/data-availability-committees/configure-dac',
                           label: `Configure DAC`,
                         },
+                        {
+                          type: 'doc',
+                          id: 'launch-arbitrum-chain/configure-your-chain/common/data-availability/data-availability-committees/das-rpc-method-reference',
+                          label: `DAS RPC method reference`,
+                        },
                       ],
                     },
                   ],
