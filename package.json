@@ -42,7 +42,7 @@
     "@docusaurus/theme-common": "^3.6.3",
     "@docusaurus/theme-live-codeblock": "^3.10.0",
     "@docusaurus/theme-mermaid": "^3.6.3",
-    "@ethersproject/address": "^5.7.0",
+    "@ethersproject/address": "^5.8.0",
     "@floating-ui/react": "^0.27.15",
     "@inkeep/cxkit-docusaurus": "^0.5.91",
     "@mdx-js/react": "^3.0.0",
