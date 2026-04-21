@@ -8,7 +8,7 @@ user_story: As a current Arbitrum chain owner, I want to refer to the DAS RPC me
 content_type: reference
 ---
 
-This document covers the JSON-RPC methods exposed by Arbitrum Data Availability Servers (DAS) and the newer DAProvider interface, as defined in the [Arbitrum Chain SDK](https://github.com/OffchainLabs/arbitrum-chain-sdk/) node configuration types [`NodeConfig.generated.ts`](https://github.com/OffchainLabs/arbitrum-chain-sdk/blob/main/src/types/NodeConfig.ts)
+This document covers the JSON-RPC methods exposed by Arbitrum Data Availability Servers (DAS) and the newer DAProvider interface, as defined in the [Arbitrum Chain SDK](https://github.com/OffchainLabs/arbitrum-chain-sdk/) node configuration types [`NodeConfig.generated.ts`](https://github.com/OffchainLabs/arbitrum-chain-sdk/blob/main/src/types/NodeConfig.generated.ts)
 
 ## Overview
 
@@ -58,7 +58,7 @@ Sends a single chunk of batch data within an active chunked store session.
 | ------------------- | ------------------------------------------------------------------------------------------- |
 | Default method name | `das_sendChunk`                                                                             |
 | Config path         | `node.data-availability.rpc-aggregator.das-rpc-client.data-stream.rpc-methods.stream-chunk` |
-| Config key          | `start-chunk`                                                                               |
+| Config key          | `stream-chunk`                                                                               |
 | Direction           | Client (batch poster) -> DAS server                                                         |
 
 **Behavior:**
@@ -146,7 +146,7 @@ Single-shot store method—sends the entire payload in one RPC call. Used when d
 
 - Sends the complete batch data in a single request
 - Simpler than a chunked store but limted by HTTP body size constraints
-- Disabled by default in favor of the streaming protocol
+- Enabled by default. Set `use-data-streaming: true` to switch to the chunked protocol.
 
 ## REST retrieval interface
 
