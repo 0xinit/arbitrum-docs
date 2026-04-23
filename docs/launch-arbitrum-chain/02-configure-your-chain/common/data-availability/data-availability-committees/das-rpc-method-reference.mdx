@@ -240,16 +240,18 @@ Full config path: `node.da-provider`
 
 Full config path: `node.data-availability.rpc-aggregator.backends` (JSON string)
 
-```typscript
+```typescript
 // Type: NodeConfigDataAvailabilityRpcAggregatorBackendsJson
 // Source: src/types/NodeConfig.ts:23-29
 [
   {
-    "url": "http://das-member-0:9876",        // DAS RPC endpoint
-    "pubkey": "<base64 BLS public key>",       // member's BLS key
-    "signermask": 1                            // bitmask (2^memberIndex)
-  }
-]
+    url: 'http://das-member-0:9876', // DAS RPC endpoint
+    pubkey: '<base64 BLS public key>', // member's BLS key
+  },
+  // Additional members go here. Each backend's signer bit is auto-derived from
+  // its index in this array (index i -> mask 1 << i) and must line up with
+  // the member's position in the onchain keyset.
+];
 ```
 
 ## Method Summary Table
