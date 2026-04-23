@@ -52,9 +52,9 @@ const keyset = prepareKeyset(publicKeys, assumedHonest);
 The node config must match the `assumed-honest` number:
 
 ```typescript
-'rpc-aggreagtor': {
+'rpc-aggregator': {
 	'enable': true,
-	'assumed-honest': 1,  // H - must match keyset's assumedHonest parameter
+	'assumed-honest': 2,  // H - must match keyset's assumedHonest parameter
 	'backends': '...',
 }
 ```
@@ -170,7 +170,7 @@ const tx = await buildSetValidKeyset(publicClient, {
 });
 ```
 
-This emits a `SetValidKeyset(bytes32, indexed keysetHash, bytes keysetBytes)` event.
+This emits a `SetValidKeyset(bytes32 indexed keysetHash, bytes keysetBytes)` event.
 
 ### Removing members (invalidate old keyset, set new one)
 
@@ -178,7 +178,7 @@ Use `buildInvalidateKeysetHash`:
 
 ```typescript
 import { prepareKeysetHash } from './prepareKeysetHash';
-import { buildInvalidKeysetHash } from './actions/buildInvalidateKeysetHash';
+import { buildInvalidateKeysetHash } from './actions/buildInvalidateKeysetHash';
 
 // 1. Compute hash of the keyset to remove
 const oldKeysetHash = prepareKeysetHash(oldKeysetBytes);
