@@ -59,56 +59,6 @@ The node config must match the `assumed-honest` number:
 }
 ```
 
-## Signer mask bit-level formatting in DACerts
-
-Each committee member is assigned a bit position (0-indexed). The `signerMask` for a given backend is the integer with that member's bit set. When the DAS aggregator collects signatures for a Data Availability Certificate (DACert), it uses the OR-comparator across all signer masks from all responding members to produce a single combined value.
-
-**Bit layout:**
-
-<!-- formatting looks weird here, it's intentional to make it display on website aligned -->
-
-```shell
-Bit:           ...  7     6    5    4     3     2     1     0
-Member:    ... #7   #6   #5   #4   #3   #2   #1   #0
-```
-
-**Individual member masks:**
-
-| Member index | `signerMask` (decimal) | `signerMask` (binary) |
-| ------------ | ---------------------- | --------------------- |
-| 0            | `1`                    | `00000001`            |
-| 1            | `2`                    | `00000010`            |
-| 2            | `4`                    | `00000100`            |
-| 3            | `8`                    | `00001000`            |
-| N            | `2^N`                  | bit `N` set           |
-
-**Combined masks in a DACert (OR of all signers):**
-
-| Signers       | Combined mask | Binary     |
-| ------------- | ------------- | ---------- |
-| Member 0 only | `1`           | `00000001` |
-| Members 0+1   | `3`           | `00000011` |
-| Members 0+1+2 | `7`           | `00000111` |
-| Members 0+2   | `5`           | `00000101` |
-| All 8 members | `255`         | `11111111` |
-
-### How to configure signer mask per backend
-
-Each backend in the RPC aggregator config gets its own `signerMask` value.
-
-```typescript
-'backends': JSON.stringify([
-  { url: 'http://das-member-0:9876', pubkey: '<BLS key base64>', signermask: 1 },   // bit 0
-  { url: 'http://das-member-1:9876', pubkey: '<BLS key base64>', signermask: 2 },   // bit 1
-  { url: 'http://das-member-2:9876', pubkey: '<BLS key base64>', signermask: 4 },   // bit 2
-  // ...
-]),
-```
-
-### Quroum validation
-
-The aggregator validates a DACert by checking: `popcount(combinedSignerMask) >= K`, where `K = N + 1 - H`. If sufficent unique member bits are set, the certificate is valid.
-
 ## Keyset binary encoding format
 
 The keyset is a compact, onchain-registered binary blob:
@@ -312,11 +262,10 @@ const isDac = await isAnyTrust({
 ### Checklist for a non-responding DAS member
 
 1. **Verify BLS public key matches**: The base64-encoded pubkey in the node config backend must correspond to the same key encoded in the onchain keyset at the member's index position.
-2. **Verify signer mask alignment**: The member index in the keyset must match the `signerMask` bit in the backend config. If member 2's key is at index 2 in the keyset, it's `signerMask` must be `4` (bit 2).
-3. **Check DAS server endpoints**: Two ports:
+2. **Check DAS server endpoints**: Two ports:
    - RPC endpoint (default: `:9876`): used by the batch poster to store data
    - REST endpoint (default: `:9877`): used by nodes to retrieve data
-4. **Check the `assumed-honest` value**: Must match the onchain keyset's `assumedHonest`. If they diverge, the aggregator may reject valid certificates or accept insufficient ones.
-5. **Review timeout settings**: `data-availability.request-timeout` defaults to `5s`. Slow DAS backends may need a longer timeout.
-6. **Panic on-error**: `data-availability.panic-on-error` should be `false` (default) in production. Setting it to `true` causes the node to crash on DAS errors rather than falling back.
-7. **REST aggregatory strategy**: The `simple-explore-exploit` strategy tracks per-endpoint latency and success rates. A member with sustained failures will be deprioritized. Check `max-per-endpoint-stats` (default 20) to control how quickly the strategy adapts.
+3. **Check the `assumed-honest` value**: Must match the onchain keyset's `assumedHonest`. If they diverge, the aggregator may reject valid certificates or accept insufficient ones.
+4. **Review timeout settings**: `data-availability.request-timeout` defaults to `5s`. Slow DAS backends may need a longer timeout.
+5. **Panic on-error**: `data-availability.panic-on-error` should be `false` (default) in production. Setting it to `true` causes the node to crash on DAS errors rather than falling back.
+6. **REST aggregatory strategy**: The `simple-explore-exploit` strategy tracks per-endpoint latency and success rates. A member with sustained failures will be deprioritized. Check `max-per-endpoint-stats` (default 20) to control how quickly the strategy adapts.
