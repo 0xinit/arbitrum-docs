@@ -1132,7 +1132,7 @@ const sidebars = {
             {
               type: 'doc',
               id: 'how-arbitrum-works/timeboost/gentle-introduction',
-              label: 'Public preview',
+              label: 'How Timeboost works',
             },
             {
               type: 'doc',
