@@ -12,7 +12,7 @@ import OrbitChainsExample from './partials/run-full-node/_orbit-chains-example.m
 
 :::info Prerequisites
 
-This page assumes you have completed the [Start here](/run-arbitrum-node/start-here.mdx) page; if you have not you will need to do so as it gathers RPC endpoints, Nitro version, database snapshots, etc.) that is required to run the node.
+This page assumes you have completed the steps from the [Start here](/run-arbitrum-node/start-here.mdx) page; if you have not you will need to do so as it gathers RPC endpoints, Nitro version, database snapshots, etc.) that is required to run the node.
 
 :::
 
@@ -99,7 +99,9 @@ By default, all node types will use HashDB, go-ethereum's original state trie st
 For nodes using PathDB, pruning will be automatic, can be done online, and defaults to retaining only the last 24 hours' worth of state history on disk.
 
 :::note
+
 The pruning process occurs when the node starts (upon initialization) and will not serve RPC requests during pruning.
+
 :::
 
 If you are using the default storage scheme (HashDB), then you can activate pruning by using the parameter:
