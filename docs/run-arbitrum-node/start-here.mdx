@@ -28,7 +28,7 @@ import HardwarePartial from '../partials/_hardware-requirements.mdx';
 Please note that:
 
 - The minimum requirements for RAM and CPU listed here are recommended for nodes that handle a limited number of RPC requests. For nodes that need to process multiple simultaneous requests, both the RAM size and the number of CPU cores should be increased to accommodate higher levels of traffic.
-- Single core performance is important. If the node is falling behind and a single core is 100% busy, the recommendation is to upgrade to a faster processor
+- Single core performance is important. If the node is falling behind and a single core is 100% busy, the recommendation is to upgrade to a faster processor.
 - The minimum storage requirements will change over time as the chain grows. Using more than the minimum requirements to run a robust full node is recommended. Note that snapshot extraction requires approximately 2x the snapshot size in temporary disk space, so plan accordingly during initial setup.
 - Path-based state schemes are supported for Nitro's state trie, but only for full nodes and archive nodes at this time, and not validators yet. As a result, HashDB is still the default state scheme used by Nitro, and you must take explicit action to enable PathDB. You can find more details in the table below for optional parameters.
 
@@ -80,9 +80,9 @@ For more details on snapshot downloading and initialization, see the [complete s
 
 :::
 
-:::warning Fusaka upgrade: Historical blobs
+:::warning Fusaka upgrade: historical blobs
 
-If running a beacon node, historical data will now be in blobs. To make this transition to using historical blobs refer to the [Historical Blobs for Beacon Nodes](/run-arbitrum-node/beacon-nodes-historical-blobs.mdx) guide.
+If you're running a beacon node, historical data will now be in blobs. To make this transition to using historical blobs, refer to the [Historical Blobs for Beacon Nodes](/run-arbitrum-node/beacon-nodes-historical-blobs.mdx) guide.
 
 :::
 
