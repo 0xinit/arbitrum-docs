@@ -152,7 +152,7 @@ const sidebars = {
         {
           type: 'doc',
           id: 'launch-arbitrum-chain/a-gentle-introduction',
-          label: 'A gentle introduction',
+          label: 'Arbitrum chains overview',
         },
         {
           type: 'doc',
