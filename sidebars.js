@@ -1086,7 +1086,7 @@ const sidebars = {
             {
               type: 'doc',
               id: 'how-arbitrum-works/bold/gentle-introduction',
-              label: 'A gentle introduction',
+              label: 'BoLD overview',
             },
             {
               type: 'link',
