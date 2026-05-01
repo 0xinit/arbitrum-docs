@@ -91,8 +91,8 @@
     "markdown-link-extractor": "^3.1.0",
     "markdownlint-cli": "^0.45.0",
     "prettier": "^2.8.3",
-    "semver": "^7.7.4",
-    "styled-components": "^6.1.15",
+    "semver": "^7.6.0",
+    "styled-components": "^6.4.1",
     "tsx": "^4.19.4",
     "typescript": "^5.1"
   },
