@@ -39,7 +39,7 @@ Learn more: [Configure data availability](https://docs.arbitrum.io/launch-arbitr
 
 ### What token is used to pay gas fees on Arbitrum chains?
 
-By default, Arbitrum chains pay gas in `ETH`. However, Arbitrum chains that use AnyTrust are configurable to use any `ERC-20` token for the gas fee token of the chain.
+By default, Arbitrum chains pay gas in **ETH**. However, Arbitrum chains that use AnyTrust are configurable to use any `ERC-20` token for the gas fee token of the chain.
 
 Learn more: [Choose a custom gas token](https://docs.arbitrum.io/launch-arbitrum-chain/features/common/gas-and-fees/choose-custom-gas-token).
 
@@ -173,7 +173,7 @@ The actual maximum throughput depends on the configurable execution parameters:
 
 ### Why is the WETH Gateway not necessary for custom gas token chains?
 
-The `WETH` gateway used in the token bridge is a special, custom gateway that unwraps the `WETH` deposits and sends them to the Arbitrum chain, then wraps them again on the Arbitrum chain. Since `ETH` is the gas token in the Arbitrum chain, there's no need to perform this operation, so you can use a standard `ERC-20` for `WETH` (this is the default case of the token bridge so that you wouldn't need a special `WETH` gateway).
+The `WETH` gateway used in the token bridge is a special, custom gateway that unwraps the `WETH` deposits and sends them to the Arbitrum chain, then wraps them again on the Arbitrum chain. Since **ETH** is the gas token in the Arbitrum chain, there's no need to perform this operation, so you can use a standard `ERC-20` for `WETH` (this is the default case of the token bridge so that you wouldn't need a special `WETH` gateway).
 
 If you want to enable extra custom operations with `WETH`, you can create a custom token and a custom gateway to handle this case.
 
@@ -217,7 +217,7 @@ To participate in a fraud-proof game, your validator will need funds (can be any
 
 1. Gas costs to post assertions- Depends on your parent chain and is estimated to cost 163109 gas per assertion. If you assume one assertion per hour, then you can multiply your gas cost per hour to calculate the annual cost. This assumption holds under normal operation, but during a challenge, you may post more assertions (these will scale with the number of challenges), so it might be one assertion every 10 minutes, depending on how many challenges are ongoing.
 
-2. Bonds to participate- Depends on your config. You can set the bond amounts to be any amount you want. For Arbitrum One, this is 3600 `ETH` initially and then 555+79 `ETH` per each subsequent challenge. These amounts were carefully selected and designed, with extensive research behind them, specifically for Arbitrum One. There could be one or multiple challenges, and so there will always be a possibility where more funds are needed.
+2. Bonds to participate- Depends on your config. You can set the bond amounts to be any amount you want. For Arbitrum One, this is 3600 **ETH** initially and then 555+79 **ETH** per each subsequent challenge. These amounts were carefully selected and designed, with extensive research behind them, specifically for Arbitrum One. There could be one or multiple challenges, and so there will always be a possibility where more funds are needed.
 
 Learn more: [BoLD economics of disputes](https://docs.arbitrum.io/how-arbitrum-works/bold/bold-economics-of-disputes).
 
