@@ -111,6 +111,16 @@ import ArbInfoRef from '../../for-devs/dev-tools-and-resources/partials/precompi
 
 <ArbInfoRef />
 
+### `ArbNativeTokenManager`
+
+ArbNativeTokenManager ([Interface](https://github.com/OffchainLabs/@@nitroPrecompilesRepositorySlug=nitro-precompile-interfaces@@/blob/@@nitroPrecompilesCommit=9056310e554d04829bc590d4ba7e17d40d0a9635@@/ArbNativeTokenManager.sol) | [Implementation](https://github.com/OffchainLabs/@@nitroRepositorySlug=nitro@@/blob/@@nitroVersionTag=v3.9.9@@/@@nitroPathToPrecompiles=precompiles@@/ArbNativeTokenManager.go)) enables minting and burning of the chain's native gas token by callers authorized through the `ArbOwner` precompile. Available since ArbOS 41.
+
+Precompile address: `0x0000000000000000000000000000000000000073`
+
+import ArbNativeTokenManagerRef from '../../for-devs/dev-tools-and-resources/partials/precompile-tables/_ArbNativeTokenManager.mdx';
+
+<ArbNativeTokenManagerRef />
+
 ### `ArbosTest`
 
 ArbosTest ([Interface](https://github.com/OffchainLabs/@@nitroPrecompilesRepositorySlug=nitro-precompile-interfaces@@/blob/@@nitroPrecompilesCommit=9056310e554d04829bc590d4ba7e17d40d0a9635@@/ArbosTest.sol) | [Implementation](https://github.com/OffchainLabs/@@nitroRepositorySlug=nitro@@/blob/@@nitroVersionTag=v3.9.9@@/@@nitroPathToPrecompiles=precompiles@@/ArbosTest.go)) provides a method of burning arbitrary amounts of gas, which exists for historical reasons. In Classic, `ArbosTest` had additional methods only the zero address could call. These have been removed since users don't use them and calls to missing methods revert.
