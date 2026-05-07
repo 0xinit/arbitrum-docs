@@ -116,7 +116,11 @@
           Implementation
         </a>
       </td>
-      <td>future.</td>
+      <td>
+        SetNativeTokenManagementFrom sets a time in epoch seconds when the native token management
+        becomes enabled. Setting it to 0 disables the feature. If the feature is disabled, then the
+        time must be at least 7 days in the future.
+      </td>
     </tr>
     <tr>
       <td>
@@ -844,7 +848,9 @@
           Implementation
         </a>
       </td>
-      <td>decompression.</td>
+      <td>
+        SetMaxWasmSize sets the maximum size the wasm code can be in bytes after decompression.
+      </td>
     </tr>
     <tr>
       <td>
@@ -1042,7 +1048,9 @@
           Implementation
         </a>
       </td>
-      <td>(EIP-7623)</td>
+      <td>
+        SetCalldataPriceIncrease sets the increased calldata price feature on or off (EIP-7623)
+      </td>
     </tr>
     <tr>
       <td>
@@ -1143,7 +1151,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro/blob/v3.9.9/precompiles/ArbOwner.go#L0"
+          href="https://github.com/OffchainLabs/nitro/blob/v3.9.9/precompiles/ArbOwner.go#L27"
           target="_blank"
         >
           Implementation
