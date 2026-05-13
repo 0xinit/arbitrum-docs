@@ -18,41 +18,41 @@ function escapeHtml(s) {
   return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 }
 
-function rewrite(node) {
-  if (node.type === 'inlineCode' || node.type === 'code') {
-    const html = rewriteMarkerValue(node.value);
-    if (html !== null) {
-      node.type = 'html';
-      node.value = html;
-      delete node.lang;
-      delete node.meta;
-      return false;
-    }
-  }
-  if (node.type === 'html' && typeof node.value === 'string' && EMPTY_COMMENT.test(node.value)) {
-    return true;
-  }
-  return false;
-}
-
-function walk(node, parent, index) {
-  if (!node || typeof node !== 'object') return false;
+// Post-order walk. Visitor returns null to drop the node, or undefined to keep
+// (with whatever mutations were applied in place).
+function walk(node, visit) {
   if (Array.isArray(node.children)) {
-    for (let i = 0; i < node.children.length; i++) {
-      const removed = walk(node.children[i], node, i);
-      if (removed) i--;
+    const out = [];
+    for (const child of node.children) {
+      const result = walk(child, visit);
+      if (result === null) continue;
+      out.push(result !== undefined ? result : child);
     }
+    node.children = out;
   }
-  const shouldRemove = rewrite(node);
-  if (shouldRemove && parent && Array.isArray(parent.children)) {
-    parent.children.splice(index, 1);
-    return true;
-  }
-  return false;
+  return visit(node);
 }
 
 module.exports = function remarkLlmsCleanup() {
   return (tree) => {
-    walk(tree, null, 0);
+    walk(tree, (node) => {
+      if (node.type === 'inlineCode' || node.type === 'code') {
+        const html = rewriteMarkerValue(node.value);
+        if (html !== null) {
+          node.type = 'html';
+          node.value = html;
+          delete node.lang;
+          delete node.meta;
+          return;
+        }
+      }
+      if (
+        node.type === 'html' &&
+        typeof node.value === 'string' &&
+        EMPTY_COMMENT.test(node.value)
+      ) {
+        return null;
+      }
+    });
   };
 };

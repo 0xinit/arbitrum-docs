@@ -1,25 +1,19 @@
 const { buildMarkerValue } = require('./llms-markers');
 
-// Splice + i-- re-visits the first replacement so nested cleanup (hash-links
-// inside tab panels, etc.) still fires. Relies on no visitor rule producing
-// output that re-matches its own check — otherwise the loop never advances.
-function walk(node, parent, index, visitor) {
-  if (!node || typeof node !== 'object') return;
-  const result = visitor(node, parent, index);
-  if (result === 'remove') return 'remove';
-  if (Array.isArray(result)) return result;
-  const children = node.children;
-  if (!Array.isArray(children)) return;
-  for (let i = 0; i < children.length; i++) {
-    const r = walk(children[i], node, i, visitor);
-    if (r === 'remove') {
-      children.splice(i, 1);
-      i--;
-    } else if (Array.isArray(r)) {
-      children.splice(i, 1, ...r);
-      i--;
+// Post-order walk. Visitor returns: null to drop the node, an array to splice
+// many in its place, a single node to replace it, or undefined to keep.
+function walk(node, visit, parent = null) {
+  if (Array.isArray(node.children)) {
+    const out = [];
+    for (const child of node.children) {
+      const result = walk(child, visit, node);
+      if (result === null) continue;
+      if (Array.isArray(result)) out.push(...result);
+      else out.push(result !== undefined ? result : child);
     }
+    node.children = out;
   }
+  return visit(node, parent);
 }
 
 function getClassList(node) {
@@ -235,21 +229,24 @@ function getAnnotationLatex(node) {
 
 module.exports = function rehypeLlmsCleanup() {
   return (tree) => {
-    walk(tree, null, 0, (node) => {
-      if (isHashLink(node)) return 'remove';
+    walk(tree, (node, parent) => {
+      if (isHashLink(node)) return null;
       if (isQuicklook(node)) return node.children || [];
       const adm = getAdmonitionType(node);
-      if (adm) return [admonitionToBlockquote(node, adm)];
+      if (adm) return admonitionToBlockquote(node, adm);
       if (isTabContainer(node)) {
         const replacement = tabsToMarkers(node);
         if (replacement) return replacement;
       }
       if (isKatexDisplay(node)) {
         const latex = getAnnotationLatex(node);
-        if (latex != null) return [mkBlockMarker('MATH_BLOCK', latex)];
+        if (latex != null) return mkBlockMarker('MATH_BLOCK', latex);
       } else if (isKatex(node)) {
+        // Skip when wrapped in <span class="katex-display"> — the outer span
+        // is visited next (post-order) and will emit the block-math marker.
+        if (parent && isKatexDisplay(parent)) return;
         const latex = getAnnotationLatex(node);
-        if (latex != null) return [mkInlineMarker('MATH_INLINE', latex)];
+        if (latex != null) return mkInlineMarker('MATH_INLINE', latex);
       }
       propagateCodeLanguage(node);
     });
