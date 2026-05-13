@@ -201,6 +201,7 @@ const config = {
             '/hosted-pdfs/**',
           ],
           beforeDefaultRehypePlugins: [require('./src/plugins/rehype-llms-cleanup')],
+          beforeDefaultRemarkPlugins: [require('./src/plugins/remark-llms-cleanup')],
         },
       },
     ],

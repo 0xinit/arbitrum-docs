@@ -12,7 +12,7 @@ function walk(node, parent, index, visitor) {
       i--;
     } else if (Array.isArray(r)) {
       children.splice(i, 1, ...r);
-      i += r.length - 1;
+      i--;
     }
   }
 }
@@ -40,6 +40,38 @@ function findChild(node, predicate) {
   return null;
 }
 
+function findDescendant(node, predicate) {
+  if (!node || typeof node !== 'object') return null;
+  if (Array.isArray(node.children)) {
+    for (const c of node.children) {
+      if (predicate(c)) return c;
+      const r = findDescendant(c, predicate);
+      if (r) return r;
+    }
+  }
+  return null;
+}
+
+function findAllDescendants(node, predicate, acc = []) {
+  if (!node || typeof node !== 'object') return acc;
+  if (Array.isArray(node.children)) {
+    for (const c of node.children) {
+      if (predicate(c)) acc.push(c);
+      else findAllDescendants(c, predicate, acc);
+    }
+  }
+  return acc;
+}
+
+function getTextContent(nodes) {
+  let s = '';
+  for (const n of nodes) {
+    if (n.type === 'text') s += n.value;
+    else if (Array.isArray(n.children)) s += getTextContent(n.children);
+  }
+  return s;
+}
+
 function isHashLink(node) {
   return node.type === 'element' && node.tagName === 'a' && hasClass(node, 'hash-link');
 }
@@ -62,15 +94,6 @@ function getAdmonitionType(node) {
     if (m) return m[1];
   }
   return null;
-}
-
-function getTextContent(nodes) {
-  let s = '';
-  for (const n of nodes) {
-    if (n.type === 'text') s += n.value;
-    else if (Array.isArray(n.children)) s += getTextContent(n.children);
-  }
-  return s;
 }
 
 function admonitionToBlockquote(node, type) {
@@ -121,6 +144,86 @@ function propagateCodeLanguage(node) {
   code.properties.className = [...codeClasses, langClass];
 }
 
+function isTabContainer(node) {
+  if (node.type !== 'element') return false;
+  const classes = getClassList(node);
+  return classes.includes('tabs-container') || classes.includes('theme-tabs-container');
+}
+
+function mkInlineMarker(kind, payload) {
+  return {
+    type: 'element',
+    tagName: 'code',
+    properties: { className: ['llms-marker'] },
+    children: [{ type: 'text', value: `LLMS_${kind}:${encodeURIComponent(payload)}` }],
+  };
+}
+
+function mkBlockMarker(kind, payload) {
+  return {
+    type: 'element',
+    tagName: 'pre',
+    properties: { className: ['llms-marker'] },
+    children: [
+      {
+        type: 'element',
+        tagName: 'code',
+        properties: {},
+        children: [{ type: 'text', value: `LLMS_${kind}:${encodeURIComponent(payload)}` }],
+      },
+    ],
+  };
+}
+
+function tabsToMarkers(node) {
+  const tablist = findDescendant(
+    node,
+    (c) => c.type === 'element' && c.properties?.role === 'tablist',
+  );
+  if (!tablist) return null;
+  const labels = (tablist.children || []).filter(
+    (c) => c.type === 'element' && c.properties?.role === 'tab',
+  );
+  const panels = findAllDescendants(
+    node,
+    (c) => c.type === 'element' && c.properties?.role === 'tabpanel',
+  );
+  if (labels.length === 0 || panels.length === 0) return null;
+  const out = [];
+  const count = Math.min(labels.length, panels.length);
+  for (let i = 0; i < count; i++) {
+    const labelText = getTextContent(labels[i].children || []).trim();
+    out.push(mkBlockMarker('DETAILS_OPEN', labelText));
+    if (Array.isArray(panels[i].children)) out.push(...panels[i].children);
+    out.push(mkBlockMarker('DETAILS_CLOSE', ''));
+  }
+  return out;
+}
+
+function isKatex(node) {
+  return node.type === 'element' && node.tagName === 'span' && getClassList(node).includes('katex');
+}
+
+function isKatexDisplay(node) {
+  return (
+    node.type === 'element' &&
+    node.tagName === 'span' &&
+    getClassList(node).includes('katex-display')
+  );
+}
+
+function getAnnotationLatex(node) {
+  const annotation = findDescendant(
+    node,
+    (c) =>
+      c.type === 'element' &&
+      c.tagName === 'annotation' &&
+      c.properties?.encoding === 'application/x-tex',
+  );
+  if (!annotation) return null;
+  return getTextContent(annotation.children || []);
+}
+
 module.exports = function rehypeLlmsCleanup() {
   return (tree) => {
     walk(tree, null, 0, (node) => {
@@ -128,6 +231,17 @@ module.exports = function rehypeLlmsCleanup() {
       if (isQuicklook(node)) return node.children || [];
       const adm = getAdmonitionType(node);
       if (adm) return [admonitionToBlockquote(node, adm)];
+      if (isTabContainer(node)) {
+        const replacement = tabsToMarkers(node);
+        if (replacement) return replacement;
+      }
+      if (isKatexDisplay(node)) {
+        const latex = getAnnotationLatex(node);
+        if (latex != null) return [mkBlockMarker('MATH_BLOCK', latex)];
+      } else if (isKatex(node)) {
+        const latex = getAnnotationLatex(node);
+        if (latex != null) return [mkInlineMarker('MATH_INLINE', latex)];
+      }
       propagateCodeLanguage(node);
     });
   };
