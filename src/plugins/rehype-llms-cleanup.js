@@ -1,3 +1,8 @@
+const { PREFIX } = require('./llms-markers');
+
+// Splice + i-- re-visits the first replacement so nested cleanup (hash-links
+// inside tab panels, etc.) still fires. Relies on no visitor rule producing
+// output that re-matches its own check — otherwise the loop never advances.
 function walk(node, parent, index, visitor) {
   if (!node || typeof node !== 'object') return;
   const result = visitor(node, parent, index);
@@ -150,12 +155,16 @@ function isTabContainer(node) {
   return classes.includes('tabs-container') || classes.includes('theme-tabs-container');
 }
 
+// Carry markers across the hast→mdast boundary as <code> (inline) or
+// <pre><code> (block) elements rather than hast comments. Comments are
+// treated as skippable by rehype-minify-whitespace and would swallow
+// adjacent text whitespace (e.g. "Where $U$ is" becomes "Where $U$is").
 function mkInlineMarker(kind, payload) {
   return {
     type: 'element',
     tagName: 'code',
     properties: { className: ['llms-marker'] },
-    children: [{ type: 'text', value: `LLMS_${kind}:${encodeURIComponent(payload)}` }],
+    children: [{ type: 'text', value: `${PREFIX}${kind}:${encodeURIComponent(payload)}` }],
   };
 }
 
@@ -169,7 +178,7 @@ function mkBlockMarker(kind, payload) {
         type: 'element',
         tagName: 'code',
         properties: {},
-        children: [{ type: 'text', value: `LLMS_${kind}:${encodeURIComponent(payload)}` }],
+        children: [{ type: 'text', value: `${PREFIX}${kind}:${encodeURIComponent(payload)}` }],
       },
     ],
   };

@@ -1,8 +1,9 @@
-const MARKER = /^LLMS_(DETAILS_OPEN|DETAILS_CLOSE|MATH_INLINE|MATH_BLOCK):([^]*)$/;
+const { MARKER_RE } = require('./llms-markers');
+
 const EMPTY_COMMENT = /^<!--\s*-->$/;
 
 function rewriteMarkerValue(value) {
-  const m = MARKER.exec(value);
+  const m = MARKER_RE.exec(value);
   if (!m) return null;
   const kind = m[1];
   const payload = decodeURIComponent(m[2]);
