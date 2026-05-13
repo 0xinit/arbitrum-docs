@@ -1,4 +1,4 @@
-const { PREFIX } = require('./llms-markers');
+const { buildMarkerValue } = require('./llms-markers');
 
 // Splice + i-- re-visits the first replacement so nested cleanup (hash-links
 // inside tab panels, etc.) still fires. Relies on no visitor rule producing
@@ -164,7 +164,7 @@ function mkInlineMarker(kind, payload) {
     type: 'element',
     tagName: 'code',
     properties: { className: ['llms-marker'] },
-    children: [{ type: 'text', value: `${PREFIX}${kind}:${encodeURIComponent(payload)}` }],
+    children: [{ type: 'text', value: buildMarkerValue(kind, payload) }],
   };
 }
 
@@ -178,7 +178,7 @@ function mkBlockMarker(kind, payload) {
         type: 'element',
         tagName: 'code',
         properties: {},
-        children: [{ type: 'text', value: `${PREFIX}${kind}:${encodeURIComponent(payload)}` }],
+        children: [{ type: 'text', value: buildMarkerValue(kind, payload) }],
       },
     ],
   };
