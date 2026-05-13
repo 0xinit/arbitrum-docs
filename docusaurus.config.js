@@ -181,28 +181,26 @@ const config = {
     require.resolve('docusaurus-plugin-fathom'),
     require.resolve('docusaurus-plugin-sass'),
     [
-      'docusaurus-plugin-llms',
+      '@signalwire/docusaurus-plugin-llms-txt',
       {
-        generateLLMsTxt: true,
-        generateLLMsFullTxt: true,
-        generateMarkdownFiles: true,
-        docsDir: 'docs',
-        excludeImports: true,
-        removeDuplicateHeadings: true,
-        title: 'Arbitrum Documentation',
-        description:
+        siteTitle: 'Arbitrum Documentation',
+        siteDescription:
           'Official documentation for the Arbitrum ecosystem: building apps, bridging tokens, running nodes, launching Arbitrum chains, and developing with Stylus.',
-        ignoreFiles: [
-          'sdk/assetBridger/**',
-          'sdk/dataEntities/**',
-          'sdk/inbox/**',
-          'sdk/message/**',
-          'sdk/utils/**',
-          'sdk/index.md',
-          'hosted-pdfs/**',
-        ],
-        pathTransformation: {
-          ignorePaths: ['docs'],
+        content: {
+          enableMarkdownFiles: true,
+          enableLlmsFullTxt: true,
+          includeDocs: true,
+          includeBlog: false,
+          includePages: false,
+          excludeRoutes: [
+            '/sdk/assetBridger/**',
+            '/sdk/dataEntities/**',
+            '/sdk/inbox/**',
+            '/sdk/message/**',
+            '/sdk/utils/**',
+            '/hosted-pdfs/**',
+          ],
+          beforeDefaultRehypePlugins: [require('./src/plugins/rehype-llms-cleanup')],
         },
       },
     ],
