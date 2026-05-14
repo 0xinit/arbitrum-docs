@@ -1,4 +1,5 @@
 const { buildMarkerValue } = require('./llms-markers');
+const h = require('hastscript');
 
 // Post-order walk. Visitor returns: null to drop the node, an array to splice
 // many in its place, a single node to replace it, or undefined to keep.
@@ -112,23 +113,12 @@ function admonitionToBlockquote(node, type) {
   const typeLabel = type.toUpperCase();
   const titleText = getTextContent(titleChildren).trim();
   const isDefaultTitle = titleText.toLowerCase() === type.toLowerCase();
-  const firstParaChildren = [
-    {
-      type: 'element',
-      tagName: 'strong',
-      properties: {},
-      children: [{ type: 'text', value: typeLabel }],
-    },
-  ];
+  const firstParaChildren = [h('strong', typeLabel)];
   if (!isDefaultTitle && titleChildren.length > 0) {
     firstParaChildren.push({ type: 'text', value: ' — ' });
     firstParaChildren.push(...titleChildren);
   }
-  const children = [{ type: 'element', tagName: 'p', properties: {}, children: firstParaChildren }];
-  if (content && Array.isArray(content.children)) {
-    children.push(...content.children);
-  }
-  return { type: 'element', tagName: 'blockquote', properties: {}, children };
+  return h('blockquote', [h('p', firstParaChildren), ...((content && content.children) || [])]);
 }
 
 function propagateCodeLanguage(node) {
@@ -154,28 +144,11 @@ function isTabContainer(node) {
 // treated as skippable by rehype-minify-whitespace and would swallow
 // adjacent text whitespace (e.g. "Where $U$ is" becomes "Where $U$is").
 function mkInlineMarker(kind, payload) {
-  return {
-    type: 'element',
-    tagName: 'code',
-    properties: { className: ['llms-marker'] },
-    children: [{ type: 'text', value: buildMarkerValue(kind, payload) }],
-  };
+  return h('code.llms-marker', buildMarkerValue(kind, payload));
 }
 
 function mkBlockMarker(kind, payload) {
-  return {
-    type: 'element',
-    tagName: 'pre',
-    properties: { className: ['llms-marker'] },
-    children: [
-      {
-        type: 'element',
-        tagName: 'code',
-        properties: {},
-        children: [{ type: 'text', value: buildMarkerValue(kind, payload) }],
-      },
-    ],
-  };
+  return h('pre.llms-marker', h('code', buildMarkerValue(kind, payload)));
 }
 
 function tabsToMarkers(node) {
