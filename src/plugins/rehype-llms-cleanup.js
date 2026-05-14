@@ -1,5 +1,8 @@
 const { buildMarkerValue } = require('./llms-markers');
 const h = require('hastscript');
+// hast-util-select is ESM; Node 22.x supports require() of ESM modules that
+// don't use top-level await, which this package doesn't. Loads synchronously.
+const { matches, select, selectAll } = require('hast-util-select');
 
 // Post-order walk. Visitor returns: null to drop the node, an array to splice
 // many in its place, a single node to replace it, or undefined to keep.
@@ -17,52 +20,6 @@ function walk(node, visit, parent = null) {
   return visit(node, parent);
 }
 
-function getClassList(node) {
-  if (node.type !== 'element' || !node.properties) return [];
-  const cls = node.properties.className;
-  if (!cls) return [];
-  return Array.isArray(cls) ? cls : String(cls).split(/\s+/);
-}
-
-function hasClass(node, name) {
-  return getClassList(node).includes(name);
-}
-
-function hasClassPrefix(node, prefix) {
-  return getClassList(node).some((c) => c.startsWith(prefix));
-}
-
-function findChild(node, predicate) {
-  if (!node.children) return null;
-  for (const child of node.children) {
-    if (predicate(child)) return child;
-  }
-  return null;
-}
-
-function findDescendant(node, predicate) {
-  if (!node || typeof node !== 'object') return null;
-  if (Array.isArray(node.children)) {
-    for (const c of node.children) {
-      if (predicate(c)) return c;
-      const r = findDescendant(c, predicate);
-      if (r) return r;
-    }
-  }
-  return null;
-}
-
-function findAllDescendants(node, predicate, acc = []) {
-  if (!node || typeof node !== 'object') return acc;
-  if (Array.isArray(node.children)) {
-    for (const c of node.children) {
-      if (predicate(c)) acc.push(c);
-      else findAllDescendants(c, predicate, acc);
-    }
-  }
-  return acc;
-}
-
 function getTextContent(nodes) {
   let s = '';
   for (const n of nodes) {
@@ -72,24 +29,9 @@ function getTextContent(nodes) {
   return s;
 }
 
-function isHashLink(node) {
-  return node.type === 'element' && node.tagName === 'a' && hasClass(node, 'hash-link');
-}
-
-function isQuicklook(node) {
-  return (
-    node.type === 'element' &&
-    node.tagName === 'a' &&
-    node.properties &&
-    'dataQuicklookFrom' in node.properties
-  );
-}
-
 function getAdmonitionType(node) {
-  if (node.type !== 'element' || node.tagName !== 'div') return null;
-  const classes = getClassList(node);
-  if (!classes.includes('theme-admonition')) return null;
-  for (const c of classes) {
+  if (!matches('div.theme-admonition', node)) return null;
+  for (const c of node.properties.className) {
     const m = /^theme-admonition-(.+)$/.exec(c);
     if (m) return m[1];
   }
@@ -97,18 +39,12 @@ function getAdmonitionType(node) {
 }
 
 function admonitionToBlockquote(node, type) {
-  const heading = findChild(
-    node,
-    (c) => c.type === 'element' && hasClassPrefix(c, 'admonitionHeading'),
-  );
-  const content = findChild(
-    node,
-    (c) => c.type === 'element' && hasClassPrefix(c, 'admonitionContent'),
-  );
+  // Docusaurus uses hashed class names like admonitionHeading_Gvgb, so we
+  // match by substring on the class attribute.
+  const heading = select('[class*="admonitionHeading"]', node);
+  const content = select('[class*="admonitionContent"]', node);
   const titleChildren = heading
-    ? (heading.children || []).filter(
-        (c) => !(c.type === 'element' && hasClassPrefix(c, 'admonitionIcon')),
-      )
+    ? (heading.children || []).filter((c) => !matches('[class*="admonitionIcon"]', c))
     : [];
   const typeLabel = type.toUpperCase();
   const titleText = getTextContent(titleChildren).trim();
@@ -122,21 +58,14 @@ function admonitionToBlockquote(node, type) {
 }
 
 function propagateCodeLanguage(node) {
-  if (node.type !== 'element' || node.tagName !== 'pre') return;
-  const langClass = getClassList(node).find((c) => /^language-/.test(c));
-  if (!langClass) return;
-  const code = findChild(node, (c) => c.type === 'element' && c.tagName === 'code');
+  if (!matches('pre[class*="language-"]', node)) return;
+  const langClass = node.properties.className.find((c) => /^language-/.test(c));
+  const code = (node.children || []).find((c) => c.type === 'element' && c.tagName === 'code');
   if (!code) return;
-  const codeClasses = getClassList(code);
-  if (codeClasses.includes(langClass)) return;
+  const existing = Array.isArray(code.properties?.className) ? code.properties.className : [];
+  if (existing.includes(langClass)) return;
   code.properties = code.properties || {};
-  code.properties.className = [...codeClasses, langClass];
-}
-
-function isTabContainer(node) {
-  if (node.type !== 'element') return false;
-  const classes = getClassList(node);
-  return classes.includes('tabs-container') || classes.includes('theme-tabs-container');
+  code.properties.className = [...existing, langClass];
 }
 
 // Carry markers across the hast→mdast boundary as <code> (inline) or
@@ -152,18 +81,10 @@ function mkBlockMarker(kind, payload) {
 }
 
 function tabsToMarkers(node) {
-  const tablist = findDescendant(
-    node,
-    (c) => c.type === 'element' && c.properties?.role === 'tablist',
-  );
+  const tablist = select('[role="tablist"]', node);
   if (!tablist) return null;
-  const labels = (tablist.children || []).filter(
-    (c) => c.type === 'element' && c.properties?.role === 'tab',
-  );
-  const panels = findAllDescendants(
-    node,
-    (c) => c.type === 'element' && c.properties?.role === 'tabpanel',
-  );
+  const labels = (tablist.children || []).filter((c) => matches('[role="tab"]', c));
+  const panels = selectAll('[role="tabpanel"]', node);
   if (labels.length === 0 || panels.length === 0) return null;
   const out = [];
   const count = Math.min(labels.length, panels.length);
@@ -176,26 +97,8 @@ function tabsToMarkers(node) {
   return out;
 }
 
-function isKatex(node) {
-  return node.type === 'element' && node.tagName === 'span' && getClassList(node).includes('katex');
-}
-
-function isKatexDisplay(node) {
-  return (
-    node.type === 'element' &&
-    node.tagName === 'span' &&
-    getClassList(node).includes('katex-display')
-  );
-}
-
 function getAnnotationLatex(node) {
-  const annotation = findDescendant(
-    node,
-    (c) =>
-      c.type === 'element' &&
-      c.tagName === 'annotation' &&
-      c.properties?.encoding === 'application/x-tex',
-  );
+  const annotation = select('annotation[encoding="application/x-tex"]', node);
   if (!annotation) return null;
   return getTextContent(annotation.children || []);
 }
@@ -203,21 +106,21 @@ function getAnnotationLatex(node) {
 module.exports = function rehypeLlmsCleanup() {
   return (tree) => {
     walk(tree, (node, parent) => {
-      if (isHashLink(node)) return null;
-      if (isQuicklook(node)) return node.children || [];
+      if (matches('a.hash-link', node)) return null;
+      if (matches('a[data-quicklook-from]', node)) return node.children || [];
       const adm = getAdmonitionType(node);
       if (adm) return admonitionToBlockquote(node, adm);
-      if (isTabContainer(node)) {
+      if (matches('.tabs-container, .theme-tabs-container', node)) {
         const replacement = tabsToMarkers(node);
         if (replacement) return replacement;
       }
-      if (isKatexDisplay(node)) {
+      if (matches('span.katex-display', node)) {
         const latex = getAnnotationLatex(node);
         if (latex != null) return mkBlockMarker('MATH_BLOCK', latex);
-      } else if (isKatex(node)) {
+      } else if (matches('span.katex', node)) {
         // Skip when wrapped in <span class="katex-display"> — the outer span
         // is visited next (post-order) and will emit the block-math marker.
-        if (parent && isKatexDisplay(parent)) return;
+        if (parent && matches('span.katex-display', parent)) return;
         const latex = getAnnotationLatex(node);
         if (latex != null) return mkInlineMarker('MATH_INLINE', latex);
       }

@@ -9428,7 +9428,7 @@ hast-util-raw@^9.0.0:
     web-namespaces "^2.0.0"
     zwitch "^2.0.0"
 
-hast-util-select@^6.0.4:
+hast-util-select@^6, hast-util-select@^6.0.4:
   version "6.0.4"
   resolved "https://registry.yarnpkg.com/hast-util-select/-/hast-util-select-6.0.4.tgz#1d8f69657a57441d0ce0ade35887874d3e65a303"
   integrity sha512-RqGS1ZgI0MwxLaKLDxjprynNzINEkRHY2i8ln4DDjgv9ZhcYVIHN9rlpiYsqtFwrgpYU361SyWDQcGNIBVu3lw==
