@@ -199,6 +199,12 @@ const config = {
             '/sdk/message/**',
             '/sdk/utils/**',
             '/hosted-pdfs/**',
+            // Internal building blocks (imported into other pages),
+            // not standalone content. Docusaurus generates routes for
+            // them anyway, but they shouldn't appear in llms.txt.
+            '**/_*', // Docusaurus partial convention
+            '**/partials/**', // non-underscored partials in this repo's partials/ dirs
+            '/category/**', // auto-generated category index pages
           ],
           beforeDefaultRehypePlugins: [require('./src/plugins/rehype-llms-cleanup')],
           beforeDefaultRemarkPlugins: [require('./src/plugins/remark-llms-cleanup')],
