@@ -31,11 +31,9 @@ function getTextContent(nodes) {
 
 function getAdmonitionType(node) {
   if (!matches('div.theme-admonition', node)) return null;
-  for (const c of node.properties.className) {
-    const m = /^theme-admonition-(.+)$/.exec(c);
-    if (m) return m[1];
-  }
-  return null;
+  const prefix = 'theme-admonition-';
+  const typeClass = node.properties.className.find((c) => c.startsWith(prefix));
+  return typeClass ? typeClass.slice(prefix.length) : null;
 }
 
 function admonitionToBlockquote(node, type) {
@@ -51,8 +49,7 @@ function admonitionToBlockquote(node, type) {
   const isDefaultTitle = titleText.toLowerCase() === type.toLowerCase();
   const firstParaChildren = [h('strong', typeLabel)];
   if (!isDefaultTitle && titleChildren.length > 0) {
-    firstParaChildren.push({ type: 'text', value: ' — ' });
-    firstParaChildren.push(...titleChildren);
+    firstParaChildren.push(' — ', ...titleChildren);
   }
   return h('blockquote', [h('p', firstParaChildren), ...((content && content.children) || [])]);
 }
@@ -86,15 +83,14 @@ function tabsToMarkers(node) {
   const labels = (tablist.children || []).filter((c) => matches('[role="tab"]', c));
   const panels = selectAll('[role="tabpanel"]', node);
   if (labels.length === 0 || panels.length === 0) return null;
-  const out = [];
   const count = Math.min(labels.length, panels.length);
-  for (let i = 0; i < count; i++) {
-    const labelText = getTextContent(labels[i].children || []).trim();
-    out.push(mkBlockMarker('DETAILS_OPEN', labelText));
-    if (Array.isArray(panels[i].children)) out.push(...panels[i].children);
-    out.push(mkBlockMarker('DETAILS_CLOSE', ''));
-  }
-  return out;
+  return labels
+    .slice(0, count)
+    .flatMap((label, i) => [
+      mkBlockMarker('DETAILS_OPEN', getTextContent(label.children || []).trim()),
+      ...(panels[i].children || []),
+      mkBlockMarker('DETAILS_CLOSE', ''),
+    ]);
 }
 
 function getAnnotationLatex(node) {
