@@ -100,9 +100,9 @@
     "tsx": "^4.19.4",
     "typescript": "^5.1"
   },
-  "resolutions": {
-    "image-size": "latest"
-  },
+"resolutions": {
+  "image-size": "^1.1.1"
+}
   "browserslist": {
     "production": [
       ">0.5%",
