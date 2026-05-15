@@ -2418,7 +2418,7 @@
       "destination": "/index.md"
     },
     {
-      "source": "/:path([^.]+)+",
+      "source": "/:path+",
       "has": [{ "type": "header", "key": "accept", "value": ".*text/markdown.*" }],
       "destination": "/:path.md"
     }
@@ -2429,7 +2429,7 @@
       "headers": [{ "key": "Vary", "value": "Accept" }]
     },
     {
-      "source": "/:path([^.]+)+",
+      "source": "/:path+",
       "headers": [{ "key": "Vary", "value": "Accept" }]
     }
   ]
