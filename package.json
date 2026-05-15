@@ -56,6 +56,7 @@
     "classnames": "^2.5.1",
     "clsx": "^2.1.1",
     "d3": "^7.9.0",
+    "docusaurus-plugin-copy-page-button": "^0.4.2",
     "docusaurus-plugin-fathom": "^1.2.0",
     "docusaurus-plugin-sass": "^0.2.5",
     "dotenv": "^17.0.1",
@@ -98,9 +99,6 @@
     "styled-components": "^6.4.1",
     "tsx": "^4.19.4",
     "typescript": "^5.1"
-  },
-  "resolutions": {
-    "image-size": "latest"
   },
   "browserslist": {
     "production": [
