@@ -101,7 +101,7 @@
     "typescript": "^5.1"
   },
   "resolutions": {
-    "image-size": "^1.1.1"
+    "image-size": "latest"
   },
   "browserslist": {
     "production": [
