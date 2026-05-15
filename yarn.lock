@@ -6125,6 +6125,11 @@
     d3-selection "^3.0.0"
     d3-transition "^3.0.1"
 
+"@vercel/edge@1.3.1":
+  version "1.3.1"
+  resolved "https://registry.yarnpkg.com/@vercel/edge/-/edge-1.3.1.tgz#e650acafcbb82603161685a55dda459368e1800a"
+  integrity sha512-k0tKWeYEWOv6qU6+Z8+hv2Nt/u3vFHRZdB0uvwE0DxoddU/5kWX/Chu8F6ojvqmRlnZwuX/7kyZFVeCP6DxqBg==
+
 "@webassemblyjs/ast@1.12.1", "@webassemblyjs/ast@^1.12.1":
   version "1.12.1"
   resolved "https://registry.npmjs.org/@webassemblyjs/ast/-/ast-1.12.1.tgz"
