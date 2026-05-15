@@ -213,7 +213,10 @@ const config = {
           includePages: false,
           excludeRoutes: nonCanonicalRoutePatterns,
           beforeDefaultRehypePlugins: [require('./src/plugins/rehype-llms-cleanup')],
-          beforeDefaultRemarkPlugins: [require('./src/plugins/remark-llms-cleanup')],
+          beforeDefaultRemarkPlugins: [
+            require('./src/plugins/remark-llms-cleanup'),
+            require('./src/plugins/remark-llms-page-header'),
+          ],
         },
       },
     ],
