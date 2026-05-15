@@ -8260,6 +8260,10 @@ dns-packet@^5.2.2:
   integrity sha512-l4gcSouhcgIKRvyy99RNVOgxXiicE+2jZoNmaNmZ6JXiGajBOJAesk1OBlJuM5k2c+eudGdLxDqXuPCKIj6kpw==
   dependencies:
     "@leichtgewicht/ip-codec" "^2.0.1"
+docusaurus-plugin-copy-page-button@^0.4.2:
+  version "0.4.3"
+  resolved "https://registry.yarnpkg.com/docusaurus-plugin-copy-page-button/-/docusaurus-plugin-copy-page-button-0.4.3.tgz#bcf39854a2d869b1a02f486909a95826ccfa716d"
+  integrity sha512-4UzG7okbdRFkiKd1JoSW77Sri2IKxu7kUP6Iu8E2mMVp12nxJxjj7NRIIs23HkMpa7zqygu7SKnENul/oUXPGA==
 
 docusaurus-plugin-fathom@^1.2.0:
   version "1.2.0"
